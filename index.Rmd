@@ -1,0 +1,73 @@
+---
+# Required Information ------------------------------------
+title: "Make Some Noise: Methods for Generating Data From Imperfect Factor Models"
+author: "Justin D. Kracht"
+month: "April"
+year: "2022"
+advisor: "Niels G. Waller"
+phd: true
+
+# Rendering options ---------------------------------------
+knit: "bookdown::render_book"
+output: 
+  gopherdown::thesis_pdf:
+    latex-engine: xelatex
+
+# Fonts ---------------------------------------------------
+mainfont: "Times New Roman"
+sansfont: "Arial"
+monofont: "Courier"
+
+# Link highlighting ---------------------------------------
+link-citations: true
+colored-not-bordered-links: true
+urlcolor-hex: "2C6DAC"   # web addresses
+citecolor-hex: "2C6DAC"  # citations
+linkcolor-hex: "2C6DAC"  # links to sections in your thesis
+
+# Bibliography/References ---------------------------------
+
+bibliography: ["bib/dissertation.bib"]
+csl: "csl/apa7.csl"
+
+# ----------------- Create List of tables and Figures --------------------------
+
+lot: true
+lof: true
+
+# ----------------- Optional Frontmatter --------------------------------------
+
+acknowledgements: >
+  `r if(knitr:::is_latex_output()) gopherdown::inc("pre/00-acknowledgements.Rmd")`
+dedication: >
+  `r if(knitr:::is_latex_output()) gopherdown::inc("pre/00-dedication.Rmd")`
+abstract: >
+  `r if(knitr:::is_latex_output()) gopherdown::inc("pre/00-abstract.Rmd")`
+---
+
+```{r setup, echo=FALSE, cache=FALSE, message=FALSE}
+# Load libraries
+library(papaja)
+library(fungible)
+library(tidyverse)
+library(bookdown)
+library(microbenchmark)
+library(patchwork)
+library(latex2exp)
+library(gghighlight)
+library(kableExtra)
+library(here)
+library(noisemaker) # devtools::install_github("JustinKracht/noisemaker")
+
+# Set knitr chunk options
+knitr::opts_chunk$set(
+  echo = FALSE, 
+  cache = TRUE, 
+  fig.align = "center", 
+  dpi = 320
+)
+
+# Flags indicating whether or not new plots and tables should be generated
+make_plots <- FALSE # Should new plots be generated?
+make_tabs <- FALSE # Should new tables be generated?
+```

@@ -1,0 +1,42 @@
+# (APPENDIX) Appendix {-}
+
+# R Code {#appendix-a}
+
+\setstretch{1}
+    <!-- Set Appendices to single spacing -->
+
+## Implementations of Model Error Methods
+
+The implementations of the model error methods used are also available bundled as an R package, *noisemaker*, which can be downloaded from [https://www.github.com/JustinKracht/noisemaker](https://www.github.com/JustinKracht/noisemaker).
+
+```{r find-code-files, echo = FALSE, include = FALSE}
+code_files <- list.files(here::here("../noisemaker/R"), full.names = TRUE)
+code_files <- code_files[stringr::str_ends(code_files, ".R")]
+
+# Function to read code files and include them in R Markdown
+read_files <- function(files) {
+  unlist(lapply(files, xfun::read_utf8))
+}
+```
+
+\small
+
+```{r write-noisemaker-code, eval = FALSE, code = read_files(code_files), echo = TRUE}
+
+```
+
+## Simulation Code
+
+### Data Generation
+
+```{r find-simulation-code-files}
+simulation_code_files <- list.files(here::here("../model-error-simulation/R"), 
+                                    full.names = TRUE)
+simulation_code_files <- simulation_code_files[stringr::str_ends(simulation_code_files, ".R")]
+```
+
+\small
+
+```{r write-simulation-code, eval = FALSE, code = read_files(simulation_code_files), echo = TRUE}
+
+```

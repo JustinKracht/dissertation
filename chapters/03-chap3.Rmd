@@ -1,0 +1,128 @@
+
+# Methods
+
+## Simulation Design
+
+I conducted a simulation study to investigate and compare characteristics of the TKL, CB, and WB model-error methods and to evaluate the effectiveness of the multiple-target TKL method. Two questions related to aspects of the model-error generation process were of particular interest. First, how do the model-error methods differ in terms of the characteristics of the error-perturbed covariance matrices they produce? Specifically, how do the model-error methods differ in terms of model fit statistics (e.g., RMSEA, SRMR, CFI, TLI) for the error-perturbed covariance matrices they generate? Second, how well do the model-error methods (in particular, the multiple-target method) work in terms of producing error-perturbed covariance matrices with RMSEA (and CFI) values that are close to the target values? Answering these questions should be helpful to researchers who are planning Monte Carlo simulation studies involving covariance structure models and would like to understand how their choice of model-error method is likely to affect the characteristics of simulated, error-perturbed covariance matrices.
+
+In the simulation study, I compared model-error methods by generating error-perturbed covariance matrices using a variety of population models and comparing the results based on several model fit indices. For simplicity, I used covariance matrices with unit diagonals (i.e., correlation matrices). Moreover, I focused on four model fit indices: the RMSEA, the CFI, the Tucker-Lewis Index [TLI\; @tucker1973], and the Correlation Mean Squared Residual [CRMR\; @bollen1989; @ogasawara2001]. Although many other fit indices have been proposed [see @marsh2005], the selected fit indices are among the most commonly-used and include both measures of absolute fit (RMSEA, CRMR) and incremental fit (CFI, TLI).
+
+Because the relationship between fit indices is affected by model characteristics [@lai2016], I included a variety of distinct population models created by systematically varying: (a) the number of major factors (Factors $\in \{1, 3, 5, 10\}$), (b) the number of items per factor (Items/Factor $\in \{5, 15 \}$), (c) the correlation between factors ($\phi \in \{0, .3, .6\}$), and (d) the strength of the item factor loadings (Loadings $\in \{0.4, 0.6, 0.8 \}$). Each item loaded on only a single factor and factor loadings were fixed at values representing weak, moderate, and strong factor loadings, respectively [@hair2018]. These factor loading and factor correlation values were intended to represent a range of values representative of values observed in empirical research. For instance, in a confirmatory factor analysis of sub-tests from the Ball Aptitude Battery believed to measure aspects of intelligence, @neuman2000 reported estimated factor loadings between 0.26 and 0.95 and factor correlations between .18 and .73.
+
+```{r loading-tables, results='asis'}
+cat(readLines(here::here("tab", "loading_tables.txt")),
+    sep = '\n')
+```
+
+Forming a fully-crossed design from the levels of Factors, Items/Factor, and factor correlation ($\phi$) would have resulted in 4 (Factors) $\times$ 2 (Items/Factor) $\times$ 3 ($\phi$) $\times$ 3 (Loadings) $= 72$ unique conditions. However, the 12 conditions with one factor and factor correlations greater than zero were invalid because it is nonsensical to have correlated factors for one-factor models. For the 60 remaining conditions, I computed the model-implied population correlation matrix corresponding to the population common factor model indicated by the condition. To generate model-implied correlation matrices (without model error), I used the `simFA()` function in the R *fungible* library [@waller2021]. The `simFA()` function computes population correlation matrices for common factor models by taking the model parameters (e.g., factor loadings, number of items per factor, factor correlations) as arguments and then using the equation for the common factor model (i.e., Equation \@ref(eq:cfm)) to produce the population correlation matrix corresponding to the specified model.
+
+Having generated model-implied population correlation matrices, the next step in the simulation procedure was to generate population correlation matrices with model error for each of the 60 population factor models using the multiple-target TKL, the CB, and the WB model-error methods. Each model-error method was repeated with random starting conditions 500 times for each of three target RMSEA values ($\varepsilon_T \in \{0.025, 0.065, 0.090\}$) and each of the 60 population factor models. The target RMSEA values were chosen to represent models with very good, fair, and poor model fit, following the convention used by @myers2015a and @maccallum2001.
+
+Although the TKL method has so far been discussed as a single model-error method, several variations of the multiple-target TKL method were included in the simulation study. Specifically, I generated error-perturbed covariance matrices for each condition with the multiple-target method using (a) only target RMSEA values (denoted as $\textrm{TKL}_{\textrm{RMSEA}}$), (b) equally-weighted target RMSEA and CFI values ($\textrm{TKL}_{\textrm{RMSEA/CB}}$), and (c) only target CFI values ($\textrm{TKL}_{\textrm{CB}}$). I used target CFI values (denoted as $\textrm{CFI}_T$) corresponding to the same subjective levels of model fit as the previously-mentioned target RMSEA values, forming conditions with very good ($\textrm{RMSEA}_T = 0.025$, $\textrm{CFI}_T = 0.99$), fair ($\textrm{RMSEA}_T = 0.065$, $\textrm{CFI}_T = 0.95$), and poor ($\textrm{RMSEA}_T = 0.090$, $\textrm{CFI}_T = 0.90$) model fit [@hu1999]. Additionally, each of the multiple-target TKL methods included a penalty term, $\lambda = 1,000,000$, to penalize solutions where any minor common factor had more than two loadings greater than .3.
+
+For all of the multiple-target TKL methods, the L-BFGS-B optimization procedure was restarted with new starting values of $\nu_\textrm{e}$ and if it failed to converge within 1,000 iterations. Starting values were randomly generated using $\nu_{\textrm{e}0} \sim \mathcal{U}(.2, .9)$ and $\epsilon_0 \sim \mathcal{U}(0, .8)$, where $\nu_{\textrm{e}0}$ and $\epsilon_0$ denote the starting values of $\nu_{\textrm{e}}$ and $\epsilon$ and $\mathcal{U}(a, b)$ denotes a uniform distribution on the interval $[a, b]$. These distributions were chosen because initial testing indicated that the multiple-target TKL method was more likely to result in a converged solution if the range of the starting values were somewhat restricted. 
+
+In addition to randomly initializing the starting values of $\nu_{\textrm{e}}$ and $\epsilon$, the values of the $\mathbf{W}^*$ matrix were also randomly initialized at each repetition. In the multiple-target TKL method, the $p \times q$ provisional matrix $\mathbf{W}^*$ was initialized such that each column consisted of $p$ samples from a standard normal distribution. Let $\epsilon_j$ and $\nu_{\textrm{e}j}$ denote the proposed values of $\epsilon$ and $\nu_{\textrm{e}}$ at iteration $j$ of the multiple-target TKL optimization procedure. At each $j$th iteration, the columns of the $\mathbf{W}^*$ were scaled using $\mathbf{W}^*_j = \mathbf{W}^* \mathbf{V}$, where $\mathbf{V}$ denotes a $q \times q$ diagonal matrix with diagonal elements $(1-\epsilon_j)^0, (1-\epsilon_j)^1, \dots, (1-\epsilon_j)^q$. Then, $\mathbf{W}^*_j$ was scaled as described in Section \@ref(#tkl-method) to form a $\mathbf{W}_j$ matrix to ensure that the proportion of variance accounted for by the $q$ minor common factors was equal to $\nu_{\mathrm{e}j}$.
+
+Repeating each of the TKL method variations 500 times with random starting values was important because the multiple-target TKL method is not guaranteed to find the global optimum for a particular problem. Moreover, the results of the multiple-target TKL method are affected by the particular value of $\mathbf{W}^*$. Therefore, looking at the results of the multiple-target TKL method with a single set of starting values and a single $\mathbf{W}^*$ matrix might have led to results that were somewhat idiosyncratic and not representative of the method's general performance. It might reasonably be asked why $\mathbf{W}^*$ was not held fixed over the 500 repetitions with random starting values to find the global optimum parameter values *for that particular* $\mathbf{W}^*$ *matrix*. However, the purpose of the multiple-target TKL method was to produce solutions with fit index values that are "close enough" to the target values to be reasonable over the entire space of $\mathbf{W}^*$ matrices, not to find the best solution for one particular $\mathbf{W}^*$ matrix.
+
+As with the multiple-target TKL methods, the WB method was also repeated 500 times for each condition of the simulation design. Each repetition of the WB method represented an independent sample from the inverse Wishart distribution associated with each condition. Therefore, a large number of samples were required to ensure that the simulation results for the WB method represented the full range of potential outcomes.
+
+***[ROUGH TRANSITION]*** Additional clarification is needed concerning the implementation of the WB method. Unlike the CB model-error method, the WB model-error method does not allow precise control of RMSEA values and produces RMSEA values that are only approximately equal to the target value. Simply using a target RMSEA value to solve for a value of $v$ was unlikely to result in error-perturbed covariance matrices that had RMSEA values close to the target RMSEA value, unless the target RMSEA value was relatively small. This is because $v = \varepsilon^2 + o_\textrm{p}(\varepsilon^2)$ [@wu2015], where $o_\textrm{p}(\varepsilon^2)$ (read as "little-o-p-$\varepsilon^2$") indicates that the difference between $v$ and $\varepsilon^2$ is bounded in probability at the rate $\varepsilon^2$ [@vaart1998, p. 12] [***COME BACK TO THIS; Wu and Browne p. 580***]. To resolve this issue, I developed a method to find a value of $v$ such that the median RMSEA value from the resulting error-perturbed covariance matrices was close to the target RMSEA value. The method is as follows. First, initial values of $v$ were obtained by squaring each element in a sequence of 20 equally-spaced RMSEA values ranging from 0.01 to 0.095. For each $v$ value, 50 error-perturbed covariance matrices were sampled from the inverse Wishart distribution and the median RMSEA value was computed. Next, $v$ was regressed on the linear and squared median RMSEA terms. The fitted model was then used to predict an appropriate $v$ value such that the median RMSEA value for simulated, error-perturbed covariance matrices was close to the target value. 
+
+```{r make-wb-mod-plot, fig.align = "center", warning = FALSE, message = FALSE}
+if (make_plots) {
+  set.seed(123)
+  
+  reps <- 50
+  NFac <- 5
+  mod <- fungible::simFA(Model = list(NFac = NFac, NItemPerFac = 5), Seed = 123)
+  target_rmsea <- seq(0.01, 0.095, length.out = 20)
+  vtilde <- target_rmsea^2
+  
+  rmsea_vec <- numeric(reps)
+  median_rmsea <- numeric(length(target_rmsea))
+  
+  for (i in seq_along(target_rmsea)) {
+    for (rep in 1:reps) {
+      Rwb <- noisemaker::wb(mod, target_rmsea = target_rmsea[i],
+                            adjust_target = FALSE)
+      rmsea_vec[rep] <- noisemaker::rmsea(Rwb, mod$Rpop, k = NFac)
+    }
+    median_rmsea[i] <- median(rmsea_vec)
+  }
+  
+  wb_data <- data.frame(v = vtilde, median_rmsea = median_rmsea)
+  
+  wb_plot <- ggplot(wb_data, aes(y = sqrt(v), x = median_rmsea)) +
+    geom_point() +
+    geom_smooth(method = lm, 
+                formula = y ~ poly(x, 2), 
+                se = FALSE, color = "darkorange", lty = 2, size = .75) +
+    geom_abline(intercept = 0, slope = 1, color = "gray") +
+    theme_minimal() + 
+    labs(x = latex2exp::TeX("median $\\epsilon$"),
+         y = latex2exp::TeX("$\\sqrt{v} = \\epsilon_T$"),
+         title = latex2exp::TeX("Relationship between $\\sqrt{\\tilde{v}}$ and $\\epsilon$ for a 5-factor model"),
+         caption = )
+  
+  ggsave(filename = "img/wb-plot.png",
+         plot = wb_plot,
+         dpi = 320,
+         height = 4, 
+         width = 5,
+         scale = 1.1)
+}
+
+```
+
+```{r wb-mod-plot, fig.cap = 'The solid gray line indicates where the target RMSEA and median RMSEA values (from 50 samples) would be equal. The dashed orange line indicates the predicted value of $\\sqrt{v}$ that will produce a given RMSEA value.', align = "center"}
+
+knitr::include_graphics(
+  "img/wb-plot.png",
+  dpi = 300
+)
+```
+
+In summary, the design of the simulation study was as follows. The crossed combinations of number of factors, number of items per factor, factor correlation, and factor loading configurations correspond to 60 population major factor models. For each of those population models, I generated 500 error-perturbed correlation matrices using three variations of the TKL multiple-target method, the CB method, and the WB method at each of three target model fit conditions corresponding to very good, fair, and poor model fit. In total, this will result in `r 5 * 3 * 60` unique conditions and a total of `r 5 * 3 * 60 * 500` simulated error-perturbed correlation matrices. All of the independent variables in the study (and the levels of those variables) are summarized in Table \@ref(tab:study1-variables).
+
+```{r study1-variables, results='asis'}
+study_vars <- rbind(
+  c("Factors" = "1, 3, 5",
+    "Items/Factor" = "5, 15",
+    "Factor Correlation ($\\phi$)" = "0.0, 0.3, 0.6",
+    "Factor Loading" = "0.4 , 0.6, 0.8",
+    "Target Model Fit" = "Very Good ($\\varepsilon_T = 0.025$, $\\textrm{CFI}_T = 0.99$),",
+    " " = "Fair ($\\varepsilon_T = 0.065$, $\\textrm{CFI}_T = 0.95$),",
+    "  " = "Poor ($\\varepsilon_T = 0.090$, $\\textrm{CFI}_T = 0.90$)",
+    "Model-Error Method" = "$\\textrm{TKL}_{\\textrm{RMSEA}}$, $\\textrm{TKL}_{\\textrm{CFI}}$, $\\textrm{TKL}_{\\textrm{RMSEA/CFI}}$, CB, WB")
+)
+
+papaja::apa_table(
+  x = t(study_vars),
+  caption = "Simulation Study Design Variables and Levels.",
+  escape = FALSE,
+  col.names = c("Variable", "Levels"),
+  note = "$\\varepsilon_T$ = Target RMSEA value; $\\textrm{CFI}_T$ = Target CFI value. TKL subscripts indicate which model fit indices were used as targets."
+)
+```
+
+## Simulation Procedure
+
+In the previous section, I described the 60 population models (without model error) resulting from the crossed levels of number of factors, number of items per factor, factor loadings, and factor correlations. In the first stage of the simulation study, I computed the model-implied population correlation matrices for each of the population models using the `simFA()` function in the R *fungible* library [@waller2021]. The `simFA()` function computes population correlation matrices for common factor models by taking the model parameters (e.g., factor loadings, number of items per factor, factor correlations) as arguments and then using the equation for the common factor model (i.e., Equation \@ref(eq:cfm)) to produce the population correlation matrix corresponding to the specified model.
+
+After computing model-implied population correlation matrices for each of the 60 population models, the next step in the simulation procedure was to generate population correlation matrices with model error using each of the model-error methods described in the previous section. For each of the $60 \times 3 = 180$ crossed combinations of population model and target model fit, I generated population correlation matrices with model error 
+
+1. TKL
+
+Three variations of the multiple-target TKL method were used to generate population correlation matrices with model error: ($\textrm{TKL}_\textrm{RMSEA}$, $\textrm{TKL}_\textrm{CFI}$, and  $\textrm{TKL}_\textrm{RMSEA/CFI}$. For each of these methods, 500 population correlation matrices with model error were generated using random starting values $\nu_{\textrm{e}0} \sim \mathcal{U}(.2, .9)$ and $\epsilon_0 \sim \mathcal{U}(0, .8)$, where $\nu_{\textrm{e}0}$ and $\epsilon_0$ denote the starting values of $\nu_{\textrm{e}}$ and $\epsilon$ and $\mathcal{U}(a, b)$ denotes a uniform distribution on the interval $[a, b]$. These distributions were chosen because initial testing indicated that the multiple-target TKL method was more likely to result in a converged solution if the range of the starting values were somewhat restricted. 
+
+In addition to randomly initializing the starting values of $\nu_{\textrm{e}}$ and $\epsilon$, the values of the $\mathbf{W}^*$ matrix were also randomly initialized at each repetition. In the multiple-target TKL method, the $p \times q$ provisional matrix $\mathbf{W}^*$ was initialized such that each column consisted of $p$ samples from a standard normal distribution. Let $\epsilon_j$ and $\nu_{\textrm{e}j}$ denote the proposed values of $\epsilon$ and $\nu_{\textrm{e}}$ at iteration $j$ of the multiple-target TKL optimization procedure. At each $j$th iteration, the columns of the $\mathbf{W}^*$ were scaled using $\mathbf{W}^*_j = \mathbf{W}^* \mathbf{V}$, where $\mathbf{V}$ denotes a $q \times q$ diagonal matrix with diagonal elements $(1-\epsilon_j)^0, (1-\epsilon_j)^1, \dots, (1-\epsilon_j)^q$. Then, $\mathbf{W}^*_j$ was scaled as described in Section \@ref(tkl-method) to form a $\mathbf{W}_j$ matrix to ensure that the proportion of variance accounted for by the $q$ minor common factors was equal to $\nu_{\mathrm{e}j}$.
+
+Repeating each of the TKL method variations 500 times with random starting values was important because the multiple-target TKL method is not guaranteed to find the global optimum for a particular problem. Moreover, the results of the multiple-target TKL method are affected by the particular value of $\mathbf{W}^*$. Therefore, looking at the results of the multiple-target TKL method with a single set of starting values and a single $\mathbf{W}^*$ matrix might have led to results that were somewhat idiosyncratic and not representative of the method's general performance. 
+
+It might reasonably be asked why $\mathbf{W}^*$ was not held fixed over the 500 repetitions with random starting values to find the global optimum parameter values *for that particular* $\mathbf{W}^*$ *matrix*. However, the purpose of the multiple-target TKL method is to produce solutions with fit index values that are "close enough" to the target values to be reasonable over the entire space of $\mathbf{W}^*$ matrices, not to find the best solution for one particular $\mathbf{W}^*$ matrix.
+
+As with the multiple-target TKL methods, the WB method was also repeated 500 times for each condition of the simulation design. Each repetition of the WB method represented an independent sample from the inverse Wishart distribution associated with each condition. Unlike the multiple-target TKL methods and the WB method, the implementation of the CB method that was used was deterministic. That is, given the same population model, the CB method always returned the same correlation matrix with model error. Therefore, it did not make sense to conduct 500 repetitions of the CB method for each condition because every repetition would have given the exact same result [NEED TO MAKE SURE PREVIOUS METHODS SECTION REFLECTS THIS].
+
+Moreover, R code for the simulation study (including implementations of each of the model-error methods) can be found in Appendix A [hyperlink this].

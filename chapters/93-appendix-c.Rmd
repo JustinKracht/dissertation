@@ -1,0 +1,101 @@
+# Results for Fixed and Varied Factor Loadings {#appendix-c}
+
+Some results I put together for Dr. Weiss.
+
+```{r fixed-vs-random-factor-loadings}
+library(fungible)
+library(noisemaker)
+library(tidyverse)
+
+factors <- c(1, 5, 10)
+items_per_factor <- c(5, 10)
+factor_corr <- c(0, .5)
+factor_loading <- c(.4, .6, .8)
+
+conditions_matrix <- expand.grid(
+  factors = factors,
+  items_per_factor = items_per_factor,
+  factor_corr = factor_corr,
+  factor_loading = factor_loading
+)
+
+conditions_matrix <- filter(conditions_matrix,
+                            !(factors == 1 & factor_corr != 0))
+
+# Generate a simFA model for each condition -------------------------------
+
+simFA_mod_list <- purrr::pmap(.l = conditions_matrix,
+                              ~ simFA(Model = list(NFac = ..1,
+                                                   NItemPerFac = ..2,
+                                                   Model = "oblique"),
+                                      Loadings = list(FacLoadRange = c(..4, 0.05),
+                                                      FacLoadDist = "rnorm"),
+                                      Phi = list(MaxAbsPhi = ..3,
+                                                 PhiType = "fixed"),
+                                      ModelError = list(ModelError = TRUE),
+                                      Seed = 123))
+
+# Extract RMSEA and CFI fit statistics
+fit_stats <- purrr::map(
+  .x = simFA_mod_list,
+  ~ list(RMSEA = pluck(.x, "ModelErrorFitStats", "RMSEA_theta"),
+         CFI = pluck(.x, "ModelErrorFitStats", "CFI_theta"))
+)
+
+# Use noisemaker to generate models with error
+set.seed(123)
+noisy_mod_list <- purrrgress::pro_pmap(
+  .l = list(mod = simFA_mod_list, 
+            target_rmsea = purrr::map(fit_stats, ~ pluck(., "RMSEA")),
+            target_cfi = purrr::map(fit_stats, ~ pluck(., "CFI"))),
+  function(mod, target_rmsea, target_cfi) {
+    suppressWarnings(
+      replicate(n = 50, 
+                noisemaker(mod = mod, method = "TKL", target_rmsea = target_rmsea,
+                           target_cfi = target_cfi, 
+                           tkl_ctrl = list(factr = 1e7,
+                                           max_tries = 1000,
+                                           WmaxLoading = .3,
+                                           NWmaxLoading = 2)))
+    )
+  }
+)
+
+noisy_data <- map_dfr(noisy_mod_list, 
+                      function(x) {as.data.frame(t(x)[,-c(1,5,8)])})
+noisy_data <- noisy_data %>%
+  mutate(across(rmsea:eps, ~unlist(.)))
+
+noisy_data$condition <- rep(1:nrow(conditions_matrix), each = 50)
+noisy_data$target_rmsea <- rep(purrr::map_dbl(fit_stats, ~ pluck(., "RMSEA")),
+                               each = 50)
+noisy_data$target_cfi <- rep(purrr::map_dbl(fit_stats, ~ pluck(., "CFI")),
+                             each = 50)
+noisy_data$condition <- as.factor(noisy_data$condition)
+noisy_data <- as_tibble(cbind(noisy_data, 
+                              conditions_matrix[noisy_data$condition,]))
+
+# Create variable labels
+noisy_data <- noisy_data %>%
+  mutate(factors = paste("Factors:", factors),
+         items_per_factor = paste("Items/Factor:", items_per_factor),
+         factor_corr = paste("Factor cor.:", factor_corr),
+         factor_loading = paste("Loading:", factor_loading))
+
+ggplot(noisy_data, aes(x = rmsea, y = cfi)) +
+  geom_point(alpha = .3) +
+  geom_hline(aes(yintercept = target_cfi), noisy_data) +
+  geom_vline(aes(xintercept = target_rmsea), noisy_data) +
+  # facet_grid(factors * factor_loading ~ items_per_factor * factor_corr, 
+  #            scales = "free") +
+  facet_wrap( ~ condition,
+              scales = "free") +
+  theme_bw()
+
+ggsave(filename = "rmsea_cfi_recovery_new_obj_weiss.png",
+       path = "../dissertation_proposal/misc/img",
+       plot = last_plot(),
+       dpi = 320,
+       height = 7,
+       width = 14)
+```

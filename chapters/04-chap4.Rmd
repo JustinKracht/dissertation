@@ -2,7 +2,7 @@
 # Results {#results}
 
 ```{r read-results}
-results_matrix <- readRDS("data/results_matrix_with_conditions.RDS")
+results_matrix <- readRDS(here("data/results_matrix_with_conditions.RDS"))
 ```
 
 In the previous section, I described the simulation study I conducted to learn more about the behavior of different methods for generating error-perturbed population covariance (correlation) matrices. The simulation study included three model-error methods---the (single- and multiple-target) TKL method, the CB method, and the WB method---and was designed to answer two primary questions. 
@@ -31,11 +31,11 @@ num_indefinite <- filter(results_matrix,
 percent_indefinite <- round((num_indefinite / num_cb) * 100, 1)
 ```
 
-One drawback of the CB model-error method is that the resulting correlation matrix with model error can be indefinite (i.e. having one or more negative eigenvalues) when the specified target RMSEA value is large [@cudeck1992]. These matrices are undesirable because correlation and covariance matrices are, by definition, at least positive semi definite (i.e., having strictly non-negative eigenvalues). Of the `r num_cb` correlation matrices with model error that were generated using the CB method, `r num_indefinite` (`r percent_indefinite`%) were indefinite. However, indefinite solutions were much more common for some conditions of the simulation design than other. Figure \@ref(fig:fig-percent-indefinite-matrices) shows the percent of indefinite CB solutions for each level of model fit, number of items per factor, number of factors, and factor loading strength are shown in Figure \@ref(fig:fig-percent-indefinite-matrices). (Exact percentages are reported in Table \@ref(tab:tab-percent-indefinite-matrices)). The figure shows at least three notable trends. First, the percent of indefinite solutions increased as model fit degraded. Second, the percent of indefinite solutions increased as the total number of items increased (i.e., as the number of factors and items per factor increased). Finally, Figure \@ref(fig:fig-percent-indefinite-matrices) shows that the percent of indefinite solutions increased as factor loadings increased. 
+One drawback of the CB model-error method is that the resulting correlation matrix with model error can be indefinite (i.e. having one or more negative eigenvalues) when the specified target RMSEA value is large [@cudeck1992]. These matrices are undesirable because correlation and covariance matrices are, by definition, at least positive semi definite (i.e., having strictly non-negative eigenvalues). Of the `r num_cb` correlation matrices with model error that were generated using the CB method, `r num_indefinite` (`r percent_indefinite`%) were indefinite. However, indefinite solutions were much more common for some conditions of the simulation design than other. \@ref(fig:fig-percent-indefinite-matrices) shows the percent of indefinite CB solutions for each level of model fit, number of items per factor, number of factors, and factor loading strength are shown in \@ref(fig:fig-percent-indefinite-matrices). (Exact percentages are reported in \@ref(tab:tab-percent-indefinite-matrices)). The figure shows at least three notable trends. First, the percent of indefinite solutions increased as model fit degraded. Second, the percent of indefinite solutions increased as the total number of items increased (i.e., as the number of factors and items per factor increased). Finally, \@ref(fig:fig-percent-indefinite-matrices) shows that the percent of indefinite solutions increased as factor loadings increased. 
 
 In the best-case scenarios, conditions corresponding to models with 25 items or fewer led to indefinite solutions very infrequently (in less than 1% of cases). On the other hand, conditions with Poor model fit and 45 items or more led to indefinite correlation matrices in more than 90% of cases. These results show that the CB method would be an inefficient way to simulate positive semi definite population correlation or covariance matrices with model error when input matrices are large and the target RMSEA value is relatively large. 
 
-Although inefficient, a potential strategy for dealing with indefinite solutions when using the CB method is to simply generate solutions using the CB method until a sufficient number of positive semi definite solutions have been obtained. However, the amount of time taken by the CB method increases quickly as the number of items increase, making the oversampling strategy impractical for problems with many items. In fact, using the CB method to generate even a small number of solution matrices becomes impractical for large input matrices. This is demonstrated in Figure \@ref(fig:cb-completion-time), which shows the completion time for the CB method when applied to a one-factor model with salient loadings fixed at .6 and the number of items varying between 5 and 120. Using a computer with an Intel Core i5-4570 3.20GHz CPU and 16GB of RAM, the CB method took just over 30 seconds to complete (on average) for an input correlation matrix with 65 items. For an input matrix with 115 items, the CB method took approximately four and a half minutes to complete. Long completion times are often impractical for large simulation studies, particularly if indefinite solutions are discarded. In fact, I had to skip using the CB method in simulation conditions with 10 factors and 15 items per factor (150 items) because those conditions would have taken an impractical amount of time to complete. Timing a single example, the CB method took 15 minutes and 48 seconds to complete with a 150-item input correlation matrix. At that rate, it would have taken almost 11 days to complete one (out of 36) conditions of the simulation design with 150 items. 
+Although inefficient, a potential strategy for dealing with indefinite solutions when using the CB method is to simply generate solutions using the CB method until a sufficient number of positive semi definite solutions have been obtained. However, the amount of time taken by the CB method increases quickly as the number of items increase, making the oversampling strategy impractical for problems with many items. In fact, using the CB method to generate even a small number of solution matrices becomes impractical for large input matrices. This is shown in \@ref(fig:cb-completion-time), which is a plot of the completion time for the CB method when applied to a one-factor model with salient loadings fixed at .6 and the number of items varying between 5 and 120. Using a computer with an Intel Core i5-4570 3.20GHz CPU and 16GB of RAM, the CB method took just over 30 seconds to complete (on average) for an input correlation matrix with 65 items. For an input matrix with 115 items, the CB method took approximately four and a half minutes to complete. Such long completion times are often impractical for large simulation studies, particularly if indefinite solutions are discarded. In fact, I had to skip using the CB method in simulation conditions with 10 factors and 15 items per factor (150 items) because those conditions would have taken an impractical amount of time to complete. Timing a single example, the CB method took 15 minutes and 48 seconds to complete with a 150-item input correlation matrix. At that rate, it would have taken almost 11 days to complete one (out of 36) conditions of the simulation design with 150 items. 
 
 (ref:cb-indefinite-table-caption) The percent of Cudeck and Browne (CB) model-error method solutions that were indefinite.
 
@@ -103,17 +103,17 @@ if (make_plots) {
          x = "Factor Loading") +
     theme(legend.position = "bottom")
   
-  ggsave(filename = "img/cb_percent_indefinite.png",
+  ggsave(filename = here("img/cb_percent_indefinite.png"),
          plot = cb_percent_indefinite,
          dpi = "retina",
          width = 6,
          height = 5)
 }
 
-knitr::include_graphics("img/cb_percent_indefinite.png")
+knitr::include_graphics(here("img/cb_percent_indefinite.png"))
 ```
 
-```{r cb-completion-time, fig.cap = 'The amount of time (in minutes) taken to generate a single correlation matrix with model error using the CB method. Completion times were recorded 10 times for single-factor models with salient factor loadings fixed at .6 and number of items (*p*) varying between 5 and 115. The dashed black line is the loess regression line.', align = "center"}
+```{r cb-completion-time, fig.cap = 'The amount of time (in minutes) taken to generate a single correlation matrix with model error using the CB method. Completion times were recorded 10 times for single-factor models with salient factor loadings fixed at .6 and number of items (\\emph{p}) varying between 5 and 115. The dashed black line is the loess regression line.', align = "center"}
 if (make_plots) {
   set.seed(123)
   max_p <- 115
@@ -174,9 +174,9 @@ knitr::include_graphics(path = here("img", "cb_time_plot.png"))
 
 ## L-BFGS-B Non-convergence (Genetic Algorithm)
 
-The default optimization method for the multiple-target TKL method was L-BFGS-B. In most cases, this method worked well and converged relatively quickly to a solution. However, there were a small number of cases where the L-BGFS-B method failed to converge. Specifically, the L-BFGS-B method failed to converge 14 times ($<1$%) when the target CFI and RMSEA values were both used and when model fit was poor. The L-BFGS-B non-convergence rates for the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ method by number of factors, number of items per factor, and model fit are shown in Table \@ref(tab:tab-l-bfgs-b-convergence). Non-convergence was also somewhat more likely for conditions with few factors compared to conditions with many factors.
+The default optimization method for the multiple-target TKL method was L-BFGS-B. In most cases, this method worked well and converged relatively quickly to a solution. However, there were a small number of cases where the L-BGFS-B method failed to converge. Specifically, the L-BFGS-B method failed to converge 14 times ($<1$%) when the target CFI and RMSEA values were both used and when model fit was Poor. The L-BFGS-B non-convergence rates for the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ method by number of factors, number of items per factor, and model fit are shown in \@ref(tab:tab-l-bfgs-b-convergence). Non-convergence was also somewhat more likely for conditions with few factors compared to conditions with many factors.
 
-Although non-convergence of the L-BFGS-B algorithm was rare, a question that arose was whether the genetic algorithm that was used as a fallback option led to similar results compared to cases where the L-BFGS-B algorithm converged. This question was difficult to answer statistically because non-convergence occurred so infrequently. To get a general sense of whether results for cases where the L-BFGS-B algorithm converged or did not converge were similar, I plotted the CFI and RMSEA values for all converged and non-converged cases in conditions where the multiple-target TKL method was used with target CFI and RMSEA values and model fit was Poor. Figure \@ref(fig:comparison-of-converged-vs-non-converged) shows that cases where the L-BFGS-B algorithm did not converge (shown in black) led to similar RMSEA and CFI values compared to cases where the algorithm converged (shown in gray). Thus, using a genetic algorithm seemed to provide reasonable results in the few cases where the L-BFGS-B algorithm failed to converge (albeit much more slowly than the L-BFGS-B algorithm).
+Although non-convergence of the L-BFGS-B algorithm was rare, a question that arose was whether the genetic algorithm that was used as a fallback option led to similar results compared to cases where the L-BFGS-B algorithm converged. This question was difficult to answer statistically because non-convergence occurred so infrequently. To get a general sense of whether results for cases where the L-BFGS-B algorithm converged or did not converge were similar, I plotted the CFI and RMSEA values for all converged and non-converged cases in conditions where the multiple-target TKL method was used with target CFI and RMSEA values and model fit was Poor. \@ref(fig:comparison-of-converged-vs-non-converged) shows that cases where the L-BFGS-B algorithm did not converge (shown in black) led to similar RMSEA and CFI values compared to cases where the algorithm converged (shown in gray). Thus, using a genetic algorithm seemed to provide reasonable results in the few cases where the L-BFGS-B algorithm failed to converge (albeit much more slowly than the L-BFGS-B algorithm).
 
 ```{r comparison-of-converged-vs-non-converged, fig.cap = "RMSEA and CFI values for cases where the model-error method was $\\textrm{TKL}_{\\textrm{RMSEA/CFI}}$ and model fit was Poor. Grey dots indicate cases where the L-BFGS-G algorithm converged; black dots indicate cases that did not converge and where a genetic algorithm was used instead."}
 if (make_plots) {
@@ -231,7 +231,7 @@ bfgs_nonconvergence_table %>%
                                   "Fair",
                                   "Poor"),
                     digits = c(0, 0, 1, 1, 1),
-                    align = "rlrrr",
+                    align = "rrrrr",
                     font_size = "small",
                     col_spanners = list("Model Fit" = c(3, 5)),
                     label = "bfgs-convergence-table",
@@ -242,11 +242,11 @@ bfgs_nonconvergence_table %>%
 
 Recall that the multiple-objective TKL method included an optional penalty that heavily penalized cases that had strong minor factors. Specifically, the penalty was applied if any minor factor had two or more absolute factor loadings greater than or equal to a specified value. The purpose of the penalty was to avoid introducing minor factors that might be more accurately characterized as major factors. To determine whether the penalty was effective at helping avoid major minor factors, I checked each of the minor factor loading ($\mathbf{W}$) matrices to determine whether any minor factor had two or more loadings greater than .3 (in absolute value). 
 
-The percent of cases where the constraints on $\mathbf{W}$ were violated for each level of number of factors, number of items per factor, factor loading strength, and model fit are shown in Figure \@ref(fig:w-major-factors-plot) and reported in Table \@ref(tab:tab-major-minor-factors). Only results for the $\textrm{TKL}_{\textrm{RMSEA}}$ were included because the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$ error methods seldom led to solutions that violated the constraints on $\mathbf{W}$. (Only 24 out of 90,000 cases had violated $\mathbf{W}$ constraints for the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$ methods combined). Figure \@ref(fig:w-major-factors-plot) shows that the $\mathbf{W}$ constraints were violated most often when model fit was Fair or Poor, factor loadings were relatively low, and there were many total items (i.e., many factors and items per factor).
+The percent of cases where the constraints on $\mathbf{W}$ were violated for each level of number of factors, number of items per factor, factor loading strength, and model fit are shown in \@ref(fig:w-major-factors-plot) and reported in \@ref(tab:tab-major-minor-factors). Only results for the $\textrm{TKL}_{\textrm{RMSEA}}$ were included because the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$ error methods seldom led to solutions that violated the constraints on $\mathbf{W}$. (Only 24 out of 90,000 cases had violated $\mathbf{W}$ constraints for the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$ methods combined.) \@ref(fig:w-major-factors-plot) shows that the $\mathbf{W}$ constraints were violated most often when model fit was Fair or Poor, factor loadings were relatively low, and there were many total items (i.e., many factors and items per factor).
 
-To understand why certain conditions led to more $\mathbf{W}$ constraint violations than others, it is helpful to understand the relationship between those conditions and the TKL parameters ($\epsilon$ and $\nu_{\textrm{e}}$). Figure \@ref(fig:eps-and-v-values-by-W-violations) shows the $\epsilon$ and $\nu_{\textrm{e}}$ values for each of the TKL model-error methods, conditioned on factor loading strength, number of factors, and number of items per factor. To conserve space, only conditions with Poor model fit and 1, 5, or 10 major factors were included in the figure. Overall, the figure shows that there was a trade-off between $\epsilon$ and $\nu_{\textrm{e}}$ such that higher values of $\nu_{\textrm{e}}$ were related to lower values of $\epsilon$ (and *vice versa*). Moreover, Figure \@ref(fig:eps-and-v-values-by-W-violations) shows that the distributions of $\epsilon$ and $\nu_{\textrm{e}}$ differed depending on which TKL variant was used. The differences between the error-method variants were largest when the there were many items (i.e., many items and many items per factor) and when factor loadings were relatively weak. Under those circumstances, the $\textrm{TKL}_\textrm{RMSEA}$ method led to higher values of $\nu_{\textrm{e}}$ than the $\textrm{TKL}_\textrm{RMSEA/CFI}$ or $\textrm{TKL}_\textrm{CFI}$ methods. This effect suggests that higher values of $\nu_{\textrm{e}}$ were required to produce solutions with RMSEA values close to .09 when there are many items. On the other hand, the results for the $\textrm{TKL}_\textrm{RMSEA/CFI}$ and $\textrm{TKL}_\textrm{CFI}$ methods indicated that much lower $\nu_{\textrm{e}}$ values were required to obtain CFI values close to .90 when there were many items.
+To understand why certain conditions led to more $\mathbf{W}$ constraint violations than others, it is helpful to understand the relationship between those conditions and the TKL parameters ($\epsilon$ and $\nu_{\textrm{e}}$). \@ref(fig:eps-and-v-values-by-W-violations) shows the $\epsilon$ and $\nu_{\textrm{e}}$ values for each of the TKL model-error methods, conditioned on factor loading strength, number of factors, and number of items per factor. To conserve space, only conditions with Poor model fit and 1, 5, or 10 major factors were included in the figure. Overall, the figure shows that there was a trade-off between $\epsilon$ and $\nu_{\textrm{e}}$ such that higher values of $\nu_{\textrm{e}}$ were related to lower values of $\epsilon$ (and *vice versa*). Moreover, \@ref(fig:eps-and-v-values-by-W-violations) shows that the distributions of $\epsilon$ and $\nu_{\textrm{e}}$ differed depending on which TKL variant was used. The differences between the error-method variants were largest when the there were many items (i.e., many items and many items per factor) and when factor loadings were relatively weak. Under those circumstances, the $\textrm{TKL}_\textrm{RMSEA}$ method led to higher values of $\nu_{\textrm{e}}$ than the $\textrm{TKL}_\textrm{RMSEA/CFI}$ or $\textrm{TKL}_\textrm{CFI}$ methods. This effect suggests that higher values of $\nu_{\textrm{e}}$ were required to produce solutions with RMSEA values close to .09 when there are many items. On the other hand, the results for the $\textrm{TKL}_\textrm{RMSEA/CFI}$ and $\textrm{TKL}_\textrm{CFI}$ methods indicated that much lower $\nu_{\textrm{e}}$ values were required to obtain CFI values close to .90 when there were many items.
 
-The apparent trade-off between $\epsilon$ and $\nu_{\textrm{e}}$ values makes sense when you consider their roles in the TKL method. A high $\nu_{\textrm{e}}$ value indicated that much of the unique variance would be assigned to the minor common factors. If the value of $\epsilon$ was also high, it indicated that the first few minor factors would account for most of the minor factor variance. Therefore, the $\mathbf{W}$ constraints were more likely to be violated when both $\epsilon$ and $\nu_{\textrm{e}}$ were high and less likely to be violated if either parameter was low. in Figure \@ref(fig:eps-and-v-values-by-W-violations), which shows the values of $\epsilon$ and $\nu_{\textrm{e}}$ produced by the three TKL variants for conditions with Poor model fit, 10 factors, 15 items per factor, and factor loadings of .8. Each point (corresponding to a single case) was colored according to whether or not the $\mathbf{W}$ constraints were violated. The figure shows that the $\mathbf{W}$ constraints were violated when the values of $\epsilon$ and $\nu_{\textrm{e}}$ were both above some threshold, which only happened when the $\textrm{TKL}_\textrm{RMSEA}$ was used.
+The apparent trade-off between $\epsilon$ and $\nu_{\textrm{e}}$ values makes sense when you consider their roles in the TKL method. A high $\nu_{\textrm{e}}$ value indicated that much of the unique variance would be assigned to the minor common factors. If the value of $\epsilon$ was also high, it indicated that the first few minor factors would account for most of the minor factor variance. Therefore, the $\mathbf{W}$ constraints were more likely to be violated when both $\epsilon$ and $\nu_{\textrm{e}}$ were high and less likely to be violated if either parameter was low. in \@ref(fig:eps-and-v-values-by-W-violations), which shows the values of $\epsilon$ and $\nu_{\textrm{e}}$ produced by the three TKL variants for conditions with Poor model fit, 10 factors, 15 items per factor, and factor loadings of .8. Each point (corresponding to a single case) was colored according to whether or not the $\mathbf{W}$ constraints were violated. The figure shows that the $\mathbf{W}$ constraints were violated when the values of $\epsilon$ and $\nu_{\textrm{e}}$ were both above some threshold, which only happened when the $\textrm{TKL}_\textrm{RMSEA}$ was used.
 
 (ref:major-minor-factors) The percent of cases that violated the minor common factor loading constraints for each level of number of factors, items per factor, factor loading, and model fit when the $\textrm{TKL}_{\textrm{RMSEA}}$ method was used.
 
@@ -274,9 +274,8 @@ percent_w_major_factors_table %>%
             font_size = "small")
 ```
 
-```{r w-major-factors-plot, fig.cap = "The percent of cases where the constraints on $\\mathbf{W}$ were violated when the $\\textrm{TKL}_{\\textrm{RMSEA}}$ model-error method was used for each level of number of factors, number of items per factor, factor loading, and model fit."}
+```{r w-major-factors-plot, fig.cap = "The percent of cases where the constraints on $\\mathbf{W}$ were violated when the $\\textrm{TKL}_{\\textrm{RMSEA}}$ model-error method was used, conditioned on number of factors, number of items per factor, factor loading, and model fit."}
 if (make_plots) {
-  
   percent_w_major_factors_table <- results_matrix %>%
     filter(!(error_method %in% c("CB", "WB"))) %>%
     group_by(factors, items_per_factor_rec, loading_numeric, 
@@ -340,7 +339,7 @@ if (make_plots) {
          height = 7, width = 6)
 }
 
-knitr::include_graphics("img/eps_and_nu_w_violations.png")
+knitr::include_graphics(here("img/eps_and_nu_w_violations.png"))
 ```
 
 ```{r w-violation-example, fig.cap = "The distribution of $\\epsilon$ and $\\nu_{\\textrm{e}}$ (and whether or not $\\mathbf{W}$ constraints were violated) for conditions with Poor model fit, 10 factors, 15 items per factor, and factor loadings of .8. TKL = Tucker, Koopman, and Linn"}
@@ -371,7 +370,7 @@ if (make_plots) {
          height = 3, width = 6)
 }
 
-knitr::include_graphics("img/eps_and_nu_violation_example.png")
+knitr::include_graphics(here("img/eps_and_nu_violation_example.png"))
 ```
 
 ## Distributions of Fit Statistics
@@ -380,11 +379,11 @@ One of the primary questions the simulation study was intended to answer was whe
 
 ### RMSEA
 
-Of the fit indices investigated in this study, the RMSEA value has been most often used as a measure of model fit when generating covariance or correlation matrices with model error. Figure \@ref(fig:rmsea-distributions) shows box-plots summarizing the distributions of RMSEA values for each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Notice that the $\textrm{TKL}_{\textrm{RMSEA}}$ and CB methods almost always produced solutions with RMSEA values that were very close to the target RMSEA values. This result makes sense because both methods use optimization to produce solutions with RMSEA values close to a specified target. However, a somewhat unexpected result was that the CB method occasionally produced solutions with RMSEA values that were much higher or lower than the target value, particularly in conditions with ten major factors.
+Of the fit indices investigated in this study, the RMSEA value has been most often used as a measure of model fit when generating covariance or correlation matrices with model error. \@ref(fig:rmsea-distributions) shows box-plots summarizing the distributions of RMSEA values for each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Notice that the $\textrm{TKL}_{\textrm{RMSEA}}$ and CB methods almost always produced solutions with RMSEA values that were very close to the target RMSEA values. This result makes sense because both methods use optimization to produce solutions with RMSEA values close to a specified target. However, a somewhat unexpected result was that the CB method occasionally produced solutions with RMSEA values that were much higher or lower than the target value, particularly in conditions with ten major factors.
 
-After the $\textrm{TKL}_{\textrm{RMSEA}}$ and CB methods, Figure \@ref(fig:rmsea-distributions) shows that the WB method was the next best model-error method in terms of producing solutions with RMSEA values close to the target values. In fact, the WB method produced solutions with median RMSEA values that were as close to the target values as those from $\textrm{TKL}_{\textrm{RMSEA}}$ and CB solutions. However, the WB method also led to more variable RMSEA values, particularly in conditions with poor model fit and many factors.
+After the $\textrm{TKL}_{\textrm{RMSEA}}$ and CB methods, \@ref(fig:rmsea-distributions) shows that the WB method was the next best model-error method in terms of producing solutions with RMSEA values close to the target values. In fact, the WB method produced solutions with median RMSEA values that were as close to the target values as those from $\textrm{TKL}_{\textrm{RMSEA}}$ and CB solutions. However, the WB method also led to more variable RMSEA values, particularly in conditions with Poor model fit and many factors.
 
-The two methods that performed worst in terms of producing solutions with RMSEA values close to the targets were the $\textrm{TKL}_{\textrm{RMSEA/CB}}$ and $\textrm{TKL}_{\textrm{CB}}$ methods. Figure \@ref(fig:rmsea-distributions) shows that these methods often led to RMSEA values that were lower than the target values, except when there were relatively few factors and strong factor loadings. The largest differences between the observed and target RMSEA values for the $\textrm{TKL}_{\textrm{RMSEA/CB}}$ and $\textrm{TKL}_{\textrm{CB}}$ methods occurred in conditions with poor model fit and relatively weak factor loadings (.3). In those conditions, both methods led to RMSEA values that were considerably lower than the target values.
+The two methods that performed worst in terms of producing solutions with RMSEA values close to the targets were the $\textrm{TKL}_{\textrm{RMSEA/CB}}$ and $\textrm{TKL}_{\textrm{CB}}$ methods. \@ref(fig:rmsea-distributions) shows that these methods often led to RMSEA values that were lower than the target values, except when there were relatively few factors and strong factor loadings. The largest differences between the observed and target RMSEA values for the $\textrm{TKL}_{\textrm{RMSEA/CB}}$ and $\textrm{TKL}_{\textrm{CB}}$ methods occurred in conditions with Poor model fit and relatively weak factor loadings (.3). In those conditions, both methods led to RMSEA values that were considerably lower than the target values.
 
 ```{r rmsea-distributions, fig.cap = "Distributions of the RMSEA values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target RMSEA value for each condition. Note that some levels of model fit and factor loading strength were omitted to conserve space. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", fig.align='left', out.width=425}
 if (make_plots) {
@@ -419,11 +418,11 @@ knitr::include_graphics(here("img/rmsea_distributions.png"))
 
 ### CFI
 
-[What are we doing for a transition here?] The distributions of CFI values for the solutions produced using the five model-error methods are shown in Figure \@ref(fig:cfi-distributions), conditioned on number of factors, model fit, and factor loading strength. As with \@ref(fig:rmsea-distributions), the middle levels of model fit and factor loading strength were omitted to converse space. Figure \@ref(fig:cfi-distributions) shows that the results for CFI were nearly opposite to the results for RMSEA. Specifically, whereas the $\textrm{TKL}_{\textrm{RMSEA}}$, CB, and WB methods produced solutions with RMSEA values much closer to the target values than those produced by the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ or $\textrm{TKL}_{\textrm{CFI}}$ methods, the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$ produced solutions with CFI values that were closer to the target CFI values compared to the other model-error methods in most conditions. The differences between the methods that optimized for CFI ($\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$) and the other model-error methods were largest for conditions with poor model fit, poor factor loadings, and many factors (see the third row of Figure \@ref(fig:cfi-distributions)). On the other hand, Figure \@ref(fig:cfi-distributions) shows that all of the model-error methods produced similar CFI values (that were close to the target CFI value) for conditions with very good model fit and strong factor loadings.
+[What are we doing for a transition here?] The distributions of CFI values for the solutions produced using the five model-error methods are shown in \@ref(fig:cfi-distributions), conditioned on number of factors, model fit, and factor loading strength. As with \@ref(fig:rmsea-distributions), the middle levels of model fit and factor loading strength were omitted to converse space. \@ref(fig:cfi-distributions) shows that the results for CFI were nearly opposite to the results for RMSEA. Specifically, whereas the $\textrm{TKL}_{\textrm{RMSEA}}$, CB, and WB methods produced solutions with RMSEA values much closer to the target values than those produced by the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ or $\textrm{TKL}_{\textrm{CFI}}$ methods, the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$ produced solutions with CFI values that were closer to the target CFI values compared to the other model-error methods in most conditions. The differences between the methods that optimized for CFI ($\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$) and the other model-error methods were largest for conditions with Poor model fit, low factor loadings, and many factors (see the third row of \@ref(fig:cfi-distributions)). On the other hand, \@ref(fig:cfi-distributions) shows that all of the model-error methods produced similar CFI values (that were close to the target CFI value) for conditions with very good model fit and strong factor loadings.
 
-A result in Figure \@ref(fig:cfi-distributions) that is worth highlighting is that the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$ produced solutions with very similar CFI values in most conditions. These two methods also produced solutions with very similar RMSEA values in many conditions, as shown in Figure \@ref(fig:rmsea-distributions). Indeed, the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$ methods led to much more similar results in terms of both RMSEA and CFI than the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA}}$ methods. Put another way, optimizing for CFI alone generally led to similar results compared to optimizing for both CFI and RMSEA, whereas optimizing for RMSEA alone generally led to solutions with much different RMSEA and CFI values compared to optimizing for both CFI and RMSEA. This suggests that CFI was more sensitive to small changes in parameter values than RMSEA.
+A result in \@ref(fig:cfi-distributions) that is worth highlighting is that the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$ produced solutions with very similar CFI values in most conditions. These two methods also produced solutions with very similar RMSEA values in many conditions, as shown in \@ref(fig:rmsea-distributions). Indeed, the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$ methods led to much more similar results in terms of both RMSEA and CFI than the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA}}$ methods. Put another way, optimizing for CFI alone generally led to similar results compared to optimizing for both CFI and RMSEA, whereas optimizing for RMSEA alone generally led to solutions with much different RMSEA and CFI values compared to optimizing for both CFI and RMSEA. This suggests that CFI was more sensitive to small changes in parameter values than RMSEA.
 
-The distributions of CFI values shown in Figure \@ref(fig:cfi-distributions) also emphasize the importance of reporting multiple fit indices when simulating correlation or covariance matrices with model error. For instance, the $\textrm{TKL}_{\textrm{RMSEA}}$ and CB methods produced solutions with RMSEA values close to the target RMSEA value of .09 in conditions with poor model fit and weak factor loadings. However, Figure \@ref(fig:cfi-distributions) shows that those two model-error methods led to solutions with unacceptably low CFI values in the same conditions.
+The distributions of CFI values shown in \@ref(fig:cfi-distributions) also emphasize the importance of reporting multiple fit indices when simulating correlation or covariance matrices with model error. For instance, the $\textrm{TKL}_{\textrm{RMSEA}}$ and CB methods produced solutions with RMSEA values close to the target RMSEA value of .09 in conditions with Poor model fit and weak factor loadings. However, \@ref(fig:cfi-distributions) shows that those two model-error methods led to solutions with unacceptably low CFI values in the same conditions.
 
 ```{r cfi-distributions, fig.cap = "Distributions of the CFI values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target CFI value for each condition. Note that some levels of model fit and factor loading strength were omitted to conserve space. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width=425}
 if (make_plots) {
@@ -458,7 +457,7 @@ knitr::include_graphics(here("img/cfi_distributions.png"))
 
 ### TLI
 
-The distributions of TLI values for the solutions produced using the five model-error methods are shown in Figure \@ref(fig:tli-distributions), conditioned on number of factors, model fit, and factor loading strength. Overall, the distributions of TLI values were quite similar to the distributions of CFI values shown in Figure \@ref(fig:cfi-distributions). In particular, the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods tended to produce solutions with higher TLI values than the other model-error methods, except for conditions with a single factor, Poor model fit, and strong factor loadings. 
+The distributions of TLI values for the solutions produced using the five model-error methods are shown in \@ref(fig:tli-distributions), conditioned on number of factors, model fit, and factor loading strength. Overall, the distributions of TLI values were quite similar to the distributions of CFI values shown in \@ref(fig:cfi-distributions). In particular, the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods tended to produce solutions with higher TLI values than the other model-error methods, except for conditions with a single factor, Poor model fit, and strong factor loadings. 
 
 ```{r tli-distributions, out.width="100%"}
 #| fig.cap="Distributions of the TLI values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the threshold values of TLI that correspond to the targeted levels of model fit, according to Hu and Bentler (1999). Note that some levels of model fit and factor loading strength were omitted to conserve space. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
@@ -495,7 +494,7 @@ if (make_plots) {
 knitr::include_graphics(here("img/tli_distributions.png"))
 ```
 
-Similar to CFI, the differences in TLI values resulting from the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods compared to the other model-error methods were most pronounced for conditions with many factors, weak factor loadings, and Poor model fit. This result (and the similar result for CFI) can be understood by thinking about how the relative and absolute fit indices differ in how they describe model fit. As an example, consider the an orthogonal model with ten major factors, five items per factor, and major common factor loadings fixed at .4. The population correlation matrix without model error for this condition ($\bm{\Omega}$) was $50 \times 50$ block-diagonal correlation matrix, with correlations of $0.16$ between items that load on the same factor and zero otherwise. To obtain a population correlation matrix ($\bm{\Sigma}$) with sufficient model error to indicate poor model fit (based on an RMSEA value of 0.09), the elements of the $\mathbf{W}$ matrix had to be large enough to ensure that the square average squared difference between the off-diagonal elements of $\bm{\Omega}$ and $\bm{\Sigma}$ was 0.0081. Because the "noise" correlations from the minor common factors were relatively large compared to the non-zero elements of $\bm{\Omega}$, the $\bm{\Sigma}$ matrix did not have a clear factor structure. Thus, the major-factor model did not fit the $\bm{\Sigma}$ very well because the model was unable to account for the correlations between the items represented in the off-block-diagonal elements of $\bm{\Sigma}$ that were introduced by the $\mathbf{WW}^\prime$ matrix. Moreover, because the $\mathbf{WW}^\prime$ matrix increased the correlations between nearly all of the items that were uncorrelated in $\bm{\Omega}$, the independence model used as a baseline for computing CFI fit $\bm{\Sigma}$ relatively well.
+Similar to CFI, the differences in TLI values resulting from the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods compared to the other model-error methods were most pronounced for conditions with many factors, weak factor loadings, and Poor model fit. This result (and the similar result for CFI) can be understood by thinking about how the relative and absolute fit indices differ in how they describe model fit. As an example, consider the an orthogonal model with ten major factors, five items per factor, and major common factor loadings fixed at .4. The population correlation matrix without model error for this condition ($\bm{\Omega}$) was $50 \times 50$ block-diagonal correlation matrix, with correlations of $0.16$ between items that load on the same factor and zero otherwise. To obtain a population correlation matrix ($\bm{\Sigma}$) with sufficient model error to indicate Poor model fit (based on an RMSEA value of 0.09), the elements of the $\mathbf{W}$ matrix had to be large enough to ensure that the square average squared difference between the off-diagonal elements of $\bm{\Omega}$ and $\bm{\Sigma}$ was 0.0081. Because the "noise" correlations from the minor common factors were relatively large compared to the non-zero elements of $\bm{\Omega}$, the $\bm{\Sigma}$ matrix did not have a clear factor structure. Thus, the major-factor model did not fit the $\bm{\Sigma}$ very well because the model was unable to account for the correlations between the items represented in the off-block-diagonal elements of $\bm{\Sigma}$ that were introduced by the $\mathbf{WW}^\prime$ matrix. Moreover, because the $\mathbf{WW}^\prime$ matrix increased the correlations between nearly all of the items that were uncorrelated in $\bm{\Omega}$, the independence model used as a baseline for computing CFI fit $\bm{\Sigma}$ relatively well.
 
 ```{r omega-wtw-sigma-example, out.width='100%'}
 #| fig.cap = "The population correlation matrix without model error ($\\bm{\\Sigma}$), the matrix of item correlations due to the minor common factors ($\\mathbf{WW}^\\prime$), and the population matrix with model error ($\\bm{\\Sigma}$) for an orthogonal model with ten major factors, five items per factor, and major common factor loadings fixed at .4. The RMSEA and CFI values for this example were 0.09 and 0.25."
@@ -573,7 +572,7 @@ if (make_plots) {
 knitr::include_graphics(here("img/omega_plus_WtW_with_annotations.png"))
 ```
 
-The effects of the model error introduced by the minor common factors can be seen in Figure \@ref(fig:omega-wtw-sigma-example), which contains visual representations of $\bm{\Omega}$, $\textrm{WW}^\prime$, and $\bm{\Sigma}$ matrices. The $\mathbf{W}$ and $\bm{\Sigma}$ matrices shown in the figure were obtained using the $\textrm{TKL}_{\textrm{RMSEA}}$ method with a target RMSEA value of 0.09. The observed RMSEA and CFI values for $\bm{\Sigma}$ were 0.09 and 0.25. Notice in Figure \@ref(fig:omega-wtw-sigma-example) how large the elements of the $\mathbf{WW}^\prime$ matrix were relative to the $\bm{\Omega}$ matrix and how many off-block-diagonal elements there were relative to the block diagonal elements. This helps explain the incompatibility between RMSEA and CFI for models with many factors, weak major common factor loadings, and target RMSEA and CFI values reflecting poor model fit. To get an RMSEA value in line with the target value, all of the elements of $\bm{\Omega}$ were perturbed. The perturbations to the off-block-diagonal elements of $\bm{\Omega}$ were important in terms of the resulting CFI value because they were incompatible with the major common factor model (i.e., they should have been zero under that model) and therefore degraded the fit of the major factor model for $\bm{\Sigma}$ while improving the fit of the independence model. The effect of perturbing these off-block-diagonal elements became more pronounced as the number of factors increased because the number of off-block-diagonal elements increased faster than the number of block-diagonal elements as the total number of items increased. This can be clearly seen in Figure \@ref(fig:off-diag-elements), which shows the number of block diagonal elements and off-block-diagonal elements in the lower triangle of $\bm{\Sigma}$ as the number of factors increased for an orthogonal model with five items per factor.
+The effects of the model error introduced by the minor common factors can be seen in \@ref(fig:omega-wtw-sigma-example), which contains visual representations of $\bm{\Omega}$, $\textrm{WW}^\prime$, and $\bm{\Sigma}$ matrices. The $\mathbf{W}$ and $\bm{\Sigma}$ matrices shown in the figure were obtained using the $\textrm{TKL}_{\textrm{RMSEA}}$ method with a target RMSEA value of 0.09. The observed RMSEA and CFI values for $\bm{\Sigma}$ were 0.09 and 0.25. Notice in \@ref(fig:omega-wtw-sigma-example) how large the elements of the $\mathbf{WW}^\prime$ matrix were relative to the $\bm{\Omega}$ matrix and how many off-block-diagonal elements there were relative to the block diagonal elements. This helps explain the incompatibility between RMSEA and CFI for models with many factors, weak major common factor loadings, and target RMSEA and CFI values reflecting poor model fit. To get an RMSEA value in line with the target value, all of the elements of $\bm{\Omega}$ were perturbed. The perturbations to the off-block-diagonal elements of $\bm{\Omega}$ were important in terms of the resulting CFI value because they were incompatible with the major common factor model (i.e., they should have been zero under that model) and therefore degraded the fit of the major factor model for $\bm{\Sigma}$ while improving the fit of the independence model. The effect of perturbing these off-block-diagonal elements became more pronounced as the number of factors increased because the number of off-block-diagonal elements increased faster than the number of block-diagonal elements as the total number of items increased. This can be clearly seen in \@ref(fig:off-diag-elements), which shows the number of block diagonal elements and off-block-diagonal elements in the lower triangle of $\bm{\Sigma}$ as the number of factors increased for an orthogonal model with five items per factor.
 
 ```{r off-diag-elements, fig.align='center'}
 #| fig.cap = "The number of block-diagonal elements in the lower-triangle of $\\bm{\\Sigma}$ compared to the number of off-block-diagonal elements for an orthogonal model with five items per factor."
@@ -628,16 +627,26 @@ knitr::include_graphics(here("img/off-diagonal-elements.png"))
 
 ### CRMR
 
-Just as the TLI results were similar to the CFI results, the CRMR results were similar in many ways to the RMSEA results. In particular, 
+The distributions of the CRMR model fit index by level of model fit, factor loading, number of major common factors, and model error method are represented as boxplots in \@ref(fig:crmr-distributions). The figure shows that in conditions with Very Good model fit, all of the model error methods led to CRMR values that were generally at or below 0.05, the rule-of-thumb CRMR threshold for good model fit given by Hu and Bentler [-@hu1999]. In general, all of the model fit methods led to similar CRMR distributions when model fit was Very Good. The largest differences in CRMR values between model error methods when model fit was Very Good occured when there were many factors and low factor loadings. In those conditions, the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$ model error methods led to lower CRMR values compared to the other methods.
 
-```{r crmr-distributions, fig.cap="Distributions of the CRMR values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the threshold values of SRMR/CRMR that correspond to the targeted levels of model fit, according to Hu and Bentler (1999). Note that some levels of model fit and factor loading strength were omitted to conserve space. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width="100%"}
+Larger differences between the model error methods emerged when model fit was Poor. In those conditions, only the $\textrm{TKL}_{\textrm{RMSEA}}$ and WB methods consistently led to CRMR values that were near or above the threshold CRMR value for acceptable model fit given by Hu and Bentler [-@hu1999]. In fact, the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods often led to CRMR values that were less than the Hu and Bentler [-@hu1999] threshold for good model fit and were frequently the methods the led to the lowest CRMR values. The only conditions where the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods led to higher median CRMR values were those with one-factor models, salient factor loadings of 0.8, and Poor (target) model fit.
+
+<!-- [TK: Need to discuss the fit indices in terms of theta hat values as well. Where best to put that material?] -->
+
+```{r crmr-distributions, fig.cap="Distributions of the CRMR values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Recommendations for threshold values of SRMR/CRMR are not as fine-grained as for some other fit indices, but threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values. The dashed lines indicate these two threshold values. Note that some levels of model fit and factor loading strength were omitted to conserve space. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width="100%"}
 if (make_plots) {
   crmr_distributions <- 
     results_matrix %>%
     filter(rmsea < 3, loading_numeric != .6, model_fit != "Fair") %>%
+    mutate(target_crmr = case_when(model_fit == "Poor" ~ 0.08,
+                                   model_fit == "Very Good" ~ 0.05)) %>%
     ggplot(aes(x = fct_rev(error_method_rec), y = crmr)) +
     geom_boxplot(outlier.size = .5, outlier.stroke = .25, lwd = .5,
                  fatten = 1.5) +
+    geom_hline(yintercept = 0.05, 
+               color = "black", linetype = "dashed", size = .25) +
+    geom_hline(yintercept = 0.08, 
+               color = "black", linetype = "dashed", size = .25) +
     coord_flip() +
     scale_x_discrete(labels = parse(text=levels(results_matrix$error_method_rec)[5:1])) +
     facet_grid(model_fit_rec * loading_rec ~ 
@@ -658,3 +667,129 @@ if (make_plots) {
 
 knitr::include_graphics(here("img/crmr_distributions.png"))
 ```
+
+## Agreement of Fit Indices
+
+In the previous section, I reported results in terms of the RMSEA, CFI, TLI, and CRMR values individually. However, we often consider fit indices jointly and are interested in whether fit indices for a correlation matrix "agree" with one another. Therefore, in this section I will report the results in terms of fit index agreement. Specifically, I will try to address two main questions. First, how well did model error methods do at producing solutions with RMSEA and CFI values that were close to the target values corresponding to a particular level of model fit? Second, to what extent did the model error methods produce solutions with fit index values that corresponded to the same qualitative interpretation of model fit? For both questions, I will focus on the agreement between RMSEA and CFI, both for the sake of simplicity and because RMSEA and CFI were the fit indices that I used as target values for the model error methods. Although not discussed here, results reporting the agreement between all of the fit indices included in this study (CFI, RMSEA, TLI, and CRMR) are included in \@ref(appendix-b).
+
+To evaluate how well each of the model error-methods did at producing solutions that had RMSEA and CFI values that were close to the target values, I used the metric
+
+\begin{equation}
+D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{target}}| + |\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{target}}|,
+\end{equation}
+
+where $\textrm{RMSEA}_{\textrm{obs}}$ and $\textrm{CFI}_{\textrm{obs}}$ denote the observed RMSEA and CFI values for each solution. Small $D$ values indicated that the solution was good in the sense that the observed RMSEA and CFI values were close to the target RMSEA and CFI values. On the other hand, large $D$ values inidcated a poor solution with either one or both of the observed RMSEA and CFI values far from the corresponding target values.
+
+Box-plots showing the distribution of $D$ values for each of the model-error methods conditioned on the number of major common factors, model fit, and factor loading strength are shown in \@ref(fig:d3-plot). The figure shows that all of the model-error method led to good results (i.e., small $D$ values) in conditions with Very Good model fit and strong factor loadings. Similarly, all of the model-error methods led to reasonably good results in conditions with one or three major factors, Poor model fit, and strong factor loadings. In the remaining conditions where the model-error methods did not all lead to small $D$ values, the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods led to smaller $D$ values than the other model-error methods. In particular, the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods led to much smaller $D$ values than the alternative model-error methods in conditions with many major common factors and weak factor loadings, especially when model fit was Poor. The CB method typically led to the next-smallest $D$ values in these conditions, followed by the $\textrm{TKL}_{\textrm{RMSEA}}$ and WB methods.
+
+```{r d3-plot, out.width="100%"}
+#| fig.cap = "The sum of the absolute differences between the observed and target RMSEA and CFI values ($D$), conditioned on number of factors, model fit, and factor loading strength. Note that some levels of model fit and factor loading strength were omitted to conserve space. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+if (make_plots) {
+  d_plot <- 
+    results_matrix %>%
+    filter(rmsea < 3, loading_numeric != .6, model_fit != "Fair") %>%
+    ggplot(aes(x = fct_rev(error_method_rec), y = d3)) +
+    geom_boxplot(outlier.size = .5, outlier.stroke = .25, lwd = .5,
+                 fatten = 1.5) +
+    coord_flip() +
+    scale_x_discrete(labels = parse(text=levels(results_matrix$error_method_rec)[5:1])) +
+    facet_grid(model_fit_rec * loading_rec ~ 
+                 factors_rec) +
+    labs(x = "",
+         y = TeX("$D$")) +
+    theme_bw() +
+    theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
+  
+  ggsave(
+    filename = here("img/d_plot.png"), 
+    plot = d_plot,
+    dpi = 320,
+    height = 4, width = 5.25,
+    scale = 1.4
+  )
+}
+
+knitr::include_graphics(here("img/d_plot.png"))
+```
+
+Looking at how far the observed RMSEA and CFI values differed from the target RMSEA and CFI values (in terms of $D$) gave one perspective on model fit agreement. I obtained a second perspective on model fit agreement by determining how often fit indices led to the same qualitative assessement of model fit using rule-of-thumb threshold values of RMSEA and CFI such as those reported by Hu and Bentler [-@hu1999], . To calculate the rates of qualitative model fit agreement, I first assigned each simulated correlation matrix into one of three qualitative model fit categories based on its observed RMSEA and CFI values. For RMSEA, a simulated correlation matrix was considered to have good model fit if the observed RMSEA value was greater than or equal to .05. If the RMSEA was greater than 0.05 but less than .1, it was considered to have acceptable model fit. RMSEA values greater than .1 were considered to represent unacceptable model fit. Similarly, observed CFI values greater than .95 were considered to represent good model fit, CFI values between .95 and .90 were considered to represent acceptable model fit, and CFI values below .90 were considered to represent unacceptable model fit. 
+
+```{r fit-agreement-fig, out.width='100%'}
+#| fig.cap = "The percent of cases where the observed RMSEA and CFI values led to the same qualitative evaluation of model fit based on the threshold values suggested by Hu and Bentler (1999)."
+
+if (make_plots) {
+  results_matrix %>%
+    mutate(
+      rmsea_subj_fit = case_when(rmsea <= 0.05 ~ "Good",
+                                 rmsea > 0.05 & rmsea <= 0.1 ~ "Acceptable",
+                                 rmsea > 0.1 ~ "Unacceptable"),
+      cfi_subj_fit = case_when(cfi >= .95 ~ "Good",
+                               cfi < .95 & cfi >= .9 ~ "Acceptable",
+                               cfi < .9 ~ "Unacceptable")
+    ) %>% mutate(
+      fit_agreement = (rmsea_subj_fit == cfi_subj_fit)
+    ) %>% group_by(factors, loading_rec, model_fit_rec, error_method) %>%
+    summarize(agreement_rate = mean(fit_agreement, na.rm = TRUE)) %>%
+    ggplot(aes(y = agreement_rate, x = factors, color = error_method, 
+               shape = error_method, linetype = error_method, 
+               group = error_method)) +
+    scale_y_continuous(label = scales::percent) +
+    scale_x_continuous(breaks = 1:10) +
+    geom_point() +
+    geom_line() +
+    scale_color_viridis_d(end = .9) +
+    labs(y = "Fit Index Agreement", x = "Factors",
+         shape = "Error Method", color = "Error Method", linetype = "Error Method") +
+    facet_grid(model_fit_rec ~ loading_rec) +
+    theme_bw() +
+    theme(legend.position = "bottom")
+  
+  ggsave(filename = here("img/fit_index_agreement.png"),
+         height = 6,
+         width = 7,
+         dpi = 320)
+}
+
+knitr::include_graphics(here("img/fit_index_agreement.png"))
+```
+
+(ref:fit-agreement-table-caption) The percent of cases where the observed RMSEA and CFI values led to the same qualitative evaluation of model fit based on the threshold values suggested by Hu and Bentler [-@hu1999].
+
+```{r fit-agreement-table}
+fit_agreement_table <- results_matrix %>%
+  mutate(
+    rmsea_subj_fit = case_when(rmsea <= 0.05 ~ "Good",
+                               rmsea > 0.05 & rmsea <= 0.1 ~ "Acceptable",
+                               rmsea > 0.1 ~ "Unacceptable"),
+    cfi_subj_fit = case_when(cfi >= .95 ~ "Good",
+                             cfi < .95 & cfi >= .9 ~ "Acceptable",
+                             cfi < .9 ~ "Unacceptable")
+  ) %>% mutate(
+    fit_agreement = (rmsea_subj_fit == cfi_subj_fit)
+  ) %>% group_by(factors, loading_numeric, model_fit, error_method) %>%
+  summarize(agreement_rate = mean(fit_agreement, na.rm = TRUE)) %>%
+  pivot_wider(names_from = error_method, 
+              values_from = agreement_rate) %>%
+  ungroup()
+
+fit_agreement_table %>%
+    mutate(across(.cols = c(`TKL (RMSEA)`:WB), ~ . * 100)) %>%
+  apa_table(col.names = c("Factors", "Loading", "Model Fit", 
+                          "$\\textrm{TKL}_{\\textrm{RMSEA}}$", 
+                          "$\\textrm{TKL}_{\\textrm{CFI}}$", 
+                          "$\\textrm{TKL}_{\\textrm{RMSEA/CFI}}$", 
+                          "CB", "WB"),
+            digits = c(0, 1, 0, 1, 1, 1, 1, 1),
+            align = "rrlrrrrr",
+            col_spanners = list("Model-Error Method" = c(4, 8)),
+            format.args = list("na_string" = "---"),
+            caption = "(ref:fit-agreement-table-caption)",
+            label = "fit-agreement-table",
+            note = "TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.")
+```
+
+<!-- Need to add:
+1. Experiments showing that the TKL optimization methods can recover true model fit parameters.
+2. Number of times that the CB method *doesn't* produced an optimal solution (RMSEA_theta_hat should be 0).
+3. Experiements showing whether reducing the TKL penalty improves convergence.
+-->

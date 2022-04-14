@@ -62,6 +62,8 @@ library(noisemaker) # devtools::install_github("JustinKracht/noisemaker")
 # Set knitr chunk options
 knitr::opts_chunk$set(
   echo = FALSE, 
+  message = FALSE,
+  warning = FALSE,
   cache = TRUE, 
   fig.align = "center", 
   dpi = 320
@@ -70,4 +72,15 @@ knitr::opts_chunk$set(
 # Flags indicating whether or not new plots and tables should be generated
 make_plots <- FALSE # Should new plots be generated?
 make_tabs <- FALSE # Should new tables be generated?
+```
+
+```{r r-citations, include = FALSE}
+# Generate a bib file citing all of the R packages that were used
+sim_deps <- renv::dependencies(here("../model-error-simulation"))$Package
+writing_deps <-  renv::dependencies(here())$Package
+
+package_deps <- c(unique(c(sim_deps, writing_deps)), "thesisdown")
+create_bib(file = here("bib/r-refs.bib"),
+           append = TRUE,
+           x = package_deps)
 ```

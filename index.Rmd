@@ -74,7 +74,7 @@ make_plots <- FALSE # Should new plots be generated?
 make_tabs <- FALSE # Should new tables be generated?
 ```
 
-```{r r-citations, include = FALSE}
+```{r r-citations, include = FALSE, eval = FALSE}
 # Generate a bib file citing all of the R packages that were used
 sim_deps <- renv::dependencies(here("../model-error-simulation"))$Package
 writing_deps <-  renv::dependencies(here())$Package

@@ -714,9 +714,37 @@ knitr::include_graphics(here("img/d_plot.png"))
 
 Looking at how far the observed RMSEA and CFI values differed from the target RMSEA and CFI values (in terms of $D$) gave one perspective on model fit agreement. I obtained a second perspective on model fit agreement by determining how often fit indices led to the same qualitative assessement of model fit using rule-of-thumb threshold values of RMSEA and CFI such as those reported by Hu and Bentler [-@hu1999]. To calculate the rates of qualitative model fit agreement, I first assigned each simulated correlation matrix into one of three qualitative model fit categories based on its observed RMSEA and CFI values. For RMSEA, a simulated correlation matrix was considered to have good model fit if the observed RMSEA value was greater than or equal to .05. If the RMSEA was greater than 0.05 but less than .1, it was considered to have acceptable model fit. RMSEA values greater than .1 were considered to represent unacceptable model fit. Similarly, observed CFI values greater than .95 were considered to represent good model fit, CFI values between .95 and .90 were considered to represent acceptable model fit, and CFI values below .90 were considered to represent unacceptable model fit.
 
-The percent of simulated correlation matrices with model error that led to fit indices indicating qualitative agreement on model fit are shown in \@ref(fig:fit-agreement-fig), conditioned on number of factors, factor loading strength, target model fit, and model-error method. The figure shows that no single model-error method always led to the highest rates of qualtative fit agreement. For conditions with target fit indices that corresponded to Very Good model fit, the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods almost always led to qualitative model fit agreement rates of 100%. The other model-error methods led to similar rates of qualitative model fit agreement in conditions with Very Good target model fit and strong factor loadings (i.e., Loading = .8), but led to much lower rates of agreement in conditions with Very Good model fit and weaker factor loadings.
+```{r calculate-agreement-rate, echo = FALSE, include = FALSE}
+agreement_rates <- results_matrix %>% mutate(
+  rmsea_subj_fit = case_when(rmsea <= 0.05 ~ "Good",
+                             rmsea > 0.05 & rmsea <= 0.1 ~ "Acceptable",
+                             rmsea > 0.1 ~ "Unacceptable"),
+  cfi_subj_fit = case_when(cfi >= .95 ~ "Good",
+                           cfi < .95 & cfi >= .9 ~ "Acceptable",
+                           cfi < .9 ~ "Unacceptable")
+) %>% mutate(
+  fit_agreement = (rmsea_subj_fit == cfi_subj_fit)
+) %>% group_by(error_method) %>% 
+  summarise(mean_fit_agreement = mean(fit_agreement, na.rm = TRUE)) %>%
+  pivot_wider(names_from = error_method, values_from = mean_fit_agreement)
 
-Results for conditions with Fair or Poor target model fit were less straightforward. When target model fit was Fair, the $\textrm{TKL}_{\textrm{CFI}}$ method generally led to the highest (or near highest) rates of qualitative agreement of the model-error methods, particular when factor loadings were weak and when there were many major common factors. When target model fit was Poor, the $\textrm{TKL}_{\textrm{CFI}}$ still led to the highest qualitative fit agreement rates 
+colnames(agreement_rates) <-
+  c("tkl_rmsea", "tkl_cfi", "tkl_rmsea_cfi", "cb", "wb")
+```
+
+The percent of simulated correlation matrices with model error that led to fit indices indicating qualitative agreement on model fit are shown in \@ref(fig:fit-agreement-fig), conditioned on number of factors, factor loading strength, target model fit, and model-error method. The figure shows that no single model-error method always led to the highest rates of qualtative fit agreement. 
+
+XXX ----
+
+Overall, the $\textrm{TKL}_{\textrm{CFI}}$ model-error method led to the highest rate of qualitative fit index agreement (`r scales::percent(agreement_rates$tkl_cfi, accuracy = .1)`), followed by the CB (`r scales::percent(agreement_rates$cb, accuracy = .1)`), $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ (`r scales::percent(agreement_rates$tkl_rmsea_cfi, accuracy = .1)`), $\textrm{TKL}_{\textrm{RMSEA}}$ (`r scales::percent(agreement_rates$tkl_rmsea, accuracy = .1)`), and WB (`r scales::percent(agreement_rates$wb, accuracy = .1)`) methods. 
+
+Breaking these results out further by level of target model fit, 
+
+XXX ----
+
+... For conditions with target fit indices that corresponded to Very Good model fit, the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods almost always led to qualitative model fit agreement rates of 100%. The other model-error methods led to similar rates of qualitative model fit agreement in conditions with Very Good target model fit and strong factor loadings (i.e., Loading = .8), but led to much lower rates of agreement in conditions with Very Good model fit and weaker factor loadings.
+
+Results for conditions with Fair or Poor target model fit were less straightforward. When target model fit was Fair, the $\textrm{TKL}_{\textrm{CFI}}$ method often led to the highest rates of qualitative fit agreement of the model-error methods, particularly when factor loadings were weak and when there were many major common factors. When target model fit was Poor, all of the model error methods had low qualitative fit agreement rates except when factor loadings were .8
 
 ```{r fit-agreement-fig, out.width='100%'}
 #| fig.cap = "The percent of cases where the observed RMSEA and CFI values led to the same qualitative evaluation of model fit based on the threshold values suggested by Hu and Bentler (1999)."
@@ -792,10 +820,16 @@ fit_agreement_table %>%
             note = "TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.")
 ```
 
-
-
 <!-- Need to add:
 1. Experiments showing that the TKL optimization methods can recover true model fit parameters.
 2. Number of times that the CB method *doesn't* produced an optimal solution (RMSEA_theta_hat should be 0).
 3. Experiements showing whether reducing the TKL penalty improves convergence.
 -->
+
+## TKL Method Recovery of Model Fit Indices
+
+The TKL-based model error methods were designed to find a correlation matrix with model error that had either an RMSEA value or a CFI value (or both) that were close to a specified value. In a previous section, I reported RMSEA and CFI values for all of the model-error methods (including the TKL-based methods) and compared them to their target values. When only one target model-fit index was used (i.e., $\textrm{TKL}_{\textrm{RMSEA}}$ or $\textrm{TKL}_{\textrm{CFI}}$), the observed RMSEA and CFI values were very close to the target values. However, when both RMSEA and CFI fit index targets were used simulaneously with the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ method, many solutions failed to have RMSEA and CFI values that were both very close to the target values. This could indicate that the optimization procedure was not working well and often failed to find an optimal solution. However, an alternative explanation is that some combinations of RMSEA and CFI might not have been possible for conditions with major factor loadings fixed at a particular value, or with a certain number of major common factors, etc. 
+
+To determine whether the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ was able to find near-optimal solutions, I first needed to find combinations of RMSEA and CFI values that were known to be possible. If the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ method was able to produce solutions with RMSEA and CFI values that were close to these target RMSEA and CFI values, it would suggest that the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ was working well. More importantly, if the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ method was not able to produce solutions with fit indices close to these known-to-be-possible combinations of RMSEA and CFI, it would suggest that the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ was not working well and cannot be relied on to produce optimal or near-optimal solutions.
+
+

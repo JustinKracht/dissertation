@@ -820,12 +820,6 @@ fit_agreement_table %>%
             note = "TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.")
 ```
 
-<!-- Need to add:
-1. Experiments showing that the TKL optimization methods can recover true model fit parameters.
-2. Number of times that the CB method *doesn't* produced an optimal solution (RMSEA_theta_hat should be 0).
-3. Experiements showing whether reducing the TKL penalty improves convergence.
--->
-
 ## TKL Method Recovery of Model Fit Indices
 
 The TKL-based model error methods were designed to find a correlation matrix with model error that had either an RMSEA value or a CFI value (or both) that were close to a specified value. In a previous section, I reported RMSEA and CFI values for all of the model-error methods (including the TKL-based methods) and compared them to their target values. When only one target model-fit index was used (i.e., $\textrm{TKL}_{\textrm{RMSEA}}$ or $\textrm{TKL}_{\textrm{CFI}}$), the observed RMSEA and CFI values were very close to the target values. However, when both RMSEA and CFI fit index targets were used simulaneously with the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ method, many solutions failed to have RMSEA and CFI values that were both very close to the target values. This could indicate that the optimization procedure was not working well and often failed to find an optimal solution. However, an alternative explanation is that some combinations of RMSEA and CFI might not have been possible for conditions with major factor loadings fixed at a particular value, or with a certain number of major common factors, etc. 
@@ -836,7 +830,7 @@ To find RMSEA and CFI value combinations that were known to be possible, I used 
 
 [^fit-recovery-code]: Code for this simulation study is provided in Appendix TK.
 
-The results from this small simulation study are reported in \@ref(fig:fit-index-recovery), which shows the known-to-be-possible target values of RMSEA and CFI (indicated by solid black lines) and the observed RMSEA and CFI values from the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ method for each condition. The figure shows that the observed RMSEA and CFI values were nearly identical to the target values for most conditions. The conditions where the observed fit indices had the most variability were conditions with one or three factors, five items, and weak factor loadings. However, even in those conditions many solutions had CFI and RMSEA values that were nearly identical to the target values. This suggests that using the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ method repeatedly with different initial values of $\mathbf{W}$, $\epsilson$, and $\nu_{\textrm{e}}$ and then selecting the solution with RMSEA and CFI values closest to the target values might be an effective approach for obtaining optimal (or nearly-optimal) solutions.
+The results from this small simulation study are reported in \@ref(fig:fit-index-recovery), which shows the known-to-be-possible target values of RMSEA and CFI (indicated by solid black lines) and the observed RMSEA and CFI values from the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ method for each condition. The figure shows that the observed RMSEA and CFI values were nearly identical to the target values for most conditions. The conditions where the observed fit indices had the most variability were conditions with one or three factors, five items, and weak factor loadings. However, even in those conditions many solutions had CFI and RMSEA values that were nearly identical to the target values. This suggests that using the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ method repeatedly with different initial values of $\mathbf{W}$,  $\epsilon$, and $\nu_{\textrm{e}}$ and then selecting the solution with RMSEA and CFI values closest to the target values might be an effective approach for obtaining optimal (or nearly-optimal) solutions.
 
 ```{r fit-index-recovery}
 #| fig.cap = "Observed RMSEA and CFI values for the $\\textrm{TKL}_{\\textrm{RMSEA/CFI}}$ model-error method and the corresponding known-to-be-possible target RMSEA and CFI values (indicated by the black lines), conditioned on number of factors, number of items per factor, factor loading strength, and factor correlation. Note that some levels were omitted to conserve space."
@@ -874,7 +868,9 @@ if (make_plots) {
 knitr::include_graphics(here("img/rmsea_cfi_recovery.png"))
 ```
 
-
-
-
-
+<!-- Need to add:
+1. Experiments showing that the TKL optimization methods can recover true model fit parameters.
+2. Number of times that the CB method *doesn't* produced an optimal solution (RMSEA_theta_hat should be 0).
+3. Experiements showing whether reducing the TKL penalty improves convergence.
+4. Discussion of "hat" fit indices? Figures and tables in Appendix, but do I need a discussion of them in the main body of the paper? Perhaps a question for Niels.
+-->

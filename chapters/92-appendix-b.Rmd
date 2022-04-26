@@ -99,6 +99,143 @@ if (make_plots) {
 knitr::include_graphics(here("img/major_minor_factors_full.png"))
 ```
 
+### Observed RMSEA Values
+
+```{r rmsea-distributions-full, fig.cap = "Distributions of the RMSEA values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target RMSEA value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width='70%'}
+if (make_plots) {
+  rmsea_distributions <- 
+    results_matrix %>%
+    filter(rmsea < 3) %>%
+    ggplot(aes(x = fct_rev(error_method_rec), y = rmsea)) +
+    geom_hline(aes(yintercept = target_rmsea), 
+               color = "black", linetype = "dashed", size = .25) +
+    geom_boxplot(outlier.size = .5, outlier.stroke = .25, lwd = .5,
+                 fatten = 1.5) +
+    coord_flip() +
+    scale_x_discrete(labels = parse(text=levels(results_matrix$error_method_rec)[5:1])) +
+    facet_grid(model_fit_rec * loading_rec ~ 
+                 factors_rec) +
+    labs(x = "",
+         y = "RMSEA") +
+    theme_bw() +
+    theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
+  
+  ggsave(
+    filename = here("img/rmsea_distributions_full.png"), 
+    plot = rmsea_distributions,
+    dpi = 320,
+    height = 8, width = 5.25,
+    scale = 1.4
+  )
+}
+
+knitr::include_graphics(here("img/rmsea_distributions_full.png"))
+```
+
+### Observed CFI Values
+
+```{r cfi-distributions-full, fig.cap = "Distributions of the CFI values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target CFI value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width='70%'}
+if (make_plots) {
+  cfi_distributions <- 
+    results_matrix %>%
+    filter(rmsea < 3) %>%
+    ggplot(aes(x = fct_rev(error_method_rec), y = cfi)) +
+    geom_hline(aes(yintercept = target_cfi), 
+               color = "black", linetype = "dashed", size = .25) +
+    geom_boxplot(outlier.size = .5, outlier.stroke = .25, lwd = .5,
+                 fatten = 1.5) +
+    coord_flip() +
+    scale_x_discrete(labels = parse(text=levels(results_matrix$error_method_rec)[5:1])) +
+    facet_grid(model_fit_rec * loading_rec ~ 
+                 factors_rec) +
+    labs(x = "",
+         y = "CFI") +
+    theme_bw() +
+    theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
+  
+  ggsave(
+    filename = here("img/cfi_distributions_full.png"), 
+    plot = cfi_distributions,
+    dpi = 320,
+    height = 8, width = 5.25,
+    scale = 1.4
+  )
+}
+
+knitr::include_graphics(here("img/cfi_distributions_full.png"))
+```
+### Observed TLI Values
+
+```{r tli-distributions-full, out.width="70%"}
+#| fig.cap="Distributions of the TLI values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the threshold values of TLI that correspond to the targeted levels of model fit, according to Hu and Bentler (1999). TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+
+if (make_plots) {
+  tli_distributions <- 
+    results_matrix %>%
+    mutate(tli = case_when(tli < 0 ~ 0, TRUE ~ tli)) %>%
+    filter(rmsea < 3) %>%
+    ggplot(aes(x = fct_rev(error_method_rec), y = tli)) +
+    geom_hline(aes(yintercept = target_cfi), 
+               color = "black", linetype = "dashed", size = .25) +
+    geom_boxplot(outlier.size = .5, outlier.stroke = .25, lwd = .5,
+                 fatten = 1.5) +
+    coord_flip() +
+    scale_x_discrete(labels = parse(text=levels(results_matrix$error_method_rec)[5:1])) +
+    facet_grid(model_fit_rec * loading_rec ~ 
+                 factors_rec) +
+    labs(x = "",
+         y = "TLI") +
+    theme_bw() +
+    theme(panel.spacing.x = unit(10, units = "pt"),
+          plot.margin = margin(0, 0, 0, -14, unit = "pt"))
+  
+  ggsave(
+    filename = here("img/tli_distributions_full.png"), 
+    plot = tli_distributions,
+    dpi = 320,
+    height = 8, width = 5.25,
+    scale = 1.4
+  )
+}
+
+knitr::include_graphics(here("img/tli_distributions_full.png"))
+```
+
+### Observed CRMR Values
+
+```{r crmr-distributions-full, fig.cap="Distributions of the CRMR values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Recommendations for threshold values of SRMR/CRMR are not as fine-grained as for some other fit indices, but threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values. The dashed lines indicate these two threshold values. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width="70%"}
+if (make_plots) {
+  crmr_distributions <- 
+    results_matrix %>%
+    filter(rmsea < 3) %>%
+    ggplot(aes(x = fct_rev(error_method_rec), y = crmr)) +
+    geom_boxplot(outlier.size = .5, outlier.stroke = .25, lwd = .5,
+                 fatten = 1.5) +
+    geom_hline(yintercept = 0.05, 
+               color = "black", linetype = "dashed", size = .25) +
+    geom_hline(yintercept = 0.08, 
+               color = "black", linetype = "dashed", size = .25) +
+    coord_flip() +
+    scale_x_discrete(labels = parse(text=levels(results_matrix$error_method_rec)[5:1])) +
+    facet_grid(model_fit_rec * loading_rec ~ 
+                 factors_rec) +
+    labs(x = "",
+         y = "CRMR") +
+    theme_bw() +
+    theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
+  
+  ggsave(
+    filename = here("img/crmr_distributions_full.png"), 
+    plot = crmr_distributions,
+    dpi = 320,
+    height = 8, width = 5.25,
+    scale = 1.4
+  )
+}
+
+knitr::include_graphics(here("img/crmr_distributions_full.png"))
+```
+
 ## Fit Indices Based on $\hat{\Sigma}$
 
 ### $\textrm{RMSEA}_{\hat{\theta}}$

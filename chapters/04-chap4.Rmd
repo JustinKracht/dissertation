@@ -676,6 +676,7 @@ To evaluate how well each of the model error-methods did at producing solutions 
 
 \begin{equation}
 D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{target}}| + |\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{target}}|,
+(\#eq:distance-between-observed-and-target)
 \end{equation}
 
 where $\textrm{RMSEA}_{\textrm{obs}}$ and $\textrm{CFI}_{\textrm{obs}}$ denote the observed RMSEA and CFI values for each solution. Small $D$ values indicated that the solution was good in the sense that the observed RMSEA and CFI values were close to the target RMSEA and CFI values. On the other hand, large $D$ values inidcated a poor solution with either one or both of the observed RMSEA and CFI values far from the corresponding target values.
@@ -712,7 +713,7 @@ if (make_plots) {
 knitr::include_graphics(here("img/d_plot.png"))
 ```
 
-Looking at how far the observed RMSEA and CFI values differed from the target RMSEA and CFI values (in terms of $D$) gave one perspective on model fit agreement. I obtained a second perspective on model fit agreement by determining how often fit indices led to the same qualitative assessement of model fit using rule-of-thumb threshold values of RMSEA and CFI such as those reported by Hu and Bentler [-@hu1999]. To calculate the rates of qualitative model fit agreement, I first assigned each simulated correlation matrix into one of three qualitative model fit categories based on its observed RMSEA and CFI values. For RMSEA, a simulated correlation matrix was considered to have good model fit if the observed RMSEA value was greater than or equal to .05. If the RMSEA was greater than 0.05 but less than .1, it was considered to have acceptable model fit. RMSEA values greater than .1 were considered to represent unacceptable model fit. Similarly, observed CFI values greater than .95 were considered to represent good model fit, CFI values between .95 and .90 were considered to represent acceptable model fit, and CFI values below .90 were considered to represent unacceptable model fit.
+Looking at how far the observed RMSEA and CFI values differed from the target RMSEA and CFI values (in terms of $D$) gave one perspective on model fit agreement. I obtained a second perspective on model fit agreement by determining how often fit indices led to the same qualitative assessement of model fit using rule-of-thumb threshold values of RMSEA and CFI such as those reported by Hu and Bentler [-@hu1999]. To calculate the rates of qualitative model fit agreement, I first assigned each simulated correlation matrix into one of three qualitative model fit categories based on its observed RMSEA and CFI values. For RMSEA, a simulated correlation matrix was considered to have good model fit if the observed RMSEA value was less than or equal to .05. If the RMSEA was greater than 0.05 but less than .1, it was considered to have acceptable model fit. RMSEA values greater than .1 were considered to represent unacceptable model fit. Similarly, observed CFI values greater than .95 were considered to represent good model fit, CFI values between .95 and .90 were considered to represent acceptable model fit, and CFI values below .90 were considered to represent unacceptable model fit.
 
 ```{r calculate-agreement-rate, echo = FALSE, include = FALSE}
 agreement_rates <- results_matrix %>% mutate(

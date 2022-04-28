@@ -875,3 +875,24 @@ knitr::include_graphics(here("img/rmsea_cfi_recovery.png"))
 3. Experiements showing whether reducing the TKL penalty improves convergence.
 4. Discussion of "hat" fit indices? Figures and tables in Appendix, but do I need a discussion of them in the main body of the paper? Perhaps a question for Niels.
 -->
+
+## Figures to Add and Discuss
+
+```{r rmsea-cfi-distributions, out.width='100%'}
+#| fig.cap = "RMSEA and CFI values for the TKL-based model-error methods, conditioned on number of factors and model fit."
+if (make_plots) {
+  results_matrix %>%
+    filter(rmsea < 3, str_detect(error_method, "TKL")) %>%
+    ggplot(aes(x = rmsea, y = cfi)) +
+    geom_jitter(alpha = .1, size = 1.5, 
+                aes(color = error_method, shape = error_method)) +
+    # scale_color_viridis_d(end = .9) +
+    scale_color_brewer(palette = "Dark2", type = "qual") +
+    facet_grid(model_fit_rec ~ factors_rec, scales = "free_x") +
+    labs(x = "RMSEA", y = "CFI", color = "Error Method", shape = "Error Method") +
+    guides(color = guide_legend(override.aes = list(alpha = 1, size = 1.5))) +
+    theme_bw() +
+    theme(legend.position = "bottom")
+}
+```
+

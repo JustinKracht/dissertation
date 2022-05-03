@@ -383,7 +383,7 @@ knitr::include_graphics(here("img/crmr_thetahat_distributions.png"))
 <!-- Begin Figure c156 -->
 \begin{sidewaysfigure}[ht]
 
-{ \centering \includegraphics[width=\linewidth]{img/c156_R_plots_with_annotation.png} }
+{ \centering \includegraphics[width=.8\linewidth]{img/c156_R_plots_with_annotation.png} }
 
 \caption{Correlation matrices with model error ($\mathbf{\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\mathbf{\Sigma}$ ($\hat{\mathbf{\Sigma}}$) for each model-error method. Results are shown for a set of solution matrices from the condition with ten orthogonal factors, ten items per factor, weak factor loadings of .3, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.}
 

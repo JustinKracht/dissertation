@@ -90,7 +90,7 @@ if (make_plots) {
                group = factors)) +
     geom_line() + 
     geom_point() +
-    scale_color_viridis_d(end = .85) +
+    scale_color_brewer(palette = "Dark2", type = "qual") +
     scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
     scale_x_continuous(breaks = c(.4, .6, .8)) +
     facet_grid(items_per_factor_rec ~ model_fit) +
@@ -295,7 +295,7 @@ if (make_plots) {
                group = factors)) +
     geom_line() +
     geom_point() +
-    scale_color_viridis_d(end = .85) +
+    scale_color_brewer(palette = "Dark2", type = "qual") +
     scale_y_continuous(label = scales::percent_format(accuracy = 1)) +
     scale_x_continuous(breaks = c(.4, .6, .8)) +
     facet_grid(items_per_factor_rec ~ model_fit_rec) +
@@ -324,8 +324,8 @@ if (make_plots) {
            factors %in% c(1,10),
            !(error_method %in% c("CB", "WB"))) %>%
     ggplot(aes(y = v, x = eps, color = error_method)) +
-    geom_point(alpha = .1, size = .5) +
-    scale_color_viridis_d() +
+    geom_point(alpha = .1, size = .75) +
+    scale_color_brewer(palette = "Dark2", type = "qual") +
     scale_x_continuous(breaks = c(0.0, 0.2, 0.4, 0.6, 0.8, 1.0)) +
     facet_grid(factors_rec * items_per_factor_rec ~ loading_rec) +
     labs(y = TeX("$\\nu_e$"), x = TeX("$\\epsilon$"), color = "Error Method") +
@@ -609,7 +609,7 @@ if (make_plots) {
     geom_line(aes(group = type)) +
     scale_y_continuous(label = scales::comma) +
     scale_x_continuous(breaks = c(0, 2, 4, 6, 8, 10)) +
-    scale_color_viridis_d(begin = .1, end = 0.9) +
+    scale_color_brewer(palette = "Dark2", type = "qual") +
     theme_minimal() +
     labs(y = "Elements in Lower Triangle",
          x = "Factors",
@@ -770,7 +770,7 @@ if (make_plots) {
     scale_x_continuous(breaks = 1:10) +
     geom_point() +
     geom_line() +
-    scale_color_viridis_d(end = .9) +
+    scale_color_brewer(palette = "Dark2", type = "qual") +
     labs(y = "Fit Index Agreement", x = "Factors",
          shape = "Error Method", color = "Error Method", linetype = "Error Method") +
     facet_grid(model_fit_rec ~ loading_rec) +
@@ -819,6 +819,32 @@ fit_agreement_table %>%
             caption = "(ref:fit-agreement-table-caption)",
             label = "fit-agreement-table",
             note = "TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.")
+```
+
+It was both interesting and unexpected that the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods led to such similar results, both in terms of $D$ and in terms of observed $RMSEA$ and $CFI$ values, whereas the $\textrm{TKL}_{\textrm{RMSEA}}$ method often led to results that were more similar to those of the CB and WB methods. The similarity between the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ results suggested that the CFI had more influence in \@ref(eq:rmsea-cfi-obj-function) than RMSEA, even when the fit indices were equally weighted. A possible explaination is provided in \@ref(fig:rmsea-cfi-distributions), which shows observed RMSEA and CFI values for solutions from the $\textrm{TKL}_{\textrm{RMSEA}}$, $\textrm{TKL}_{\textrm{CFI}}$, and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods, conditioned on number of factors and model fit. The figure shows that when the $\textrm{TKL}_{\textrm{RMSEA}}$ method was used, 
+
+```{r rmsea-cfi-distributions, out.width='100%'}
+#| fig.cap = "RMSEA and CFI values for the TKL-based model-error methods, conditioned on number of factors and model fit."
+if (make_plots) {
+  results_matrix %>%
+    filter(rmsea < 3, str_detect(error_method, "TKL"),
+           factors != 3, loading_numeric != .6) %>%
+    ggplot(aes(x = rmsea, y = cfi)) +
+    geom_jitter(alpha = .1, size = 1, 
+                aes(color = error_method, shape = error_method)) +
+    scale_color_brewer(palette = "Dark2", type = "qual") +
+    facet_grid(model_fit_rec~ factors_rec * loading_rec, scales = "free") +
+    labs(x = "RMSEA", y = "CFI", color = "Error Method", shape = "Error Method") +
+    guides(color = guide_legend(override.aes = list(alpha = 1, size = 1.5))) +
+    theme_bw() +
+    theme(legend.position = "bottom")
+  
+  ggsave(filename = here("img/rmsea-cfi-distributions.png"),
+         dpi = 320,
+         height = 5, width = 7)
+}
+
+knitr::include_graphics(path = here("img/rmsea-cfi-distributions.png"))
 ```
 
 ## TKL Method Recovery of Model Fit Indices
@@ -878,21 +904,104 @@ knitr::include_graphics(here("img/rmsea_cfi_recovery.png"))
 
 ## Figures to Add and Discuss
 
-```{r rmsea-cfi-distributions, out.width='100%'}
-#| fig.cap = "RMSEA and CFI values for the TKL-based model-error methods, conditioned on number of factors and model fit."
+```{r rmsea-conditional-cfi, out.width='100%'}
+#| fig.cap = "Observed CFI and RMSEA values for solutions generated using the $\\textrm{TKL}_{\\textrm{RMSEA}}$ method. For each combination of number of factors, number of items per factor, and factor loading strength, 100 solutions were generated for each of 16 target RMSEA values equally-spaced between 0.025 and 0.1. The solid black line indicates where CFI and $1 - \\textrm{RMSEA}$ were equal."
+
 if (make_plots) {
-  results_matrix %>%
-    filter(rmsea < 3, str_detect(error_method, "TKL")) %>%
+  # Show possible CFI values for a range of RMSEA values
+  reps <- 50
+  
+  factors <- unique(results_matrix$factors)
+  items_per_factor <- unique(results_matrix$items_per_factor)
+  loading <- unique(results_matrix$loading_numeric)
+  target_rmsea <- seq(0.025, 0.1, by = 0.005)
+  
+  conditions_matrix <- expand.grid(
+    factors = factors,
+    items_per_factor = items_per_factor,
+    loading = loading,
+    target_rmsea = target_rmsea
+  )
+  
+  set.seed(666)
+  rmsea_cfi_vals <- pro_map_dfr(
+    .x = 1:nrow(conditions_matrix), 
+    .f = function(condition) {
+      mod <- simFA(
+        Model = list(NFac = conditions_matrix$factors[condition],
+                     NItemPerFac = conditions_matrix$items_per_factor[condition],
+                     Model = "orthogonal"),
+        Loadings = list(FacLoadDist = "fixed",
+                        FacLoadRange = conditions_matrix$loading[condition])
+      )
+      
+      map_dfr(.x = 1:reps,
+              .f = function(x, target_rmsea) {
+                sol <- noisemaker(mod = mod, 
+                                  method = "TKL", 
+                                  target_rmsea = target_rmsea,
+                                  target_cfi = NULL,
+                                  tkl_ctrl = list(penalty = 1e6,
+                                                  NWmaxLoading = 2,
+                                                  WmaxLoading = .3))
+                w_constraints_violated <- sum(sol$W[,1] >= .3) > 2
+                c(rmsea = sol$rmsea, cfi = sol$cfi, 
+                  w_constraints_violated = w_constraints_violated)
+              }, target_rmsea = conditions_matrix$target_rmsea[condition])
+    }
+  )
+  
+  rmsea_cfi_vals <- bind_cols(
+    rmsea_cfi_vals,
+    conditions_matrix[rep(1:nrow(conditions_matrix), each = reps),]
+  )
+  
+  rmsea_cfi_vals <- rmsea_cfi_vals %>%
+    mutate(
+      factors_rec = factor(factors, 
+                           labels = levels(results_matrix$factors_rec)),
+      loading_rec = factor(loading, 
+                           labels = levels(results_matrix$loading_rec)),
+      items_per_factor_rec = factor(items_per_factor, 
+                                    labels = levels(results_matrix$items_per_factor_rec))
+    )
+  
+  saveRDS(rmsea_cfi_vals, file = here("data/rmsea_conditional_cfi.RDS"))
+  # rmsea_cfi_vals <- readRDS(here("data/rmsea_conditional_cfi.RDS"))
+  
+  rmsea_cfi_vals %>%
     ggplot(aes(x = rmsea, y = cfi)) +
-    geom_jitter(alpha = .1, size = 1.5, 
-                aes(color = error_method, shape = error_method)) +
-    # scale_color_viridis_d(end = .9) +
-    scale_color_brewer(palette = "Dark2", type = "qual") +
-    facet_grid(model_fit_rec ~ factors_rec, scales = "free_x") +
-    labs(x = "RMSEA", y = "CFI", color = "Error Method", shape = "Error Method") +
+    geom_point(size = 1, alpha = .1) +
+    geom_abline(aes(slope = -1, intercept = 1), size = .5, alpha = .5) +
+    facet_grid(loading_rec * items_per_factor_rec ~ factors_rec) +
     guides(color = guide_legend(override.aes = list(alpha = 1, size = 1.5))) +
+    labs(x = "RMSEA", y = "CFI") +
     theme_bw() +
-    theme(legend.position = "bottom")
+    theme(legend.position = "bottom",
+          panel.spacing.x = unit(14, units = "points"))
+  
+  ggsave(filename = here("img/rmsea_conditional_cfi.png"),
+         height = 7,
+         width = 7,
+         scale = 1.15,
+         dpi = 320)
 }
+
+knitr::include_graphics(
+  path = here("img/rmsea_conditional_cfi.png")
+)
 ```
 
+These specific matrices were chosen because they had large differences between CFI and RMSEA, but the W matrix didn't violate the constraints and the CB matrix wasn't indefinite.
+
+<!-- Begin Figure c129 -->
+\begin{sidewaysfigure}[ht]
+
+{ \centering \includegraphics[width=\linewidth]{img/c129_R_plots_with_annotation.png} }
+
+\caption{Correlation matrices with model error ($\mathbf{\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\mathbf{\Sigma}$ ($\hat{\mathbf{\Sigma}}$) for each model-error method. Results are shown for a set of solution matrices from the condition with ten orthogonal factors, five items per factor, weak factor loadings of .3, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.}
+
+\label{fig:c129-with-annotation}
+
+\end{sidewaysfigure}
+<!-- End Figure c129 -->

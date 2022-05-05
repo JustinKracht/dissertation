@@ -39,7 +39,7 @@ simulation_code_files <- simulation_code_files[stringr::str_ends(simulation_code
 
 ```
 
-## Simulation Code: Check Recovery of Model Fit Indices with Known-Possible Values
+## Simulation Code: Check Recovery of Model Fit Indices with Known-Possible Values {#check-model-fit-recovery-code}
 
 ```{r find-secondary-simulation-code-files}
 secondary_simulation_code_files <- list.files(here::here("code/misc"), 

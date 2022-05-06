@@ -849,7 +849,7 @@ if (make_plots) {
 knitr::include_graphics(path = here("img/rmsea-cfi-distributions.png"))
 ```
 
-To better understand the conditional distribution of CFI values for solutions with fixed RMSEA values, I used the $\textrm{TKL}_{\textrm{RMSEA}}$ method to generate solutions with a range of target RMSEA values for each of a subset of conditions from the main simulation study. Specifically, I generated 100 solutions for each of 16 target RMSEA values equally-spaced between .025 and .1 for each condition of the main simulation design with uncorrelated major common factors. (Conditions with correlated major common factors were omitted to make the number of conditions manageable.) The results can be seen in Figure \@ref(fig:rmsea-conditional-cfi), which shows the CFI and RMSEA values for each condition. The solid black lines in the figure indicate where RMSEA is equal to $1 - \textrm{CFI}$ and can be used to easily determine which fit index changed most quickly as a function of the other fit index. RMSEA and $1 - CFI$ are comparable in this context because they indicate roughly the same level of qualitative model fit over the range of target RMSEA values. For example, both $\textrm{RMSEA} = 0.05$ and $\textrm{CFI} = .95$ are often used as threshold values for good model fit. Figure \@ref(fig:rmsea-conditional-cfi) shows that CFI values decreased faster than RMSEA values increased for most of the included conditions. The only exceptions were conditions with relatively few major factors and strong factor loadings.
+To better understand the conditional distribution of CFI values for solutions with fixed RMSEA values, I used the $\textrm{TKL}_{\textrm{RMSEA}}$ method to generate solutions with a range of target RMSEA values for each of a subset of conditions from the main simulation study. Specifically, I generated 100 solutions for each of 16 target RMSEA values equally-spaced between .025 and .1 for each condition of the main simulation design with uncorrelated major common factors. (Conditions with correlated major common factors were omitted to make the number of conditions manageable.) The results can be seen in Figure \@ref(fig:rmsea-conditional-cfi), which shows the CFI and RMSEA values for each condition. The solid black lines in the figure indicate where RMSEA is equal to $1 - \textrm{CFI}$ and can be used to easily determine which fit index changed most quickly as a function of the other fit index. RMSEA and $1 - CFI$ are comparable in this context because they indicate roughly the same level of qualitative model fit over the range of target RMSEA values. For example, both $\textrm{RMSEA} = 0.05$ and $\textrm{CFI} = .95$ have often been used as threshold values for good model fit. Figure \@ref(fig:rmsea-conditional-cfi) shows that CFI values decreased faster than RMSEA values increased for most of the included conditions. The only exceptions were conditions with relatively few major factors and strong factor loadings.
 
 ```{r rmsea-conditional-cfi, out.width='100%'}
 #| fig.cap = "Observed CFI and RMSEA values for solutions generated using the $\\textrm{TKL}_{\\textrm{RMSEA}}$ method. For each combination of number of factors, number of items per factor, and factor loading strength, 100 solutions were generated for each of 16 target RMSEA values equally-spaced between 0.025 and 0.1. The solid black line indicates where CFI and $1 - \\textrm{RMSEA}$ were equal."
@@ -939,7 +939,7 @@ knitr::include_graphics(
 )
 ```
 
-Taken together, the results in Figures \@ref(fig:rmsea-cfi-distributions) and \@ref(fig:rmsea-conditional-cfi) can help explain why the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ model-error methods often led to similar results. Because CFI values decreased more quickly than RMSEA values increased in most conditions, changes to parameter values that led to an RMSEA value that was closer to the target RMSEA value but moved the CFI value further from the target CFI value were more costly than changes that prioritized the target CFI value. Moreover, Figure \@ref(fig:rmsea-conditional-cfi) also provided an indication of which conditions were most likely to lead to conflicting qualitative interpretations of RMSEA and CFI. Simulated matrices that had RMSEA and CFI values that were far from the solid black line were the conditions that 
+Taken together, the results in Figures \@ref(fig:rmsea-cfi-distributions) and \@ref(fig:rmsea-conditional-cfi) can help explain why the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ model-error methods often led to similar results. Because CFI values decreased more quickly than RMSEA values increased in most conditions, changes to parameter values that led to an RMSEA value that was closer to the target RMSEA value but moved the CFI value further from the target CFI value were more costly than changes that prioritized the target CFI value. Moreover, Figure \@ref(fig:rmsea-conditional-cfi) also provided an indication of which conditions were most likely to lead to conflicting qualitative interpretations of RMSEA and CFI. Because RMSEA and $1 - \textrm{CFI}$ indicated approximately the same qualitative model fit over the range of target RMSEA values, points far from the line indicated RMSEA and CFI pairs with 
 
 ## TKL Method Recovery of Model Fit Indices
 
@@ -990,10 +990,10 @@ knitr::include_graphics(here("img/rmsea_cfi_recovery.png"))
 ```
 
 <!-- Need to add:
-1. Experiments showing that the TKL optimization methods can recover true model fit parameters.
-2. Number of times that the CB method *doesn't* produced an optimal solution (RMSEA_theta_hat should be 0).
-3. Experiements showing whether reducing the TKL penalty improves convergence.
-4. Discussion of "hat" fit indices? Figures and tables in Appendix, but do I need a discussion of them in the main body of the paper? Perhaps a question for Niels.
+1. [] Experiments showing that the TKL optimization methods can recover true model fit parameters.
+2. [] Number of times that the CB method *doesn't* produced an optimal solution (RMSEA_theta_hat should be 0).
+3. [] Experiements showing whether reducing the TKL penalty improves convergence.
+4. [] Discussion of "hat" fit indices? Figures and tables in Appendix, but do I need a discussion of them in the main body of the paper? Perhaps a question for Niels.
 
 - Check that RMSEA always is reported with a leading zero, (i.e., 0.025) and that CFI is not (i.e., .95).
 - Define terms at the beginning. Factor loadings are always major common factor loadings. Items per factor is more precisely indicators per factor.
@@ -1014,3 +1014,100 @@ These specific matrices were chosen because they had large differences between C
 
 \end{sidewaysfigure}
 <!-- End Figure c129 -->
+
+
+```{r penalty-values}
+if (make_plots) {
+  reps <- 100
+  
+  factors <- unique(results_matrix$factors)
+  items_per_factor <- 15
+  loading <- c(.4)
+  target_rmsea <- c(0.090)
+  penalty <- c(0, .1, 1, 10, 100, 1000, 10000)
+  
+  conditions_matrix <- expand.grid(
+    factors = factors,
+    items_per_factor = items_per_factor,
+    loading = loading,
+    target_rmsea = target_rmsea
+  )
+  
+  check_constraints <- function(W) {
+    any(max(apply(abs(W) >= .3, 2, sum)) > 2)
+  }
+  
+  seed_list <- sample(1:1e6, size = nrow(conditions_matrix))
+  
+  set.seed(666)
+  constraint_violations <- map_dfr(
+    .x = 1:nrow(conditions_matrix), 
+    .f = function(condition) {
+      
+      cat("\nWorking on condition", condition, "of", nrow(conditions_matrix))
+      
+      mod <- simFA(
+        Model = list(NFac = conditions_matrix$factors[condition],
+                     NItemPerFac = conditions_matrix$items_per_factor[condition],
+                     Model = "orthogonal"),
+        Loadings = list(FacLoadDist = "fixed",
+                        FacLoadRange = conditions_matrix$loading[condition])
+      )
+      
+      map_dfr(.x = 1:reps,
+              .f = function(x, target_rmsea) {
+                map_dfr(.x = penalty, 
+                        .f = function(penalty, mod, target_rmsea, seed) {
+                          set.seed(seed)
+                          sol <- noisemaker(mod = mod, 
+                                            method = "TKL", 
+                                            target_rmsea = target_rmsea,
+                                            target_cfi = NULL,
+                                            tkl_ctrl = list(penalty = penalty,
+                                                            NWmaxLoading = 2,
+                                                            WmaxLoading = .3))
+                          w_constraints_violated <- check_constraints(sol$W)
+                          
+                          c(penalty = penalty, 
+                            constraints_violated = w_constraints_violated)
+                        },
+                        mod = mod,
+                        target_rmsea = target_rmsea,
+                        seed = sample(1e6, 1))
+              }, target_rmsea = conditions_matrix$target_rmsea[condition])
+    }
+  )
+  
+  constraint_violations <- bind_cols(
+    conditions_matrix[rep(1:nrow(conditions_matrix), each = length(penalty) * reps),],
+    constraint_violations
+  )
+  
+  constraint_violations %>%
+    mutate(factors = as.factor(factors),
+           penalty = factor(penalty, 
+                            labels = c("0", "0.1", "1", "10", 
+                                       "100", "1,000", "10,000"))) %>%
+    group_by(factors, penalty) %>%
+    summarise(percent = mean(constraints_violated, na.rm = TRUE)) %>%
+    ggplot(aes(x = penalty, y = percent, color = factors, shape = factors, 
+               linetype = factors, group = factors)) +
+    geom_point() +
+    geom_line() +
+    scale_y_continuous(labels = scales::percent) +
+    scale_color_brewer(palette = "Dark2", type = "qual") +
+    labs(y = "Cases with Violtated W Constraints",
+         x = latex2exp::TeX("$\\lambda$"),
+         color = "Factors", shape = "Factors", linetype = "Factors") +
+    theme_bw() +
+    theme(legend.position = "bottom")
+  
+  ggsave(filename = here("img/penalty_values.png"),
+         dpi = 320,
+         height = 4,
+         width = 4)
+}
+
+knitr::include_graphics(here("img/penalty_values.png"))
+```
+

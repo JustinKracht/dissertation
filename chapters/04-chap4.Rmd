@@ -381,20 +381,20 @@ knitr::include_graphics(here("img/eps_and_nu_violation_example.png"))
 
 ### Choice of Penalty Value
 
-The penalty value in \@ref(eq:rmsea-cfi-obj-function), $\lambda$, can be set at a higher or lower value to change the penalty that is incurred when a potential solution has a $\mathbf{W}$ matrix that violates the user-specified constraints. In the present study, the penalty was set to be $\lambda = 1,000,000$ to ensure that the penalty was sufficiently large. However, it is possible that smaller values of $\lambda$ would have also been as effective or more effective at leading to solutions that satisfied the constraints on $\mathbf{W}$. To determine which ...
+The penalty value in \@ref(eq:rmsea-cfi-obj-function), $\lambda$, can be set at a higher or lower value to change the penalty that is incurred when a potential solution has a $\mathbf{W}$ matrix that violates the user-specified constraints. In the present study, the penalty was set to be $\lambda = 1,000,000$ to ensure that the penalty was sufficiently large. However, it is possible that smaller values of $\lambda$ would have also been as effective or more effective at leading to solutions that satisfied the constraints on $\mathbf{W}$. To determine which values of $\lambda$ worked best, I simulated 100 correlation matrices with model error using the $\textrm{TKL}_{\textrm{RMSEA}}$ method for each of 28 conditions. These conditions were formed by crossing the number of major common factors (1, 3, 5, or 10), and seven values of $\lambda$ ($\lambda \in [0, \:0.1, \:1, \:10, \:100, \:1,000, \:10,000]$). All factors were orthogonal, with factor loadings fixed at 0.4, 15 items per factor, and a target RMSEA value of 0.09. These sets of values were chosen because they often resulted in solutions with violated $W$ constraints in the main simulation study.
 
-TODO: Determine whether a scaling penalty works better, e.g., a penalty like $\lambda (|\mathbf{W}| - .3)$.
+The proportions of solutions with violated $\mathbf{W}$ constraints for each combination of number of factors and $\lambda$ are shown in \@ref(fig:penalty-values). The figure shows that...
 
 ```{r penalty-values, out.width='70%'}
 #| fig.cap = "The percentage of cases with violated $\mathbf{W}$ constraints conditioned on the constraint penalty value ($\lambda$) and the number of major common factors when the $\textrm{TKL}_{\textrm{RMSEA}}$ method was used. All conditions had 15 items per factor, major common factor loadings fixed at 0.4, and a target RMSEA value of 0.09. One hundred solution matrices were generated for each condition."
 if (make_plots) {
-  reps <- 100
+  reps <- 200
   
   factors <- unique(results_matrix$factors)
   items_per_factor <- 15
   loading <- c(.4)
   target_rmsea <- c(0.090)
-  penalty <- c(0, .1, 1, 10, 100, 1000, 10000)
+  penalty <- c(0, .1, 1, 1e1, 1e2, 1e3, 1e4, 1e5, 1e6)
   
   conditions_matrix <- expand.grid(
     factors = factors,
@@ -424,7 +424,7 @@ if (make_plots) {
                         FacLoadRange = conditions_matrix$loading[condition])
       )
       
-      map_dfr(.x = 1:reps,
+      pro_map_dfr(.x = 1:reps,
               .f = function(x, target_rmsea) {
                 map_dfr(.x = penalty, 
                         .f = function(penalty, mod, target_rmsea, seed) {

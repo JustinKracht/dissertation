@@ -457,7 +457,8 @@ if (make_plots) {
     mutate(factors = as.factor(factors),
            penalty = factor(penalty, 
                             labels = c("0", "0.1", "1", "10", 
-                                       "100", "1,000", "10,000"))) %>%
+                                       "100", "1,000", "10,000",
+                                       "100,000", "1,000,000"))) %>%
     group_by(factors, penalty) %>%
     summarise(percent = mean(constraints_violated, na.rm = TRUE)) %>%
     ggplot(aes(x = penalty, y = percent, color = factors, shape = factors, 
@@ -475,7 +476,7 @@ if (make_plots) {
   ggsave(filename = here("img/penalty_values.png"),
          dpi = 320,
          height = 4,
-         width = 4)
+         width = 6)
 }
 
 knitr::include_graphics(here("img/penalty_values.png"))

@@ -242,7 +242,7 @@ bfgs_nonconvergence_table %>%
 
 Recall that the multiple-objective TKL method included an optional penalty that penalized cases that had strong minor factors. Specifically, the penalty was applied if any minor factor had two or more absolute factor loadings greater than or equal to a specified value. The purpose of the penalty was to avoid introducing minor factors that might be more accurately characterized as major factors. To determine whether the penalty was effective at helping avoid major minor factors, I checked each of the minor factor loading ($\mathbf{W}$) matrices to determine whether any minor factor had two or more loadings greater than .3 in absolute value. 
 
-The percent of cases where the constraints on $\mathbf{W}$ were violated for each level of number of factors, number of items per factor, factor loading strength, and model fit are shown in \@ref(fig:w-major-factors-plot) and reported in \@ref(tab:tab-major-minor-factors). Only results for the $\textrm{TKL}_{\textrm{RMSEA}}$ were included because the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$ error methods seldom led to solutions that violated the constraints on $\mathbf{W}$. (Only 24 out of 90,000 cases had violated $\mathbf{W}$ constraints for the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$ methods combined.) \@ref(fig:w-major-factors-plot) shows that the $\mathbf{W}$ constraints were violated most often when model fit was Fair or Poor, factor loadings were relatively low, and there were many total items (i.e., many factors and items per factor).
+The percent of cases where the constraints on $\mathbf{W}$ were violated for each level of number of factors, number of items per factor, factor loading strength, and model fit are shown in \@ref(fig:w-major-factors-plot) and reported in \@ref(tab:tab-major-minor-factors). Only results for the $\textrm{TKL}_{\textrm{RMSEA}}$ were included because the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$ error methods seldom led to solutions that violated the constraints on $\mathbf{W}$. In fact, only 24 out of 180,000 cases had violated $\mathbf{W}$ constraints for the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$ methods combined. \@ref(fig:w-major-factors-plot) shows that the $\mathbf{W}$ constraints were violated most often when model fit was Fair or Poor, factor loadings were relatively low, and there were many total items (i.e., many factors and items per factor).
 
 (ref:major-minor-factors) The percent of cases that violated the minor common factor loading constraints for each level of number of factors, items per factor, factor loading, and model fit when the $\textrm{TKL}_{\textrm{RMSEA}}$ method was used.
 
@@ -381,9 +381,9 @@ knitr::include_graphics(here("img/eps_and_nu_violation_example.png"))
 
 ### Choice of Penalty Value
 
-The penalty value in \@ref(eq:rmsea-cfi-obj-function), $\lambda$, can be set at a higher or lower value to change the penalty that is incurred when a potential solution has a $\mathbf{W}$ matrix that violates the user-specified constraints. In the present study, the penalty was set to be $\lambda = 1,000,000$ to ensure that the penalty was sufficiently large. However, it is possible that smaller values of $\lambda$ would have also been as effective or more effective at leading to solutions that satisfied the constraints on $\mathbf{W}$. To determine which values of $\lambda$ worked best, I simulated 100 correlation matrices with model error using the $\textrm{TKL}_{\textrm{RMSEA}}$ method for each of 28 conditions. These conditions were formed by crossing the number of major common factors (1, 3, 5, or 10), and seven values of $\lambda$ ($\lambda \in [0, \:0.1, \:1, \:10, \:100, \:1,000, \:10,000]$). All factors were orthogonal, with factor loadings fixed at 0.4, 15 items per factor, and a target RMSEA value of 0.09. These sets of values were chosen because they often resulted in solutions with violated $W$ constraints in the main simulation study.
+The penalty value in \@ref(eq:rmsea-cfi-obj-function), $\lambda$, can be set at a higher or lower value to change the penalty that is incurred when a potential solution has a $\mathbf{W}$ matrix that violates the user-specified constraints. In the present study, the penalty was set to be $\lambda = 1,000,000$ to ensure that the penalty was sufficiently large. However, it is possible that smaller values of $\lambda$ would have also been as effective or more effective at leading to solutions that satisfied the constraints on $\mathbf{W}$. To determine which values of $\lambda$ worked best, I simulated 200 correlation matrices with model error using the $\textrm{TKL}_{\textrm{RMSEA}}$ method for each of 36 conditions. These conditions were formed by crossing the number of major common factors (1, 3, 5, or 10), and seven values of $\lambda$ ($\lambda \in [0, \:0.1, \:1, \:10, \:100, \:1,000, \:10,000, \:100,000, \:1,000,000]$). All factors were orthogonal, with factor loadings fixed at 0.4, 15 items per factor, and a target RMSEA value of 0.09. These sets of values were chosen because they often resulted in solutions with violated $W$ constraints in the main simulation study.
 
-The proportions of solutions with violated $\mathbf{W}$ constraints for each combination of number of factors and $\lambda$ are shown in \@ref(fig:penalty-values). The figure shows that...
+The proportions of solutions with violated $\mathbf{W}$ constraints for each combination of number of factors and $\lambda$ are shown in \@ref(fig:penalty-values). The figure shows that for conditions with one, three, or five factors, the proportion of solutions with violations of the $\mathbf{W}$ constraints decreased as $\lambda$ increased from zero to one and then leveled off for $\lambda$ values greater than one. For conditions with ten factors, all solutions had violated $\mathbf{W}$ constraints, regardless of the $\lambda$ value. Although only a subset of the conditions from the full study were included in this smaller simulation, the results suggested that using a smaller $\lambda$ value is unlikely to have resulted in a substantial descrease in the number of solutions with violated $\mathbf{W$ constraints. On the other hand, the results also suggested that $\lambda$ values as small as one are likely just as effective as much larger values at preventing solutions with violated $\mathbf{W}$ constraints. 
 
 ```{r penalty-values, out.width='70%'}
 #| fig.cap = "The percentage of cases with violated $\mathbf{W}$ constraints conditioned on the constraint penalty value ($\lambda$) and the number of major common factors when the $\textrm{TKL}_{\textrm{RMSEA}}$ method was used. All conditions had 15 items per factor, major common factor loadings fixed at 0.4, and a target RMSEA value of 0.09. One hundred solution matrices were generated for each condition."
@@ -480,6 +480,33 @@ if (make_plots) {
 }
 
 knitr::include_graphics(here("img/penalty_values.png"))
+```
+
+An unfortunate conclusion from both the main simulation study and the smaller study of $\lambda$ values was that enforcing constraints on $\mathbf{W}$ using the penalty in \@ref(eq:rmsea-cfi-obj-function) was only somewhat effective when the $\textrm{TKL}_{\textrm{RMSEA}}$ method was used. Regardless of the $\lambda$ value used, $\textrm{TKL}_{\textrm{RMSEA}}$ often led to solutions with violated $\mathbf{W}$ constraints in conditions with Poor model fit, weak factor loadings, and many items or factors. To help understand why the $\textrm{TKL}_{\textrm{RMSEA}}$ method so often led to solutions that violated the constraints on $\mathbf{W}$ compared to the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods, I evaluated the objective function across a grid of $\epsilon$ and $\nu_{\textrm{e}}$ values for a single pair of $\bm{\Omega}$ and $\mathbf{W}^*$ matrices and each of the TKL model-error methods. The population correlation matrix without model error
+
+```{r is-a-penalty-useful-with-cfi-target}
+if (make_plots) {
+  
+  mod <- simFA(Model = list(NFac = 10,
+                            NItemPerFac = 15,
+                            Model = "orthogonal"),
+               Loadings = list(FacLoadDist = "fixed",
+                               FacLoadRange = .4))
+  
+  constraints_violated_vec <- pbmclapply(
+    X = 1:200,
+    FUN = function(x) {
+      sol <- noisemaker(mod = mod, 
+                        method = "TKL", 
+                        target_rmsea = 0.09,
+                        target_cfi = 0.9,
+                        tkl_ctrl = list(penalty = 0))
+      check_constraints(sol$W)
+    },
+    mc.cores = 4
+  )
+  
+}
 ```
 
 ## Distributions of Fit Statistics

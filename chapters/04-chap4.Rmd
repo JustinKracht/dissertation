@@ -482,7 +482,9 @@ if (make_plots) {
 knitr::include_graphics(here("img/penalty_values.png"))
 ```
 
-An unfortunate conclusion from both the main simulation study and the smaller study of $\lambda$ values was that enforcing constraints on $\mathbf{W}$ using the penalty in \@ref(eq:rmsea-cfi-obj-function) was only somewhat effective when the $\textrm{TKL}_{\textrm{RMSEA}}$ method was used. Regardless of the $\lambda$ value used, $\textrm{TKL}_{\textrm{RMSEA}}$ often led to solutions with violated $\mathbf{W}$ constraints in conditions with Poor model fit, weak factor loadings, and many items or factors. To help understand why the $\textrm{TKL}_{\textrm{RMSEA}}$ method so often led to solutions that violated the constraints on $\mathbf{W}$ compared to the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods, I evaluated the objective function across a grid of $\epsilon$ and $\nu_{\textrm{e}}$ values for a single pair of $\bm{\Omega}$ and $\mathbf{W}^*$ matrices and each of the TKL model-error methods. The population correlation matrix without model error
+### TKL Model-Error Method Objective Function Surfaces
+
+An unfortunate conclusion from both the main simulation study and the smaller study of $\lambda$ values was that enforcing constraints on $\mathbf{W}$ using the penalty in \@ref(eq:rmsea-cfi-obj-function) was only somewhat effective when the $\textrm{TKL}_{\textrm{RMSEA}}$ method was used. Regardless of the $\lambda$ value used, $\textrm{TKL}_{\textrm{RMSEA}}$ often led to solutions with violated $\mathbf{W}$ constraints in conditions with Poor model fit, weak factor loadings, and many items or factors. In contrast, the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods rarely produced solutions that violated the constraints on $\mathbf{W}$. However, it was unclear whether the the penalty worked better for the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods for some reason, or whether the inclusion of a target CFI value simply made it less likely for the $\mathbf{W$ constraints to be violated regardless of whether the penalty was included. To test this, I generated 200 $\bm{\Sigma}$ matrices 
 
 ```{r is-a-penalty-useful-with-cfi-target}
 if (make_plots) {
@@ -508,6 +510,8 @@ if (make_plots) {
   
 }
 ```
+
+To help understand why the $\textrm{TKL}_{\textrm{RMSEA}}$ method so often led to solutions that violated the constraints on $\mathbf{W}$ compared to the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods, I evaluated the objective function over a grid of $\epsilon$ and $\nu_{\textrm{e}}$ values for a single pair of $\bm{\Omega}$ and $\mathbf{W}^*$ matrices and each of the TKL model-error methods. The $\bm{\Omega}$ population correlation matrix without model error corresponded to a model with 10 orthogonal major factors and 15 items per factor, with salient factor loadings fixed at 0.4. This condition was chosen because all of the solutions produced by the $\textrm{TKL}_{\textrm{RMSEA}}$ method violated the $\mathbf{W}$ constraints in the main simulation (see \@ref(fig:))
 
 ## Distributions of Fit Statistics
 

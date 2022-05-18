@@ -312,7 +312,7 @@ if (make_plots) {
 knitr::include_graphics(here("img/major_minor_factors.png"))
 ```
 
-To understand why certain conditions led to more $\mathbf{W}$ constraint violations than others, it is helpful to understand the relationship between those conditions and the TKL parameters ($\epsilon$ and $\nu_{\textrm{e}}$). \@ref(fig:eps-and-v-values-by-W-violations) shows the $\epsilon$ and $\nu_{\textrm{e}}$ values for each of the TKL model-error methods, conditioned on factor loading strength, number of factors, and number of items per factor. To conserve space, only conditions with Poor model fit and 1, 5, or 10 major factors were included in the figure. Overall, the figure shows that there was a trade-off between $\epsilon$ and $\nu_{\textrm{e}}$ such that higher values of $\nu_{\textrm{e}}$ were related to lower values of $\epsilon$ (and *vice versa*). Moreover, \@ref(fig:eps-and-v-values-by-W-violations) shows that the distributions of $\epsilon$ and $\nu_{\textrm{e}}$ differed depending on which TKL variant was used. The differences between the error-method variants were largest when the there were many items (i.e., many items and many items per factor) and when factor loadings were relatively weak. Under those circumstances, the $\textrm{TKL}_\textrm{RMSEA}$ method led to higher values of $\nu_{\textrm{e}}$ than the $\textrm{TKL}_\textrm{RMSEA/CFI}$ or $\textrm{TKL}_\textrm{CFI}$ methods. This effect suggested that higher values of $\nu_{\textrm{e}}$ were required to produce solutions with RMSEA values close to .09 when there are many items. On the other hand, the results for the $\textrm{TKL}_\textrm{RMSEA/CFI}$ and $\textrm{TKL}_\textrm{CFI}$ methods indicated that much lower $\nu_{\textrm{e}}$ values were required to obtain CFI values close to .90 when there were many items.
+To understand why certain conditions led to more $\mathbf{W}$ constraint violations than others, it is helpful to understand the relationship between those conditions and the TKL parameters ($\epsilon$ and $\nu_{\textrm{e}}$). \@ref(fig:eps-and-v-values-by-W-violations) shows the $\epsilon$ and $\nu_{\textrm{e}}$ values for each of the TKL model-error methods, conditioned on factor loading strength, number of factors, and number of items per factor. To conserve space, only conditions with Poor model fit and 1, 5, or 10 major factors were included in the figure. Overall, the figure shows that there was a trade-off between $\epsilon$ and $\nu_{\textrm{e}}$ such that higher values of $\nu_{\textrm{e}}$ were related to lower values of $\epsilon$ (and *vice versa*). Moreover, \@ref(fig:eps-and-v-values-by-W-violations) shows that the distributions of $\epsilon$ and $\nu_{\textrm{e}}$ differed depending on which TKL variant was used. The differences between the error-method variants were largest when the there were many items (i.e., many items and many items per factor) and when factor loadings were relatively weak. Under those circumstances, the $\textrm{TKL}_{\textrm{RMSEA}}$ method led to higher values of $\nu_{\textrm{e}}$ than the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ or $\textrm{TKL}_\textrm{CFI}$ methods. This effect suggested that higher values of $\nu_{\textrm{e}}$ were required to produce solutions with RMSEA values close to .09 when there are many items. On the other hand, the results for the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ and $\textrm{TKL}_{\textrm{CFI}}$ methods indicated that much lower $\nu_{\textrm{e}}$ values were required to obtain CFI values close to .90 when there were many items.
 
 ```{r eps-and-v-values-by-W-violations}
 #| fig.cap = "Values of the TKL parameters ($\\epsilon$ and $\\nu_{\\textrm{e}}$) by model-error method, number of factors, number of items per factor, and factor loading strength when model fit was Poor. Results for conditions with three or five major factors were omitted to conserve space. TKL = Tucker, Koopman, and Linn."
@@ -383,10 +383,10 @@ knitr::include_graphics(here("img/eps_and_nu_violation_example.png"))
 
 The penalty value in \@ref(eq:rmsea-cfi-obj-function), $\lambda$, can be set at a higher or lower value to change the penalty that is incurred when a potential solution has a $\mathbf{W}$ matrix that violates the user-specified constraints. In the present study, the penalty was set to be $\lambda = 1,000,000$ to ensure that the penalty was sufficiently large. However, it is possible that smaller values of $\lambda$ would have also been as effective or more effective at leading to solutions that satisfied the constraints on $\mathbf{W}$. To determine which values of $\lambda$ worked best, I simulated 200 correlation matrices with model error using the $\textrm{TKL}_{\textrm{RMSEA}}$ method for each of 36 conditions. These conditions were formed by crossing the number of major common factors (1, 3, 5, or 10), and seven values of $\lambda$ ($\lambda \in [0, \:0.1, \:1, \:10, \:100, \:1,000, \:10,000, \:100,000, \:1,000,000]$). All factors were orthogonal, with factor loadings fixed at 0.4, 15 items per factor, and a target RMSEA value of 0.09. These sets of values were chosen because they often resulted in solutions with violated $W$ constraints in the main simulation study.
 
-The proportions of solutions with violated $\mathbf{W}$ constraints for each combination of number of factors and $\lambda$ are shown in \@ref(fig:penalty-values). The figure shows that for conditions with one, three, or five factors, the proportion of solutions with violations of the $\mathbf{W}$ constraints decreased as $\lambda$ increased from zero to one and then leveled off for $\lambda$ values greater than one. For conditions with ten factors, all solutions had violated $\mathbf{W}$ constraints, regardless of the $\lambda$ value. Although only a subset of the conditions from the full study were included in this smaller simulation, the results suggested that using a smaller $\lambda$ value is unlikely to have resulted in a substantial decrease in the number of solutions with violated $\mathbf{W$ constraints. On the other hand, the results also suggested that $\lambda$ values as small as one are likely just as effective as much larger values at preventing solutions with violated $\mathbf{W}$ constraints. 
+The proportions of solutions with violated $\mathbf{W}$ constraints for each combination of number of factors and $\lambda$ are shown in \@ref(fig:penalty-values). The figure shows that for conditions with one, three, or five factors, the proportion of solutions with violations of the $\mathbf{W}$ constraints decreased as $\lambda$ increased from zero to one and then leveled off for $\lambda$ values greater than one. For conditions with ten factors, all solutions had violated $\mathbf{W}$ constraints, regardless of the $\lambda$ value. Although only a subset of the conditions from the full study were included in this smaller simulation, the results suggested that using a smaller $\lambda$ value is unlikely to have resulted in a substantial decrease in the number of solutions with violated $\mathbf{W}$ constraints. On the other hand, the results also suggested that $\lambda$ values as small as one are likely just as effective as much larger values at preventing solutions with violated $\mathbf{W}$ constraints. 
 
 ```{r penalty-values, out.width='70%'}
-#| fig.cap = "The percent of cases with violated $\\mathbf{W}$ constraints conditioned on the constraint penalty value ($\lambda$) and the number of major common factors when the $\textrm{TKL}_{\textrm{RMSEA}}$ method was used. All conditions had 15 items per factor, major common factor loadings fixed at 0.4, and a target RMSEA value of 0.09. One hundred solution matrices were generated for each condition."
+#| fig.cap = "The percent of cases with violated $\\mathbf{W}$ constraints conditioned on the constraint penalty value ($\\lambda$) and the number of major common factors when the $\\textrm{TKL}_{\\textrm{RMSEA}}$ method was used. All conditions had 15 items per factor, major common factor loadings fixed at 0.4, and a target RMSEA value of 0.09. One hundred solution matrices were generated for each condition."
 if (make_plots) {
   reps <- 200
   
@@ -484,7 +484,7 @@ knitr::include_graphics(here("img/penalty_values.png"))
 
 ### TKL Model-Error Method Objective Function Surfaces
 
-An unfortunate conclusion from both the main simulation study and the smaller study of $\lambda$ values was that enforcing constraints on $\mathbf{W}$ using the penalty in \@ref(eq:rmsea-cfi-obj-function) was only somewhat effective when the $\textrm{TKL}_{\textrm{RMSEA}}$ method was used. Regardless of the $\lambda$ value used, $\textrm{TKL}_{\textrm{RMSEA}}$ often led to solutions with violated $\mathbf{W}$ constraints in conditions with Poor model fit, weak factor loadings, and many items or factors. In contrast, the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods rarely produced solutions that violated the constraints on $\mathbf{W}$. However, it was unclear whether the the penalty worked better for the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods for some reason, or whether the inclusion of a target CFI value simply made it less likely for the $\mathbf{W$ constraints to be violated regardless of whether the penalty was included. 
+An unfortunate conclusion from both the main simulation study and the smaller study of $\lambda$ values was that enforcing constraints on $\mathbf{W}$ using the penalty in \@ref(eq:rmsea-cfi-obj-function) was only somewhat effective when the $\textrm{TKL}_{\textrm{RMSEA}}$ method was used. Regardless of the $\lambda$ value used, $\textrm{TKL}_{\textrm{RMSEA}}$ often led to solutions with violated $\mathbf{W}$ constraints in conditions with Poor model fit, weak factor loadings, and many items or factors. In contrast, the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods rarely produced solutions that violated the constraints on $\mathbf{W}$. However, it was unclear whether the the penalty worked better for the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods for some reason, or whether the inclusion of a target CFI value simply made it less likely for the $\mathbf{W}$ constraints to be violated regardless of whether the penalty was included. 
 
 To test whether the inclusion of the target CFI value was sufficient to avoid violated $\mathbf{W}$ constraints when no penalty was applied, I conducted a small-scale simulation study. Specifically, I generated 200 $\bm{\Sigma}$ matrices using a population correlation matrix $\bm{\Omega}$ with ten (orthogonal) major common factors, 15 items per factor, and salient factor loadings fixed at 0.4. Each of the $\bm{\Sigma}$ matrices were generated using the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ method with target RMSEA and CFI values of 0.09 and 0.90, respectively, and $\lambda = 0$ so that no penalty was applied. I chose this condition because nearly 100% of the solutions generated by the $\textrm{TKL}_{\textrm{RMSEA}}$ for this condition in the main simulation study had violated $\mathbf{W}$ constraints, whereas the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods did produce any solutions with violated $\mathbf{W}$. Thus, generating $\bm{\Sigma}$ matrices for this condition using the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ with $\lambda = 0$ was a reasonable test of whether using a penalty to enforce the $\mathbf{W}$ constraints was was necessary when the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ was used. Somewhat surprisingly, I found that none of the 200 solutions that were generated violated the $\mathbf{W}$ constraints, even when $\lambda$ was set to zero. This result suggested that the addition of a target CFI value in and of itself was useful for producing solutions without unacceptably strong minor factors.
 
@@ -513,15 +513,19 @@ if (make_plots) {
 }
 ```
 
-To better understand why the $\textrm{TKL}_{\textrm{RMSEA}}$ method so often led to solutions that violated the constraints on $\mathbf{W}$ compared to the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods, I evaluated the objective function over a grid of $\epsilon$ and $\nu_{\textrm{e}}$ values for a single pair of $\bm{\Omega}$ and $\mathbf{W}^*$ matrices and each of the TKL model-error methods. The $\bm{\Omega}$ population correlation matrix without model error again corresponded to a model with 10 orthogonal major factors and 15 items per factor, with salient factor loadings fixed at 0.4 and $\lambda = 1,000$. The objective function surfaces for each of the three TKL model-error methods are shown in \@ref(fig:obj-function-landscape). 
+To better understand why the $\textrm{TKL}_{\textrm{RMSEA}}$ method so often led to solutions that violated the constraints on $\mathbf{W}$ compared to the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods, I evaluated the objective function over a grid of $\epsilon$ and $\nu_{\textrm{e}}$ values for a single pair of $\bm{\Omega}$ and $\mathbf{W}^*$ matrices and each of the TKL model-error methods. The $\bm{\Omega}$ population correlation matrix without model error again corresponded to a model with 10 orthogonal major factors and 15 items per factor, with salient factor loadings fixed at 0.4. The penalty value, $\\lambda$, was fixed at 1,000 to penalize solutions with minor factors that had more than two factor loadings greater or equal to 0.3 in absolute value. The objective function surfaces for each of the three TKL model-error methods are shown in \@ref(fig:obj-function-landscape). To make it easier to compare the objective function surfaces, I made separate plots for cases where the $\mathbf{W}$ constraints were and were not violated. Moreover, I scaled the objective function values ($F_{\textrm{obj}}$) in each panel of \@ref(fig:obj-function-landscape) to fall between zero and one so that the surfaces could be easily compared. The figure showed clear differences between the objective function surfaces for the $\textrm{TKL}_{\textrm{RMSEA}}$ method compared to the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods. In particular, the figure showed that the values of $F_{\textrm{obj}}$ decreased as $\nu_{\textrm{e}}$ and $\epsilon$ increased. In contrast, the values of $F_{\textrm{obj}}$ increased as $\nu_{\textrm{e}}$ and $\epsilon$ increased for the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods. 
+
+The results shown in \@ref(fig:obj-function-landscape) helped explain why the $\textrm{TKL}_{\textrm{RMSEA}}$ method often led to solutions with violated $\mathbf{W}$ constraints even when such solutions were heavily penalized. Because higher values of $\nu_{\textrm{e}}$ and $\epsilon$ led to lower $F_{\textrm{obj}}$ values, the smallest $F_{\textrm{obj}}$ values for the $\textrm{TKL}_{\textrm{RMSEA}}$ method were close to the "cliff" in the objective function surface formed by the addition of the penalty. If the optimization procedure stepped over the cliff by selecting values of $\nu_{\textrm{e}}$ and $\epsilon$ that led to a violation of the constraints on $\mathbf{W}$, it would likely be difficult for the procedure to XXX
+
+whereas the $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ methods almost never produced solutions with violated $\mathbf{W}$ constraints, with or without a penalty. 
 
 ```{r obj-function-landscape}
-#| fig.cap = "Heatmaps of the scaled objective function surface for combinations of $\\eps$ and $\\nu_{\textrm{e}}$ values and each of the Tucker, Koopman, and Linn (TKL; 1969) model-error methods. Objective function values were computed using a $\\bm{\\Omega}$ matrix with ten orthogonal major factors, 15 items per factor, and salient factor loadings fixed at 0.4. The penalty value, $\lambda$, was fixed at 1,000 to penalize solutions with minor factors that had more than two factor loadings greater or equal to 0.3 in absolute value. To aid visualization, the the objective function values for combinations of $\\eps$ and $\\nu_{\textrm{e}}$ where the constraints on $\mathbf{W}$ were violated were scaled and plotted separately from combinations that did not lead to constraint violations."
+#| fig.cap = "Heatmaps of the scaled objective function surface for combinations of $\\epsilon$ and $\\nu_{\\textrm{e}}$ values and each of the Tucker, Koopman, and Linn (TKL; 1969) model-error methods. Objective function values were computed using a $\\bm{\\Omega}$ matrix with ten orthogonal major factors, 15 items per factor, and salient factor loadings fixed at 0.4. The penalty value, $\\lambda$, was fixed at 1,000 to penalize solutions with minor factors that had more than two factor loadings greater or equal to 0.3 in absolute value. To aid visualization, the the objective function values for combinations of $\\epsilon$ and $\\nu_{\\textrm{e}}$ where the constraints on $\\mathbf{W}$ were violated were scaled and plotted separately from combinations that did not lead to constraint violations."
 
 if (make_plots) {
   par_grid <- expand.grid(
-    eps = seq(0, 1, length.out = 250),
-    nu = seq(0, .2, length.out = 250)
+    eps = seq(0, 1, length.out = 50),
+    nu = seq(0, 1, length.out = 50)
   )
   
   simFA_mod <- simFA(Model = list(NFac = 10, 
@@ -594,16 +598,17 @@ if (make_plots) {
     group_by(error_method) %>%
     mutate(value = (value - min(value, na.rm = TRUE)) / 
              (max(value, na.rm = TRUE) - min(value, na.rm = TRUE))) %>%
-    ggplot(aes(x = eps, y = nu, fill = value)) +
+    ggplot(aes(x = eps, y = nu, fill = value, z = value)) +
     geom_raster() +
+    geom_contour(color = "lightgrey") +
     scale_fill_viridis_c() +
     scale_x_continuous(expand = c(0,0)) +
     scale_y_continuous(expand = c(0,0), limits = c(0, .2)) +
     facet_grid( ~ error_method, labeller = label_parsed) +
     theme_bw() +
-    labs(x = latex2exp::TeX("$\\epsilon$"),
+    labs(x = "",
          y = latex2exp::TeX("$\\nu_e$"),
-         fill = latex2exp::TeX("$F_{obj}"),
+         fill = latex2exp::TeX("$F_{obj}$"),
          title = "Constraints on W Not Violated") +
     theme(panel.spacing = unit(20, "points"))
   
@@ -612,22 +617,26 @@ if (make_plots) {
     group_by(error_method) %>%
     mutate(value = (value - min(value, na.rm = TRUE)) / 
              (max(value, na.rm = TRUE) - min(value, na.rm = TRUE))) %>%
-    ggplot(aes(x = eps, y = nu, fill = value)) +
+    ggplot(aes(x = eps, y = nu, fill = value, z = value)) +
     geom_raster() +
+    geom_contour(color = "grey") +
     scale_fill_viridis_c() +
     scale_x_continuous(expand = c(0,0)) +
     scale_y_continuous(expand = c(0,0), limits = c(0, .2)) +
     facet_grid( ~ error_method, labeller = label_parsed) +
     theme_bw() +
-    labs(x = latex2exp::TeX("$\\epsilon$"),
+    labs(x = "",
          y = latex2exp::TeX("$\\nu_e$"),
-         fill = latex2exp::TeX("$F_{obj}"),
+         fill = latex2exp::TeX("$F_{obj}$"),
          title = "Constraints on W Violated") +
     theme(panel.spacing = unit(20, "points"))
   
-  obj_func_plot <- without_W_penalty / with_W_penalty + plot_layout(guides = "collect")
+  obj_func_plot <- without_W_penalty / with_W_penalty + 
+    plot_layout(guides = "collect")
   
-  ggsave(filename = here("img/obj_func_landscape_ten_factor.png"),
+  # Save as a pdf --- need to insert epsilon axis labels manually because
+  # R only has varepsilon.
+  ggsave(filename = here("img/obj_func_landscape_ten_factor.pdf"),
          obj_func_plot,
          dpi = 320,
          height = 5.75,

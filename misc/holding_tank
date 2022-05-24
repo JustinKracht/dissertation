@@ -1,0 +1,2 @@
+
+The essential problem was that the addition of the discrete penalty term made the objective function non differentiable, which made it very difficult for the L-BFGS-B optimization algorithm to

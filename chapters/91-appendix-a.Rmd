@@ -39,23 +39,11 @@ simulation_code_files <- simulation_code_files[stringr::str_ends(simulation_code
 
 ```
 
-## Simulation Code: Check Recovery of Model Fit Indices with Known-Possible Values {#check-model-fit-recovery-code}
-
-```{r find-secondary-simulation-code-files}
-secondary_simulation_code_files <- list.files(here::here("code/misc"), 
-                                    full.names = TRUE)
-secondary_simulation_code_files <- secondary_simulation_code_files[stringr::str_ends(secondary_simulation_code_files, ".R")]
-```
+## Secondary Simulation: Check Effect of $\lambda$ Values {#effect-of-lambda}
 
 \small
 
-```{r write-secondary-simulation-code, eval = FALSE, code = read_files(secondary_simulation_code_files), echo = TRUE}
-
-```
-
-## Simulation Code: Check Effect of $\lambda$ Values
-
-```{r check-lambda-values, echo = FALSE}
+```{r check-lambda-values, eval = FALSE, echo = TRUE}
 # Set the number of reps
 reps <- 200
 
@@ -159,4 +147,62 @@ ggsave(filename = here("img/penalty_values.png"),
        height = 4,
        width = 6)
 ```
+
+## Secondary Simulation: Check Whether $\textrm{TKL}_{\textrm{CFI}}$ Requires A Penalty {#tkl-cfi-penalty}
+
+\small
+
+```{r check-whether-tkl-cfi-needs-penalty, eval = FALSE, echo=TRUE}
+# Check whether the TKL (CFI) method leads to solutions that violate the W 
+# constraints when no penalty is applied
+set.seed(42)
+
+# Create a population correlation matrix without model error (Omega)
+mod <- simFA(Model = list(NFac = 10,
+                          NItemPerFac = 15,
+                          Model = "orthogonal"),
+             Loadings = list(FacLoadDist = "fixed",
+                             FacLoadRange = .4))
+
+# Function to check whether a W matrix has more than two factor loadings greater
+# than 0.3 for any minor factor.
+check_constraints <- function(W) {
+  any(max(apply(abs(W) >= .3, 2, sum)) > 2)
+}
+
+# Generate 200 population correlation matrices with model error (Sigma) using 
+# the TKL (CFI) method without a penalty, then check how often the constraints
+# on W were violated
+constraints_violated_vec <- pbmclapply(
+  X = 1:200,
+  FUN = function(x) {
+    sol <- noisemaker(mod = mod, 
+                      method = "TKL", 
+                      target_rmsea = 0.09,
+                      target_cfi = 0.9,
+                      tkl_ctrl = list(penalty = 0))
+    check_constraints(sol$W)
+  },
+  mc.cores = 4
+)
+
+# What percent of cases had violated W constraints?
+mean(constraints_violated_vec, na.rm = TRUE)
+```
+
+## Secondary Simulation: Check Recovery of Model Fit Indices with Known-Possible Values {#check-model-fit-recovery-code}
+
+```{r find-secondary-simulation-code-files}
+secondary_simulation_code_files <- list.files(here::here("code/misc"), 
+                                    full.names = TRUE)
+secondary_simulation_code_files <- secondary_simulation_code_files[stringr::str_ends(secondary_simulation_code_files, ".R")]
+```
+
+\small
+
+```{r write-secondary-simulation-code, eval = FALSE, code = read_files(secondary_simulation_code_files), echo = TRUE}
+
+```
+
+
 

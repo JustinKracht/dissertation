@@ -6,9 +6,7 @@ Here is where we can put extra material that is useful, but perhaps not critical
 
 ## Supplemental Figures
 
-### Expanded Figures
-
-#### Percent of CB Solutions that were Indefinite
+### Percent of CB Solutions that were Indefinite
 
 ```{r fig-percent-indefinite-matrices-expanded, fig.cap = "The percent of Cudeck-Browne (CB) method solutions that were indefinite, conditioned on number of factors, factor loading, number of items per factor, factor correlation, and model fit.", out.width='90%'}
 if (make_plots) {
@@ -59,7 +57,7 @@ if (make_plots) {
 knitr::include_graphics(here("img/cb_percent_indefinite_full.png"))
 ```
 
-#### Percent of TKL Solutions Where the Constraints on $\mathbf{W}$ were Violated
+### Percent of TKL Solutions Where the Constraints on $\mathbf{W}$ were Violated
 
 ```{r w-major-factors-plot-expanded, fig.cap = "The percent of cases where the constraints on $\\mathbf{W}$ were violated when the $\\textrm{TKL}_{\\textrm{RMSEA}}$ model-error method was used, conditioned on number of factors, number of items per factor, factor loading, factor correlation, and model fit.", out.width='85%'}
 if (make_plots) {
@@ -101,7 +99,7 @@ if (make_plots) {
 knitr::include_graphics(here("img/major_minor_factors_full.png"))
 ```
 
-#### Observed RMSEA Values
+### Observed RMSEA Values
 
 ```{r rmsea-distributions-full, fig.cap = "Distributions of the RMSEA values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target RMSEA value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width='70%'}
 if (make_plots) {
@@ -134,7 +132,7 @@ if (make_plots) {
 knitr::include_graphics(here("img/rmsea_distributions_full.png"))
 ```
 
-#### Observed CFI Values
+### Observed CFI Values
 
 ```{r cfi-distributions-full, fig.cap = "Distributions of the CFI values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target CFI value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width='70%'}
 if (make_plots) {
@@ -166,7 +164,7 @@ if (make_plots) {
 
 knitr::include_graphics(here("img/cfi_distributions_full.png"))
 ```
-#### Observed TLI Values
+### Observed TLI Values
 
 ```{r tli-distributions-full, out.width="70%"}
 #| fig.cap="Distributions of the TLI values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the threshold values of TLI that correspond to the targeted levels of model fit, according to Hu and Bentler (1999). TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
@@ -203,7 +201,7 @@ if (make_plots) {
 knitr::include_graphics(here("img/tli_distributions_full.png"))
 ```
 
-#### Observed CRMR Values
+### Observed CRMR Values
 
 ```{r crmr-distributions-full, fig.cap="Distributions of the CRMR values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Recommendations for threshold values of SRMR/CRMR are not as fine-grained as for some other fit indices, but threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values. The dashed lines indicate these two threshold values. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width="65%"}
 if (make_plots) {

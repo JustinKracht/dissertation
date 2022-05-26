@@ -1,61 +1,3 @@
-# (APPENDIX) Appendix {-}
-
-# R Code {#appendix-a}
-
-\setstretch{1}
-    <!-- Set Appendices to single spacing -->
-
-## Implementations of Model Error Methods
-
-The implementations of the model error methods used are also available bundled as an R package, *noisemaker*, which can be downloaded from [https://www.github.com/JustinKracht/noisemaker](https://www.github.com/JustinKracht/noisemaker).
-
-```{r find-code-files, echo = FALSE, include = FALSE}
-code_files <- list.files(here::here("code/noisemaker"), full.names = TRUE)
-code_files <- code_files[stringr::str_ends(code_files, ".R")]
-
-# Function to read code files and include them in R Markdown
-read_files <- function(files) {
-  unlist(lapply(files, xfun::read_utf8))
-}
-```
-
-\small
-
-```{r write-noisemaker-code, eval = FALSE, code = read_files(code_files), echo = TRUE}
-
-```
-
-## Main Simulation Code
-
-```{r find-simulation-code-files}
-simulation_code_files <- list.files(here::here("code/model-error-simulation"), 
-                                    full.names = TRUE)
-simulation_code_files <- simulation_code_files[stringr::str_ends(simulation_code_files, ".R")]
-```
-
-\small
-
-```{r write-simulation-code, eval = FALSE, code = read_files(simulation_code_files), echo = TRUE}
-
-```
-
-## Simulation Code: Check Recovery of Model Fit Indices with Known-Possible Values {#check-model-fit-recovery-code}
-
-```{r find-secondary-simulation-code-files}
-secondary_simulation_code_files <- list.files(here::here("code/misc"), 
-                                    full.names = TRUE)
-secondary_simulation_code_files <- secondary_simulation_code_files[stringr::str_ends(secondary_simulation_code_files, ".R")]
-```
-
-\small
-
-```{r write-secondary-simulation-code, eval = FALSE, code = read_files(secondary_simulation_code_files), echo = TRUE}
-
-```
-
-## Simulation Code: Check Effect of $\lambda$ Values
-
-```{r check-lambda-values, echo = FALSE}
 # Set the number of reps
 reps <- 200
 
@@ -158,5 +100,3 @@ ggsave(filename = here("img/penalty_values.png"),
        dpi = 320,
        height = 4,
        width = 6)
-```
-

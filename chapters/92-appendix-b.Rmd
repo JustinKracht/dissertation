@@ -236,7 +236,7 @@ if (make_plots) {
 knitr::include_graphics(here("img/crmr_distributions_full.png"))
 ```
 
-### Fit Indices Based on $\hat{\Sigma}$
+### Fit Indices Based on $\hat{\Sigma}$ {#sigma-hat-fit-indices}
 
 #### $\textrm{RMSEA}_{\hat{\theta}}$
 

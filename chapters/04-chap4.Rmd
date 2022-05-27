@@ -1188,7 +1188,7 @@ if (make_plots) {
 knitr::include_graphics(here("img/omega_plus_WtW_with_annotations.png"))
 ```
 
-The effects of the model error introduced by the minor common factors can be seen in \@ref(fig:omega-wtw-sigma-example), which contains visual representations of the $\bm{\Omega}$, $\mathbf{WW}^\prime$, and $\bm{\Sigma}$ matrices. The $\mathbf{WW}^\prime$ and $\bm{\Sigma}$ matrices shown in the figure were obtained using the $\textrm{TKL}_{\textrm{RMSEA}}$ method with a target RMSEA value of 0.09. The observed RMSEA and CFI values for $\bm{\Sigma}$ were 0.09 and 0.25, respectively. Notice in \@ref(fig:omega-wtw-sigma-example) how large the elements of the $\mathbf{WW}^\prime$ matrix were relative to the $\bm{\Omega}$ matrix and how many off-block-diagonal elements there were relative to the block diagonal elements. This helps explain the incompatibility between RMSEA and CFI for models with many factors, weak major common factor loadings, and target RMSEA and CFI values reflecting poor model fit. To get an RMSEA value in line with the target value, all of the elements of $\bm{\Omega}$ were perturbed. The perturbations to the off-block-diagonal elements of $\bm{\Omega}$ were important in terms of the resulting CFI value because they were incompatible with the major common factor model (i.e., they should have been zero under that model) and therefore degraded the fit of the major factor model for $\bm{\Sigma}$ while improving the fit of the independence model. The effect of perturbing these off-block-diagonal elements became more pronounced as the number of factors increased because the number of off-block-diagonal elements increased faster than the number of block-diagonal elements as the total number of items increased. This can be clearly seen in \@ref(fig:off-diag-elements), which shows the number of block diagonal elements and off-block-diagonal elements in the lower triangle of $\bm{\Sigma}$ as the number of factors increased for an orthogonal model with five items per factor.
+The effects of the model error introduced by the minor common factors can be seen in \@ref(fig:omega-wtw-sigma-example), which contains visual representations of the $\bm{\Omega}$, $\mathbf{WW}^\prime$, and $\bm{\Sigma}$ matrices. The $\mathbf{WW}^\prime$ and $\bm{\Sigma}$ matrices shown in the figure were obtained using the $\textrm{TKL}_{\textrm{RMSEA}}$ method with a target RMSEA value of 0.09. The observed RMSEA and CFI values for $\bm{\Sigma}$ were 0.09 and 0.25, respectively. Notice that the elements of the $\mathbf{WW}^\prime$ matrix in \@ref(fig:omega-wtw-sigma-example) were large (in absolute value) relative to the $\bm{\Omega}$ matrix. Also notice that $\bm{\Omega}$ had off-block-diagonal elements relative to the number of block-diagonal elements. Both of these features helped to explain the incompatibility between RMSEA and CFI for models with many factors, weak major common factor loadings, and target RMSEA and CFI values reflecting poor model fit. To get an RMSEA value close to the target value, all of the elements of $\bm{\Omega}$ had to be perturbed by making the elements of $\mathbf{WW}^\prime$ relatively large (in absolute value). The changes to the off-block-diagonal elements of $\bm{\Omega}$ were important in terms of the resulting CFI value because they were incompatible with the major common factor model (i.e., they should have been zero under that model). Therefore, they degraded the fit of the major factor model for $\bm{\Sigma}$ while improving the fit of the independence model. Moreover, perturbing the off-block-diagonal elements had a larger effect on CFI as the number of factors increased because the number of off-block-diagonal elements increased more quickly than the number of block-diagonal elements as the total number of items increased. This can be seen in \@ref(fig:off-diag-elements), which shows the number of block diagonal elements and off-block-diagonal elements in the lower triangle of $\bm{\Sigma}$ as the number of factors increased for an orthogonal model with five items per factor.
 
 ```{r off-diag-elements, fig.align='center', out.width='60%'}
 #| fig.cap = "The number of block-diagonal elements in the lower-triangle of $\\bm{\\Sigma}$ compared to the number of off-block-diagonal elements for an orthogonal model with five items per factor."
@@ -1241,26 +1241,101 @@ if (make_plots) {
 knitr::include_graphics(here("img/off-diagonal-elements.png"))
 ```
 
-[TK: BAD TRANSITION, REVISE] Finally, the differences among the smoothing methods can be seen in \@ref(fig:c129-with-annotation), which shows heat-maps of the population correlation matrices with model error ($\mathbf{\Sigma}$) and the model-implied covariance matrix obtained from analyzing $\bm{\Sigma}$ ($\hat{\bm{\Sigma}}$) for each of the model-error methods. The correlation matrices corresponded to the condition with ten orthogonal major common factors, five items per factor, weak factor loadings of 0.3, and Poor model fit. This particular condition was chosen because it led to $\mathbf{\Sigma}$ matrices with RMSEA and CFI values that indicated different levels of qualitative model fit and highlights the differences between the model-error methods that incorporated a target CFI value ($\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$) and those that did not ($\textrm{TKL}_{\textrm{RMSEA}}$, CB, and WB).
+Yet another perspective on the trade-off between CFI and RMSEA can be obtained by examining the differences between the $\mathbf{\Sigma}$ matrices produced by each of the model-error methods for a condition that often led to conflicting RMSEA and CFI values. \@ref(fig:c129-heat-maps) shows heat-maps of the $\mathbf{\Sigma}$ matrices for each of the five model-error methods. The $\bm{\Sigma}$ matrices corresponded to the condition with ten orthogonal major common factors, five items per factor, weak factor loadings of 0.3, and Poor model fit.[^more-sigma-heat-maps] The figure shows clear differences between the model-error methods that incorporated a target CFI value ($\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$) and the remaining model-error methods that only incorporated a target RMSEA value. The $\textrm{TKL}_{\textrm{CFI}}$ and $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ model-error methods 
 
-```{r eval = FALSE}
-knitr::include_graphics(here("img/c129_R_plots_with_annotation.png"))
+[^more-sigma-heat-maps]: Heat-maps of both the $\bm{\Sigma}$ and $\hat{\bm{\Sigma}}$ matrices for the five model-error methods and conditions with ten orthogonal factors, weak factor loadings, Poor model fit, and five or ten items per factor are shown in \@ref(sigma-heat-maps).
+
+```{r c129-heat-maps, out.width = "100%"}
+#| fig.cap = "Correlation matrices with model error ($\\bm{\\Sigma}$) for each model-error method from the condition with ten orthogonal factors, five items per factor, weak factor loadings of 0.3, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+if (make_plots) {
+  # Function to make heatmap plots
+  matrix_plot <- function(R, title="", fill_limits = "auto") {
+    
+    if (length(fill_limits) == 1) {
+      if (fill_limits == "auto") {
+        fill_limits = NULL
+      }
+    }
+    
+    R <- R %>%
+      as_tibble(rownames = NA) %>%
+      rownames_to_column(var = "Var1") %>%
+      pivot_longer(cols = !matches("Var1"), 
+                   names_to = "Var2", values_to = "value") %>%
+      mutate(value = case_when(Var1 == Var2 ~ NA_real_,
+                               TRUE ~ value),
+             Var1 = paste0("V", formatC(as.numeric(str_extract(Var1, "[0-9]+")),
+                                        width = 3,
+                                        flag = "0")),
+             Var2 = paste0("V", formatC(as.numeric(str_extract(Var2, "[0-9]+")),
+                                        width = 3,
+                                        flag = "0"))) %>%
+      mutate(Var2 = fct_rev(as.factor(Var2)))
+    
+    ggplot(R, aes(x = Var1, y = Var2, fill = value)) +
+      geom_tile() +
+      colorspace::scale_fill_continuous_diverging("Purple-Green", 
+                                                  limits = fill_limits) +
+      # scale_fill_viridis_c(limits = fill_limits) +
+      labs(title = title, fill = "Correlation") +
+      theme(axis.text = element_blank(),
+            axis.ticks = element_blank(), 
+            axis.title = element_blank()) +
+      coord_equal()
+  }
+  
+  # Load RpopME matrices
+  RpopME_matrices <- readRDS(here("../model-error-simulation/misc/RpopME_matrices.RDS"))
+  
+  mod <- simFA(Model = list(NFac = 10, NItemPerFac = 5, Model = "orthogonal"),
+               Loadings = list(FacLoadRange = .4, FacLoadDist = "fixed"))
+  
+  out_129 <- RpopME_matrices$C129
+  out_129$Rpop <- mod$Rpop
+  
+  # Compute estimated population matrices
+  Rtheta_list <- purrrgress::pro_map(out_129[1:5], .f = function(R) {
+    fout_129 <- factanal(covmat = R, 
+                         factors = 10, 
+                         rotation = "none", 
+                         n.obs = 1000, 
+                         control = list(nstart = 100))
+    Fhat <- fout_129$loadings
+    Rhat <- Fhat %*% t(Fhat)
+    diag(Rhat) <- 1
+    Rhat
+  })
+  
+  p1 <- matrix_plot(out_129$RpopME_tkl_rmsea, 
+                    title = latex2exp::TeX("$TKL_{RMSEA}$"),
+                    fill_limits = c(-.3, .3))
+  p2 <- matrix_plot(out_129$RpopME_tkl_cfi, 
+                    title = latex2exp::TeX("$TKL_{CFI}$"),
+                    fill_limits = c(-.3, .3))
+  p3 <- matrix_plot(out_129$RpopME_tkl_rmsea_cfi, 
+                    title = latex2exp::TeX("$TKL_{RMSEA/CFI}$"),
+                    fill_limits = c(-.3, .3))
+  p4 <- matrix_plot(out_129$RpopME_wb, 
+                    title = "CB",
+                    fill_limits = c(-.3, .3))
+  p5 <- matrix_plot(out_129$RpopME_wb, 
+                    title = "WB",
+                    fill_limits = c(-.3, .3))
+  
+  c129_plot <- (p1 + p2 + p3 + p4 + p5) + 
+    plot_layout(guides = "collect", nrow = 2) +
+    plot_annotation() & theme(legend.position = "bottom")
+  
+  ggsave(filename = here("img/c129_R_plot_Sigma_only.png"),
+         plot = c129_plot,
+         dpi = 320,
+         height = 6, width = 7)
+}
+
+knitr::include_graphics(here("img/c129_R_plot_Sigma_only.png"))
 ```
 
 
-They were chosen because they had large differences between CFI and RMSEA, but the W matrix didn't violate the constraints and the CB matrix wasn't indefinite.
-
-<!-- Begin Figure c129 -->
-\begin{sidewaysfigure}[ht]
-
-{ \centering \includegraphics[width=\linewidth]{img/c129_R_plots_with_annotation.png} }
-
-\caption{Correlation matrices with model error ($\mathbf{\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\mathbf{\Sigma}$ ($\hat{\mathbf{\Sigma}}$) for each model-error method. Results are shown for a set of solution matrices from the condition with ten orthogonal factors, five items per factor, weak factor loadings of 0.3, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.}
-
-\label{fig:c129-with-annotation}
-
-\end{sidewaysfigure}
-<!-- End Figure c129 -->
 
 ## TKL Method Recovery of Model Fit Indices
 

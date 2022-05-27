@@ -376,7 +376,25 @@ if (make_plots) {
 knitr::include_graphics(here("img/crmr_thetahat_distributions.png"))
 ```
 
-### Population and Implied Correlation Matrices with Model Error
+### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Sigma}}$ {#sigma-heat-maps}
+
+#### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Sigma}}$ for the Condition with Ten Orthogonal Factors, Five Items per Factor, Weak Factor Loadings, and Poor Model Fit
+
+\vfill
+
+<!-- Begin Figure c129 -->
+\begin{sidewaysfigure}[ht]
+
+{ \centering \includegraphics[width=\linewidth]{img/c129_R_plots_with_annotation.png} }
+
+\caption{Correlation matrices with model error ($\mathbf{\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\mathbf{\Sigma}$ ($\hat{\mathbf{\Sigma}}$) for each model-error method. Results are shown for a set of solution matrices from the condition with ten orthogonal factors, five items per factor, weak factor loadings of 0.3, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.}
+
+\label{fig:c129-with-annotation}
+
+\end{sidewaysfigure}
+<!-- End Figure c129 -->
+
+#### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Sigma}}$ for the Condition with Ten Orthogonal Factors, Ten Items per Factor, Weak Factor Loadings, and Poor Model Fit
 
 \vfill
 

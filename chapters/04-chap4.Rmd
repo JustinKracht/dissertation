@@ -847,11 +847,11 @@ if (make_plots) {
 knitr::include_graphics(here("img/crmr_distributions.png"))
 ```
 
-## Agreement of Fit Indices
+## Fit Index Agreement
 
-In the previous section, I reported results in terms of the RMSEA, CFI, TLI, and CRMR values individually. However, we often consider fit indices jointly and are interested in whether fit indices for a correlation matrix "agree" with one another. Therefore, in this section I will report the results in terms of fit index agreement. Specifically, I will try to address two main questions. First, how well did model error methods do at producing solutions with RMSEA and CFI values that were close to the target values corresponding to a particular level of model fit? Second, to what extent did the model error methods produce solutions with fit index values that corresponded to the same qualitative interpretation of model fit? For both questions, I will focus on the agreement between RMSEA and CFI, both for the sake of simplicity and because RMSEA and CFI were the fit indices that I used as target values for the model error methods. Although not discussed here, results reporting the agreement between all of the fit indices included in this study (CFI, RMSEA, TLI, and CRMR) are included in \@ref(appendix-b).
+In the previous section, I reported results in terms of the RMSEA, CFI, TLI, and CRMR values individually. However, it is often recommended to evaluate model fit using more than one fit index [@hu1999; @raykov2012]. Therefore, I was interested to what extent the model-error methods included in this simulation study led to solutions with fit indices indicating similar levels of model fit. In this section, I report the results in terms of fit index agreement. Specifically, I address two main questions. First, how well did model error methods do at producing solutions with RMSEA and CFI values that were close to the target values corresponding to a particular level of model fit? Second, to what extent did the model error methods produce solutions with fit index values that corresponded to the same qualitative interpretation of model fit? For both questions, I focused on the agreement between RMSEA and CFI, both for the sake of simplicity and because RMSEA and CFI were the fit indices that I used as target values for the model error methods.
 
-To evaluate how well each of the model error-methods did at producing solutions that had RMSEA and CFI values that were close to the target values, I used the metric
+To evaluate how well each of the model error-methods did at producing solutions that had both RMSEA and CFI values that were close to the target values, I used the metric
 
 \begin{equation}
 D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{target}}| + |\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{target}}|,

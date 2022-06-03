@@ -1,2 +1,12 @@
 
 The essential problem was that the addition of the discrete penalty term made the objective function non differentiable, which made it very difficult for the L-BFGS-B optimization algorithm to
+
+
+
+[^sigma-vs-sigma-hat] 
+
+[^sigma-vs-sigma-hat]: The results reported in this section are for fit indices relating to the lack of fit between $\bm{\Sigma}$ and $\mathbf{\Omega}$. Figures showing analogous results for fit indices calculated using $\hat{\mathbf{\Omega}}$ --- the model-implied correlation matrix obtained by analyzing $\mathbf{\Sigma}$ --- are provided in \@ref(sigma-hat-fit-indices).
+
+FOR DISCUSSION: 
+
+With the exception of the CB method, none of the model-error methods were expected to produce the same fit index values for $\bm{\Omega}$ and $\hat{\bm{\Omega}}$. Although in theory it might be possible to modify the TKL model-error methods to try to generate a $\bm{\Sigma}$ matrix corresponding to particular $\textrm{RMSEA}_{\hat{\theta}}$ or $\textrm{CFI}_{\hat{\theta}}$ values, doing so would require fitting a factor model at each iteration of the optimization procedure and thus would likely be impractical for most purposes. Understanding how the observed $\textrm{RMSEA}_{\hat{\theta}}$ or $\textrm{CFI}_{\hat{\theta}}$ values related the observed RMSEA and CFI values in the simulation study would be...

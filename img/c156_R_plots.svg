@@ -8,8 +8,8 @@
    height="576"
    viewBox="0 0 1260 576"
    sodipodi:docname="c156_R_plots.svg"
-   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
-   inkscape:export-filename="/home/justin/Documents/dissertation_proposal/img/c156_R_plots_with_annotation.png"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
+   inkscape:export-filename="../../dissertation_proposal/img/c156_R_plots_with_annotation.png"
    inkscape:export-xdpi="320"
    inkscape:export-ydpi="320"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -76,14 +76,16 @@
      inkscape:pagecheckerboard="0"
      showgrid="false"
      inkscape:zoom="1.0825397"
-     inkscape:cx="445.24926"
+     inkscape:cx="218.92962"
      inkscape:cy="288.21114"
      inkscape:window-width="1680"
      inkscape:window-height="981"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="g18" />
+     inkscape:current-layer="g18"
+     inkscape:showpageshadow="2"
+     inkscape:deskcolor="#d1d1d1" />
   <g
      inkscape:groupmode="layer"
      inkscape:label="Image"
@@ -110,39 +112,27 @@
              y="81.962997"
              id="use3557"
              width="100%"
-             height="100%" />
+             height="100%"
+             transform="translate(0.66162328)" />
         </g>
       </g>
     </g>
     <g
-       inkscape:label=""
-       transform="matrix(3.6697732,0,0,3.6697732,-314.88249,148.04024)"
-       id="g108">
+       id="g217"
+       transform="translate(-2.0921204,-7.4803711)">
       <g
-         id="g6448">
-        <g
-           style="fill:#000000;fill-opacity:1"
-           id="g7950">
-          <use
-             xlink:href="#symbol2283"
-             x="93.031998"
-             y="79.445"
-             id="use1850"
-             width="100%"
-             height="100%" />
-        </g>
-        <g
-           style="fill:#000000;fill-opacity:1"
-           id="g2150">
-          <use
-             xlink:href="#symbol5257"
-             x="91.925003"
-             y="81.962997"
-             id="use1938"
-             width="100%"
-             height="100%" />
-        </g>
+         id="page1"
+         transform="matrix(3.5266036,0,0,3.5266036,-783.7077,157.21771)">
+        <path
+           id="use182"
+           d="m 233.62392,75.250044 -1.335,1.354919 0.17933,0.179327 1.15567,-1.016189 1.1457,1.016189 0.17933,-0.179327 z" />
+        <path
+           id="use184"
+           d="m 236.771,83.068494 h -0.24907 c -0.0498,0.259029 -0.0897,0.48817 -0.17933,0.727273 -0.0498,0.159402 -0.0797,0.239103 -0.65753,0.239103 h -0.79701 c 0.12951,-0.557907 0.43836,-1.036114 0.88667,-1.693648 0.46825,-0.707348 0.87672,-1.39477 0.87672,-2.181819 0,-1.384807 -1.34496,-2.500622 -3.02865,-2.500622 -1.71357,0 -3.0386,1.135741 -3.0386,2.500622 0,0.787049 0.40847,1.474471 0.87671,2.181819 0.43836,0.657534 0.75716,1.135741 0.88668,1.693648 h -0.79702 c -0.57783,0 -0.60772,-0.0797 -0.65753,-0.22914 -0.0797,-0.229141 -0.12951,-0.48817 -0.17933,-0.737236 h -0.24906 l 0.32876,1.613948 h 1.59403 c 0.21917,0 0.24906,0 0.24906,-0.209215 0,-0.697385 -0.30884,-1.574098 -0.53798,-2.211707 -0.20922,-0.577833 -0.48817,-1.364881 -0.48817,-2.112079 0,-1.594023 1.09589,-2.271482 2.00249,-2.271482 0.95641,0 2.01245,0.71731 2.01245,2.271482 0,0.747198 -0.26899,1.504358 -0.5579,2.321295 -0.14944,0.418431 -0.46825,1.315068 -0.46825,2.002491 0,0.209215 0.0299,0.209215 0.25903,0.209215 h 1.58406 z" />
       </g>
     </g>
+    <g
+       id="g222"
+       transform="translate(20.33971,-7.4803711)" />
   </g>
 </svg>

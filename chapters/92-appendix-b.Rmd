@@ -1,8 +1,6 @@
 # Supplemental Tables and Figures {#appendix-b}
 
-Here is where we can put extra material that is useful, but perhaps not critical to the overall paper. This could include instruments, consent forms, additional syntax, proofs, supplemental graphics, etc.
-
-## Tables Corresponding to Figures
+## Supplemental Tables
 
 ## Supplemental Figures
 
@@ -236,7 +234,7 @@ if (make_plots) {
 knitr::include_graphics(here("img/crmr_distributions_full.png"))
 ```
 
-### Fit Indices Based on $\hat{\Sigma}$ {#sigma-hat-fit-indices}
+### Fit Indices Based on $\hat{\Omega}$ {#sigma-hat-fit-indices}
 
 #### $\textrm{RMSEA}_{\hat{\theta}}$
 
@@ -385,14 +383,16 @@ knitr::include_graphics(here("img/crmr_thetahat_distributions.png"))
 <!-- Begin Figure c129 -->
 \begin{sidewaysfigure}[ht]
 
-{ \centering \includegraphics[width=\linewidth]{img/c129_R_plots_with_annotation.png} }
+{ \centering \includegraphics[width=.8\linewidth]{img/c129_R_plots_with_annotation.png} }
 
-\caption{Correlation matrices with model error ($\mathbf{\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\mathbf{\Sigma}$ ($\hat{\mathbf{\Sigma}}$) for each model-error method. Results are shown for a set of solution matrices from the condition with ten orthogonal factors, five items per factor, weak factor loadings of 0.3, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.}
+\caption{Correlation matrices with model error ($\mathbf{\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\mathbf{\Sigma}$ ($\hat{\mathbf{\Omega}}$) for each model-error method. Results are shown for a set of solution matrices from the condition with ten orthogonal factors, five items per factor, weak factor loadings of 0.3, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.}
 
 \label{fig:c129-with-annotation}
 
 \end{sidewaysfigure}
 <!-- End Figure c129 -->
+
+\pagebreak
 
 #### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Sigma}}$ for the Condition with Ten Orthogonal Factors, Ten Items per Factor, Weak Factor Loadings, and Poor Model Fit
 
@@ -401,10 +401,10 @@ knitr::include_graphics(here("img/crmr_thetahat_distributions.png"))
 <!-- Begin Figure c156 -->
 \begin{sideways}
 
-\ffigbox[][][]{\includegraphics[width=1.25\textwidth]{img/c156_R_plots_with_annotation.png}
+\ffigbox[][][]{\includegraphics[width=.8\linewidth]{img/c156_R_plots_with_annotation.png}
 \captionsetup{width=\textwidth, textfont={}, labelfont={it}, justification=raggedright, singlelinecheck=false, labelsep=period} 
 \centering
-\caption{Correlation matrices with model error ($\mathbf{\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\mathbf{\Sigma}$ ($\hat{\mathbf{\Sigma}}$) for each model-error method. Results are shown for a set of solution matrices from the condition with ten orthogonal factors, ten items per factor, weak factor loadings of 0.4, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.}}
+\caption{Correlation matrices with model error ($\mathbf{\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\mathbf{\Sigma}$ ($\hat{\mathbf{\Omega}}$) for each model-error method. Results are shown for a set of solution matrices from the condition with ten orthogonal factors, ten items per factor, weak factor loadings of 0.4, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.}}
 
 \label{fig:c156-with-annotation}
 

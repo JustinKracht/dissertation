@@ -236,10 +236,10 @@ knitr::include_graphics(here("img/crmr_distributions_full.png"))
 
 ### Fit Indices Based on $\hat{\Omega}$ {#sigma-hat-fit-indices}
 
-#### $\textrm{RMSEA}_{\hat{\theta}}$
+#### $\textrm{RMSEA}_{\hat{\gamma}}$
 
 ```{r rmsea-thetahat-distributions, out.width="85%"}
-#| fig.cap = "Distributions of the $\\textrm{RMSEA}_{\\hat{\\theta}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target RMSEA value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Distributions of the $\\textrm{RMSEA}_{\\hat{\\gamma}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target RMSEA value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 if (make_plots) {
   rmsea_thetahat_distributions <- 
     results_matrix %>%
@@ -254,7 +254,7 @@ if (make_plots) {
     facet_grid(model_fit_rec * loading_rec ~ 
                  factors_rec) +
     labs(x = "",
-         y = latex2exp::TeX("$RMSEA_{\\hat{\\theta}}$")) +
+         y = latex2exp::TeX("$RMSEA_{\\hat{\\gamma}}$")) +
     theme_bw() +
     theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
   
@@ -270,10 +270,10 @@ if (make_plots) {
 knitr::include_graphics(here("img/rmsea_thetahat_distributions.png"))
 ```
 
-#### $\textrm{CFI}_{\hat{\theta}}$
+#### $\textrm{CFI}_{\hat{\gamma}}$
 
 ```{r cfi-thetahat-distributions, out.width="90%"}
-#| fig.cap = "Distributions of the $\\textrm{CFI}_{\\hat{\\theta}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target CFI value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Distributions of the $\\textrm{CFI}_{\\hat{\\gamma}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target CFI value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 if (make_plots) {
   cfi_thetahat_distributions <- 
     results_matrix %>%
@@ -288,7 +288,7 @@ if (make_plots) {
     facet_grid(model_fit_rec * loading_rec ~ 
                  factors_rec) +
     labs(x = "",
-         y = latex2exp::TeX("$CFI_{\\hat{\\theta}}$")) +
+         y = latex2exp::TeX("$CFI_{\\hat{\\gamma}}$")) +
     theme_bw() +
     theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
   
@@ -304,10 +304,10 @@ if (make_plots) {
 knitr::include_graphics(here("img/cfi_thetahat_distributions.png"))
 ```
 
-#### $\textrm{TLI}_{\hat{\theta}}$
+#### $\textrm{TLI}_{\hat{\gamma}}$
 
 ```{r tli-thetahat-distributions, out.width="90%"}
-#| fig.cap = "Distributions of the $\\textrm{TLI}_{\\hat{\\theta}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the threshold values of TLI that correspond to the targeted levels of model fit, according to Hu and Bentler (1999). TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Distributions of the $\\textrm{TLI}_{\\hat{\\gamma}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the threshold values of TLI that correspond to the targeted levels of model fit, according to Hu and Bentler (1999). TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 if (make_plots) {
   tli_thetahat_distributions <- 
     results_matrix %>%
@@ -322,7 +322,7 @@ if (make_plots) {
     facet_grid(model_fit_rec * loading_rec ~ 
                  factors_rec) +
     labs(x = "",
-         y = latex2exp::TeX("$TLI_{\\hat{\\theta}}$")) +
+         y = latex2exp::TeX("$TLI_{\\hat{\\gamma}}$")) +
     theme_bw() +
     theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
   
@@ -338,10 +338,10 @@ if (make_plots) {
 knitr::include_graphics(here("img/tli_thetahat_distributions.png"))
 ```
 
-#### $\textrm{CRMR}_{\hat{\theta}}$
+#### $\textrm{CRMR}_{\hat{\gamma}}$
 
 ```{r crmr-thetahat-distributions, out.width="90%"}
-#| fig.cap = "Distributions of the $\\textrm{TLI}_{\\hat{\\theta}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Recommendations for threshold values of SRMR/CRMR are not as fine-grained as for some other fit indices, but threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values. The dashed lines indicate these two threshold values. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Distributions of the $\\textrm{TLI}_{\\hat{\\gamma}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Recommendations for threshold values of SRMR/CRMR are not as fine-grained as for some other fit indices, but threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values. The dashed lines indicate these two threshold values. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 if (make_plots) {
   crmr_thetahat_distributions <- 
     results_matrix %>%
@@ -358,7 +358,7 @@ if (make_plots) {
     facet_grid(model_fit_rec * loading_rec ~ 
                  factors_rec) +
     labs(x = "",
-         y = latex2exp::TeX("$CRMR_{\\hat{\\theta}}$")) +
+         y = latex2exp::TeX("$CRMR_{\\hat{\\gamma}}$")) +
     theme_bw() +
     theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
   
@@ -374,39 +374,21 @@ if (make_plots) {
 knitr::include_graphics(here("img/crmr_thetahat_distributions.png"))
 ```
 
-### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Sigma}}$ {#sigma-heat-maps}
+### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$ {#sigma-heat-maps}
 
-#### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Sigma}}$ for the Condition with Ten Orthogonal Factors, Five Items per Factor, Weak Factor Loadings, and Poor Model Fit
+#### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$ for the Condition with Ten Orthogonal Factors, Five Items per Factor, Weak Factor Loadings, and Poor Model Fit
 
-\vfill
+```{r c129-with-annotation, out.width = '60%'}
+#| fig.cap = "Correlation matrices with model error ($\\mathbf{\\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\\mathbf{\\Sigma}$ ($\\hat{\\mathbf{\\Omega}}$) for each model-error method. Results are shown for a set of solution matrices from the condition with ten orthogonal factors, five items per factor, weak factor loadings of 0.3, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 
-<!-- Begin Figure c129 -->
-\begin{sidewaysfigure}[ht]
+knitr::include_graphics(here("img/c129_R_plots_with_annotation.png"))
+```
 
-{ \centering \includegraphics[width=.8\linewidth]{img/c129_R_plots_with_annotation.png} }
+#### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$ for the Condition with Ten Orthogonal Factors, Ten Items per Factor, Weak Factor Loadings, and Poor Model Fit
 
-\caption{Correlation matrices with model error ($\mathbf{\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\mathbf{\Sigma}$ ($\hat{\mathbf{\Omega}}$) for each model-error method. Results are shown for a set of solution matrices from the condition with ten orthogonal factors, five items per factor, weak factor loadings of 0.3, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.}
+```{r c156-with-annotation, out.width='70%'}
+#| fig.cap = "Correlation matrices with model error ($\\mathbf{\\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\\mathbf{\\Sigma}$ ($\\hat{\\mathbf{\\Omega}}$) for each model-error method. Results are shown for a set of solution matrices from the condition with ten orthogonal factors, ten items per factor, weak factor loadings of 0.4, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 
-\label{fig:c129-with-annotation}
-
-\end{sidewaysfigure}
-<!-- End Figure c129 -->
-
-\pagebreak
-
-#### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Sigma}}$ for the Condition with Ten Orthogonal Factors, Ten Items per Factor, Weak Factor Loadings, and Poor Model Fit
-
-\vfill
-
-<!-- Begin Figure c156 -->
-\begin{sideways}
-
-\ffigbox[][][]{\includegraphics[width=.8\linewidth]{img/c156_R_plots_with_annotation.png}
-\captionsetup{width=\textwidth, textfont={}, labelfont={it}, justification=raggedright, singlelinecheck=false, labelsep=period} 
-\centering
-\caption{Correlation matrices with model error ($\mathbf{\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\mathbf{\Sigma}$ ($\hat{\mathbf{\Omega}}$) for each model-error method. Results are shown for a set of solution matrices from the condition with ten orthogonal factors, ten items per factor, weak factor loadings of 0.4, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.}}
-
-\label{fig:c156-with-annotation}
-
-\end{sideways}
+knitr::include_graphics(here("img/c156_R_plots_with_annotation.png"))
+```
 

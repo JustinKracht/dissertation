@@ -1017,7 +1017,7 @@ if (make_plots) {
 knitr::include_graphics(path = here("img/rmsea-cfi-distributions.png"))
 ```
 
-To better understand the conditional distribution of CFI values for solutions with fixed RMSEA values, I used the $\textrm{TKL}_{\textrm{RMSEA}}$ method to generate solutions with a range of target RMSEA values for each of a subset of conditions from the main simulation study. Specifically, I generated 100 solutions for each of 16 target RMSEA values equally-spaced between .025 and .1 for each condition of the main simulation design with uncorrelated major common factors. (Conditions with correlated major common factors were omitted to make the number of conditions manageable.) The results can be seen in Figure \@ref(fig:rmsea-conditional-cfi), which shows the CFI and RMSEA values for each condition. The solid black lines in the figure indicate where RMSEA is equal to $1 - \textrm{CFI}$ and can be used to easily determine which fit index changed most quickly as a function of the other fit index. RMSEA and $1 - CFI$ are comparable in this context because they indicate roughly the same level of qualitative model fit over the range of target RMSEA values. For example, both $\textrm{RMSEA} = 0.05$ and $\textrm{CFI} = .95$ have often been used as threshold values for good model fit. Figure \@ref(fig:rmsea-conditional-cfi) shows that CFI values decreased faster than RMSEA values increased for most of the included conditions, with the exception of conditions with relatively few major factors and strong factor loadings.
+To better understand the conditional distribution of CFI values for solutions with fixed RMSEA values, I used the $\textrm{TKL}_{\textrm{RMSEA}}$ method to generate solutions with a range of target RMSEA values for each of a subset of conditions from the main simulation study. Specifically, I generated 100 solutions for each of 16 target RMSEA values equally-spaced between .025 and .100 for each condition of the main simulation design with uncorrelated major common factors. (Conditions with correlated major common factors were omitted to make the number of conditions manageable.) The results can be seen in Figure \@ref(fig:rmsea-conditional-cfi), which shows the CFI and RMSEA values for each condition. The solid black lines in the figure indicate where RMSEA is equal to $1 - \textrm{CFI}$ and can be used to easily determine which fit index changed most quickly as a function of the other fit index. RMSEA and $1 - CFI$ are comparable in this context because they indicate roughly the same level of qualitative model fit over the range of target RMSEA values. For example, both $\textrm{RMSEA} = 0.05$ and $\textrm{CFI} = .95$ have often been used as threshold values for good model fit. Figure \@ref(fig:rmsea-conditional-cfi) shows that CFI values decreased faster than RMSEA values increased for most of the included conditions, with the exception of conditions with relatively few major factors and strong factor loadings.
 
 ```{r rmsea-conditional-cfi, out.width='100%'}
 #| fig.cap = "Observed CFI and RMSEA values for solutions generated using the $\\textrm{TKL}_{\\textrm{RMSEA}}$ method. For each combination of number of factors, number of items per factor, and factor loading strength, 100 solutions were generated for each of 16 target RMSEA values equally-spaced between 0.025 and 0.1. The solid black line indicates where CFI and $1 - \\textrm{RMSEA}$ were equal."
@@ -1341,10 +1341,16 @@ Although the lack-of-fit between $\bm{\Sigma}$ and $\bm{\Omega}$ was of primary 
 
 Figures reporting the distributions of RMSEA, CFI, TLI, and CRMR values representing the lack-of-fit between $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$ (analogous to \@ref(fig:rmsea-distributions), \@ref(fig:cfi-distributions), \@ref(fig:tli-distributions), and \@ref(fig:crmr-distributions)) are provided in \@ref(sigma-hat-fit-indices). In addition to the distributions of the $\hat{\bm{\Omega}}$ fit indices, I was also interested in how they related to the corresponding fit indices indicating lack-of-fit between $\bm{\Sigma}$ and $\bm{\Omega}$. In particular, I was interested in determining how $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ was related to RMSEA and how $\textrm{CFI}_{\hat{\bm{\Omega}}}$ was related to CFI.
 
-To better understand the relationship between the observed $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ and RMSEA values from the simulation study, \@ref(fig:rmsea-theta-vs-theta-hat) shows box-plots of $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ and RMSEA conditioned on each of the model-error methods, factor loading levels, and levels of model fit. The figure shows that the $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ values were almost always lower than the RMSEA values corresponding to the same $\bm{\Sigma}$ matrix, resulting in positive differences between RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$. The vast majority of these differences were quite small, with a median difference of only 0.003. However, \@ref(fig:rmsea-theta-vs-theta-hat) shows that the differences between RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ were affected by the level of model fit such that the differences were largest when model fit was Poor and smallest when model fit was Very Good. In the most extreme instance, a $\bm{\Sigma}$ matrix with Poor model fit had an $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ value of .006 and an RMSEA value of .308, indicating very different qualitative interpretations of model fit. Thus, although the differences between RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ were often negligible, in some cases they were large enough to indicate completely different qualitative interpretations of model fit for RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$.
+To better understand the relationship between the observed $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ and RMSEA values from the simulation study, \@ref(fig:rmsea-theta-vs-theta-hat) shows box-plots of the differences between $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ and RMSEA, denoted as 
+
+\begin{equation}
+\textrm{RMSEA}_{\Delta} = \textrm{RMSEA}_{\hat{\bm{\Omega}}} - \textrm{RMSEA},
+\end{equation}
+
+conditioned on each of the model-error methods, factor loading levels, and levels of model fit. The figure shows that the $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ values were almost always lower than the RMSEA values corresponding to the same $\bm{\Sigma}$ matrix, resulting in positive values of $\textrm{RMSEA}_{\Delta}$. The vast majority of these differences were quite small, with a median difference of only 0.003. However, \@ref(fig:rmsea-theta-vs-theta-hat) shows that $\textrm{RMSEA}_{\Delta}$ was affected by the level of model fit such that $\textrm{RMSEA}_{\Delta}$ was largest when model fit was Poor and smallest when model fit was Very Good. In the most extreme instance, a $\bm{\Sigma}$ matrix with Poor model fit had an $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ value of .006 and an RMSEA value of .308, indicating very different qualitative interpretations of model fit. Thus, although the differences between RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ were often negligible, in some cases they were large enough to indicate completely different qualitative interpretations of model fit for RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$.
 
 ```{r rmsea-theta-vs-theta-hat, out.width = '100%'}
-#| fig.cap = "Box-plots of the differences between RMSEA and $\\textrm{RMSEA}_{\\hat{\\theta}}$  conditioned on model-error method, levels of model fit, and factor loading. Note that some outliers were omitted from the plot to aid visualization. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Box-plots of the differences between RMSEA and $\\textrm{RMSEA}_{\\hat{\\theta}}$ (denoted as $\\textrm{RMSEA}_{\\Delta}$) conditioned on model-error method, levels of model fit, and factor loading. Note that some outliers were omitted from the plot to aid visualization. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 
 if (make_plots) {
   rmsea_diff <- results_matrix %>%  
@@ -1359,7 +1365,7 @@ if (make_plots) {
     geom_boxplot(width = .4, outlier.size = .4, outlier.alpha = .05, size = .4) +
     scale_x_continuous(limits = c(0, .075)) +
     scale_y_discrete(labels = scales::label_parse()) +
-    labs(x = latex2exp::TeX("$RMSEA - RMSEA_{\\hat{\\theta}}$"),
+    labs(x = latex2exp::TeX("$RMSEA_{\\Delta}$"),
          y = "") +
     facet_grid(model_fit_rec ~ loading_rec,
                labeller = label_parsed) +
@@ -1374,10 +1380,14 @@ if (make_plots) {
 knitr::include_graphics(here("img/rmsea_diff.png"))
 ```
 
-In addition to being affected by the level of model fit, \@ref(fig:rmsea-theta-vs-theta-hat) also shows that the relationship between RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ was affected by the strength of the major common factor loadings. Moving from left to right in  \@ref(fig:rmsea-theta-vs-theta-hat), the differences between RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ values tended to decrease as factor loadings increased from 0.3 to 0.8. The figure also shows that there was an interaction between model-error method and factor loading such that the differences between RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ values decreased the most for the $\textrm{TKL}_{\textrm{RMSEA}}$ and CB methods as factor loadings increased, compared to the alternative model-error methods.
+In addition to being affected by the level of model fit, \@ref(fig:rmsea-theta-vs-theta-hat) also shows that $\textrm{RMSEA}_{\Delta}$ was affected by the strength of the major common factor loadings. Moving across the figure from left to right, the differences between RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ values tended to decrease as factor loadings increased from 0.3 to 0.8. The figure also shows that there was an interaction between model-error method and factor loading such that $\textrm{RMSEA}_{\Delta}$ decreased the most for the $\textrm{TKL}_{\textrm{RMSEA}}$ and CB methods as factor loadings increased, compared to the alternative model-error methods.
+
+Another important effect that can be seen in \@ref(fig:rmsea-theta-vs-theta-hat) is that the relationship between RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ differed depending on the model-error method that was used. For instance, the CB method consistently produced $\bm{\Sigma}$ matrices with small $\textrm{RMSEA}_{\Delta}$ values, whereas the other model-error methods often produced solutions with large $\textrm{RMSEA}_{\Delta}$ values. In theory, the CB method should have led to solutions with equal RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ values because $\hat{\bm{\Omega}} = \bm{\Omega}$ when the CB method converges to a valid solution (see \@ref(population-model-fit)). However, in the present simulation study the CB method produced RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ values that were often very close but not exactly equal (i.e., small but non-zero $\textrm{RMSEA}_{\Delta}$ values). The $\textrm{RMSEA}_{\Delta}$ values were largest when model fit was Poor and smallest when model fit was Very Good, as can be seen by moving from top to bottom of \@ref(fig:rmsea-theta-vs-theta-hat). Although the differences between RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ were often non-zero, they were generally small enough to be of little concern to most researchers.
+
+Finally, the number of major common factors and the number of items per factor had important effects on $\textrm{RMSEA}_{\Delta}$. These effects are shown in \@ref(rmsea-theta-vs-theta-hat-factors), which contains box-plots of $\textrm{RMSEA}_{\Delta}$ conditioned on number of factors and number of items per factor. The most important effects shown in \@ref(rmsea-theta-vs-theta-hat-factors) are the interaction effects between model-error method and the number of factors and between model-error method and the number of items per factor. The figure shows that the TKL-based methods were most affected by the number of factors and the number of items per factor, but that the direction of the effect depended on the particular method. The $\textrm{TKL}_{\textrm{RMSEA}}$ method [PICK UP HERE...] 
 
 ```{r rmsea-theta-vs-theta-hat-factors, out.width = '100%'}
-#| fig.cap = "Box-plots of the differences between RMSEA and $\\textrm{RMSEA}_{\\hat{\\theta}}$  conditioned on model-error method and number of factors. Note that some outliers were omitted from the plot to aid visualization. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Box-plots of the differences between RMSEA and $\\textrm{RMSEA}_{\\hat{\\theta}}$ (denoted as $\\textrm{RMSEA}_{\\Delta}$) conditioned on model-error method, number of factors, and number of items per factor. Note that some outliers were omitted from the plot to aid visualization. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 
 if (make_plots) {
   rmsea_diff_factors <- results_matrix %>%  
@@ -1392,28 +1402,26 @@ if (make_plots) {
     geom_boxplot(width = .4, outlier.size = .4, outlier.alpha = .05, size = .4) +
     scale_x_continuous(limits = c(0, .075)) +
     scale_y_discrete(labels = scales::label_parse()) +
-    labs(x = latex2exp::TeX("$RMSEA - RMSEA_{\\hat{\\theta}}$"),
+    labs(x = latex2exp::TeX("$\\textrm{RMSEA}_{\\Delta}$"),
          y = "") +
-    facet_grid(~ factors_rec,
+    facet_grid(items_per_factor_rec ~ factors_rec,
                labeller = label_parsed) +
     theme_bw()
   
     ggsave(here("img/rmsea_diff_factors.png"),
          rmsea_diff_factors,
          dpi = 320,
-         height = 2.25,
+         height = 3.5,
          width = 7)
 }
 
 knitr::include_graphics(here("img/rmsea_diff_factors.png"))
 ```
 
-[START WRITING HERE.] Another effect that can be seen in both \@ref(fig:rmsea-theta-vs-thetahat) and \ref(fig:rmsea-theta-vs-theta-hat-nfac) is that the relationship between RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ differed depending on the model-error method that was used. For instance, the CB method consistently produced $\bm{\Sigma}$ matrices with very similar RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ values, whereas the other model-error methods often produced solutions with very different RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ values. In theory, the CB method should have led to solutions with equal RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ values because $\hat{\bm{\Omega}} = \bm{\Omega}$ when the CB method converges to a valid solution (see \@ref(population-model-fit)). However, in the present simulation study the CB method produced RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ values that were often very close but not exactly equal. The differences between RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ were largest when model fit was Poor and smallest when model fit was Very Good. This can be seen in \@ref(fig:rmsea-diff), which shows histograms of the differences between RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ for $\bm{\Sigma}$ matrices generated using the CB method, conditioned on level of model fit. Although the differences between RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ were often non-zero, they were still small enough to be of little concern to most researchers.
-
 In addition to looking at how RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$ values differed among the conditions in the simulation study, I was also interested in how the CFI and $\textrm{CFI}_{\hat{\bm{\Omega}}}$ values differed. Scatter-plots of CFI and $\textrm{CFI}_{\hat{\bm{\Omega}}}$ conditioned on model-error method and level of model fit are shown in \@ref(fig:cfi-theta-vs-theta-hat). Similar to the previous results for RMSEA and $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$, the figure shows that CFI and $\textrm{CFI}_{\hat{\bm{\Omega}}}$ were most different when model fit was Poor and most similar when model fit was Very Good. Moreover, the figure also shows differences among the model fit indices. Just as the CB method led to the 
 
 ```{r cfi-theta-vs-theta-hat, out.width = '100%'}
-#| fig.cap = "Box-plots of the differences between CFI and $\\textrm{CFI}_{\\hat{\\theta}}$  conditioned on model-error method, levels of model fit, and number of items per factor. Note that some outliers were omitted from the plot to aid visualization. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Box-plots of the differences between CFI and $\\textrm{CFI}_{\\hat{\\theta}}$ (denoted as $\\textrm{CFI}_{\\Delta}$) conditioned on model-error method, levels of model fit, and factor loading. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 
 if (make_plots) {
   cfi_diff <- results_matrix %>%  
@@ -1428,9 +1436,9 @@ if (make_plots) {
     geom_boxplot(width = .4, outlier.size = .4, outlier.alpha = .05, size = .4) +
     # scale_x_continuous(limits = c(0, .075)) +
     scale_y_discrete(labels = scales::label_parse()) +
-    labs(x = latex2exp::TeX("$CFI - CFI_{\\hat{\\theta}}$"),
+    labs(x = latex2exp::TeX("$CFI_{\\Delta}$"),
          y = "") +
-    facet_grid(model_fit_rec ~ items_per_factor_rec,
+    facet_grid(model_fit_rec ~ loading_rec,
                labeller = label_parsed) +
     theme_bw()
   
@@ -1440,40 +1448,40 @@ if (make_plots) {
          height = 5)
 }
 
-knitr::include_graphics(here("img/rmsea_diff.png"))
+knitr::include_graphics(here("img/cfi_diff.png"))
 ```
 
 Some more text about \@ref(fig:cfi-theta-vs-theta-hat-nfac).
 
 ```{r cfi-theta-vs-theta-hat-nfac, out.width = '100%'}
-#| fig.cap = "Scatter-plot of CFI and $\\textrm{CFI}_{\\hat{\\theta}}$ values conditioned on model-error method, number of major common factors, and number of items per factor. Conditions with three factors were omitted to conserve space. The solid black line indicates where CFI and $\\textrm{CFI}_{\\hat{\\theta}}$ are equal. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Box-plots of the differences between CFI and $\\textrm{CFI}_{\\hat{\\theta}}$ (denoted as $\\textrm{CFI}_{\\Delta}$) conditioned on model-error method, number of factors, and number of items per factor. Note that some outliers were omitted from the plot to aid visualization. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 
 if (make_plots) {
-  results_matrix %>%  
-    filter(rmsea < 3, factors != 3) %>% 
+  cfi_diff_factors <- results_matrix %>%  
+    filter(rmsea < 3) %>% 
     mutate(model_fit_rec = str_replace_all(model_fit_rec, " ", "~"),
            model_fit_rec = fct_relevel(model_fit_rec,
                                        "Fit:~Poor",
                                        "Fit:~Fair",
                                        "Fit:~Very~Good")) %>% 
-    ggplot(aes(x = cfi, y = cfi_thetahat)) +
-    geom_point(alpha = 0.1, size = .5) +
-    geom_abline(slope = 1, intercept = 0)  +
-    coord_fixed(xlim = c(0, 1), ylim = c(0, 1)) +
-    scale_x_continuous(breaks = seq(0, 1, length.out = 6)) +
-    scale_y_continuous(breaks = seq(0, 1, length.out = 6)) +
-    labs(x = "CFI", y = latex2exp::TeX("$CFI_{\\hat{\\theta}}$")) +
-    facet_grid(factors_rec * items_per_factor_rec ~ error_method_rec,
+    mutate(error_method_rec = fct_rev(error_method_rec)) %>% 
+    ggplot(aes(x = cfi - cfi_thetahat, y = error_method_rec)) +
+    geom_boxplot(width = .4, outlier.size = .4, outlier.alpha = .05, size = .4) +
+    scale_y_discrete(labels = scales::label_parse()) +
+    labs(x = latex2exp::TeX("$CFI_{\\Delta}$"),
+         y = "") +
+    facet_grid(items_per_factor_rec ~ factors_rec,
                labeller = label_parsed) +
-    theme_bw(base_size = 9) +
-    theme(panel.spacing = unit(8, "pt"))
+    theme_bw()
   
-  ggsave(filename = here("img/cfi-theta-vs-theta-hat-nfac.png"),
+    ggsave(here("img/cfi_diff_factors.png"),
+         cfi_diff_factors,
          dpi = 320,
-         height = 7)
+         height = 3.5,
+         width = 7)
 }
 
-knitr::include_graphics(here("img/cfi-theta-vs-theta-hat-nfac.png"))
+knitr::include_graphics(here("img/cfi_diff_factors.png"))
 ```
 
 ## TKL Method Recovery of Model Fit Indices

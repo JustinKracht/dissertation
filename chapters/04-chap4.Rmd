@@ -1428,7 +1428,16 @@ In addition to knowing how $\textrm{RMSEA}_{\Delta}$ values differed among the c
 \textrm{CFI}_{\Delta} =  \textrm{CFI} - \textrm{CFI}_{\hat{\bm{\Omega}}}.
 \end{equation}
 
-Box-plots of $\textrm{CFI}_{\Delta}$ conditioned on model-error method, level of model fit, and factor loading strength are shown in \@ref(fig:cfi-theta-vs-theta-hat). Similar to the previous results for $\textrm{RMSEA}_{\Delta}$, the figure shows that $\textrm{CFI}_{\Delta}$ values were largest when model fit was Poor and smallest when model fit was Very Good. Moreover, the figure also shows differences among the model fit indices. Of the model-error methods, the $\textrm{TKL}_{\textrm{RMSEA}}$ method generally led to the largest median $\textrm{CFI}_{\Delta}$ values
+```{r calculate-error-method-medians-cfi-delta, echo = FALSE}
+cfi_method_medians <- results_matrix %>% 
+  group_by(error_method) %>% 
+  summarise(median_cfi_delta = median(cfi - cfi_thetahat, na.rm = TRUE)) %>% 
+  pivot_wider(names_from = error_method, values_from = median_cfi_delta)
+```
+
+\@ref(fig:cfi-theta-vs-theta-hat) contains box-plots of $\textrm{CFI}_{\Delta}$ conditioned on model-error method, level of model fit, and factor loading strength. Similar to the previous results for $\textrm{RMSEA}_{\Delta}$, the figure shows that $\textrm{CFI}_{\Delta}$ values were largest when model fit was Poor and smallest when model fit was Very Good. Moreover, the figure also shows differences among the model fit indices. Of the model-error methods, the WB method had the most extreme median $\textrm{CFI}_{\Delta}$ value (i.e., furthest from zero; *Mdn* = ```r round(cfi_method_medians$WB, 3)```), followed by the $\textrm{TKL}_{\textrm{RMSEA}}$ method (*Mdn* = ```r round(cfi_method_medians$'TKL (RMSEA)', 3)```), the $\textrm{TKL}_{\textrm{RMSEA/CFI}}$ method (*Mdn* = ```r round(cfi_method_medians$'TKL (RMSEA/CFI)', 3)```), the CB method (*Mdn* = ```r round(cfi_method_medians$CB, 3)```), and the $\textrm{TKL}_{\textrm{CFI}}$ method (*Mdn* = ```r round(cfi_method_medians$'TKL (CFI)', 3)```). It was surprising that the $\textrm{TKL}_{\textrm{CFI}}$ led to less extreme $\textrm{CFI}_{\Delta}$ values than the CB method; as mentioned previously, the CB method should (in theory) have produced solutions with $\hat{\bm{\Omega}} = \bm{\Omega}$ and, correspondingly, $\textrm{CFI}_{\Delta} = 0$.
+
+<!-- This is because the 10-factor, 15-item-per-factor condition is making the results wonky. -->
 
 ```{r cfi-theta-vs-theta-hat, out.width = '100%'}
 #| fig.cap = "Box-plots of the differences between CFI and $\\textrm{CFI}_{\\hat{\\theta}}$ (denoted as $\\textrm{CFI}_{\\Delta}$) conditioned on model-error method, levels of model fit, and factor loading. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."

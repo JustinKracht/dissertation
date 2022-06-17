@@ -57,6 +57,7 @@ library(latex2exp)
 library(gghighlight)
 library(kableExtra)
 library(here)
+library(scales)
 library(noisemaker) # devtools::install_github("JustinKracht/noisemaker")
 
 # Set knitr chunk options

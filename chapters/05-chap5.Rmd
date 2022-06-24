@@ -32,11 +32,12 @@ Find a way to work in: all methods led to similar results (in terms of RMSEA, CF
     
 2. When assessing which of these methods to use in simulation work, there are other considerations. (A) Completion time; (B) Non-convergence; (C) Indefinite Matrices.
 
-
 Future Research:
 
 1. More flexible targets; target fit index ranges rather than fit index values.
 2. Marsh et al. in search of golden rules: use more varied (realistic) model error methods to establish rule-of-thumb cutoff values.
 3. The proposed model-error methods will give researchers the ability to generate more realistic population models with model error and user-specified fit index values. This could help us better understand how fit indices 
+4. User-specified bounds of v and epsilon for noisemaker.
+5. What do my results say about which model-error method should be preferred?
 --->
 

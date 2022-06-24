@@ -1,4 +1,6 @@
-library(furrr)
+library(fungible)
+library(noisemaker)
+library(pbapply)
 
 reps <- 100
 
@@ -14,12 +16,10 @@ conditions_matrix <- expand.grid(
   target_cfi = target_cfi
 )
 
-plan(multisession, workers = 4L)
-
 set.seed(666)
-cfi_rmsea_vals <- future_map_dfr(
-  .x = 1:nrow(conditions_matrix), 
-  .f = function(condition) {
+cfi_rmsea_vals <- pblapply(
+  X = 1:nrow(conditions_matrix), 
+  FUN = function(condition) {
     mod <- simFA(
       Model = list(NFac = conditions_matrix$factors[condition],
                    NItemPerFac = conditions_matrix$items_per_factor[condition],
@@ -41,10 +41,10 @@ cfi_rmsea_vals <- future_map_dfr(
               c(rmsea = sol$rmsea, cfi = sol$cfi, 
                 w_constraints_violated = w_constraints_violated)
             }, target_cfi = conditions_matrix$target_cfi[condition])
-  },
-  .progress = TRUE
+  }
 )
 
+cfi_rmsea_vals <- bind_rows(cfi_rmsea_vals)
 cfi_rmsea_vals <- bind_cols(
   cfi_rmsea_vals,
   conditions_matrix[rep(1:nrow(conditions_matrix), each = reps),]
@@ -64,12 +64,12 @@ saveRDS(cfi_rmsea_vals, file = here("data/cfi_conditional_rmsea.RDS"))
 # rmsea_cfi_vals <- readRDS(here("data/rmsea_conditional_cfi.RDS"))
 
 cfi_rmsea_vals %>%
-  ggplot(aes(x = cfi, y = rmsea)) +
+  ggplot(aes(y = rmsea, x = cfi)) +
   geom_point(size = 1, alpha = .1) +
   geom_abline(aes(slope = -1, intercept = 1), size = .5, alpha = .5) +
   facet_grid(loading_rec * items_per_factor_rec ~ factors_rec) +
   guides(color = guide_legend(override.aes = list(alpha = 1, size = 1.5))) +
-  labs(x = "CFI", y = "RMSEA") +
+  labs(y = "RMSEA", x = "CFI") +
   theme_bw() +
   theme(legend.position = "bottom",
         panel.spacing.x = unit(14, units = "points"))

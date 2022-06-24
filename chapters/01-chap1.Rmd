@@ -176,30 +176,35 @@ RMSEA, CFI, TLI, and SRMR are generally defined in terms of the sample covarianc
 
 \begin{equation}
 \textrm{RMSEA} = \varepsilon = \sqrt{\frac{F_h}{df_h}},
+(\#eq:rmsea)
 \end{equation}
 
 \noindent the population CFI value is given by
 
 \begin{equation}
 \textrm{CFI} = 1 - \frac{F_h}{F_b},
+(\#eq:cfi)
 \end{equation}
 
 \noindent and the population TLI value is given by
 
 \begin{equation} 
 \textrm{TLI} = 1 - \frac{F_h / df_h}{F_b / df_b}.
+(\#eq:tli)
 \end{equation}
 
 \noindent Unlike RMSEA, CFI, and TLI, the population SRMR does not depend on discrepancy function values and is given by
 
 \begin{equation}
 \textrm{SRMR} = \sqrt{ \frac{1}{p (p + 1) / 2} \sum_{i \leq j} \left(  \frac{\sigma_{ij} - \omega_{ij}}{\sqrt{\sigma_{ii} \sigma_{jj}}} \ \right) ^2 },
+(\#eq:srmr)
 \end{equation}
 
 \noindent where $p$ is the number of observed variables, and $\sigma_{ij}$ and $\omega_{ij}$ are the $i,j$th elements of $\bm{\Sigma}$ and $\bm{\Omega}$, respectively [@maydeu-olivares2017; @xia2019; @pavlov2021]. Note that when $\bm{\Sigma}$ and $\bm{\Omega}$ are constrained to be correlation matrices with unit diagonals, the correlation root mean residual [CRMR\; @bollen1989a; @ogasawara2001] is appropriate:
 
 \begin{equation}
 \textrm{CRMR} = \sqrt{ \frac{1}{p (p - 1) / 2} \sum_{i < j} \left( \sigma_{ij} - \omega_{ij} \ \right) ^2 }.
+(\#eq:crmr)
 \end{equation}
 
 Although all of the fit indices discussed here have been used to quantify model error in simulation studies [e.g., @lai2020b; @lai2020c; @lai2017; @xia2016a], the population RMSEA is used most often. Indeed, many simulation studies using the TKL, CB, or WB model-error methods have grouped simulated covariance matrices into model fit categories based on highly-cited "rule-of-thumb" RMSEA cutoff values. For instance, Lorenzo-Seva and Ferrando [-@lorenzo-seva2020] used RMSEA values of 0.065 to represent models with fair fit, citing Browne and Cudeck [-@browne1992]. @myers2015a used RMSEA values of 0.025, 0.065, and 0.090 to categorize models as having very good fit, fair fit, and poor fit (respectively), citing Browne and Cudeck [-@browne1992], Steiger [-@steiger1989ezpath], and @jackson2009. According to Lai and Green [-@lai2016, p. 220]: 

@@ -10,3 +10,236 @@ The essential problem was that the addition of the discrete penalty term made th
 FOR DISCUSSION: 
 
 With the exception of the CB method, none of the model-error methods were expected to produce the same fit index values for $\bm{\Omega}$ and $\hat{\bm{\Omega}}$. Although in theory it might be possible to modify the TKL model-error methods to try to generate a $\bm{\Sigma}$ matrix corresponding to particular $\textrm{RMSEA}_{\hat{\theta}}$ or $\textrm{CFI}_{\hat{\theta}}$ values, doing so would require fitting a factor model at each iteration of the optimization procedure and thus would likely be impractical for most purposes. Understanding how the observed $\textrm{RMSEA}_{\hat{\theta}}$ or $\textrm{CFI}_{\hat{\theta}}$ values related the observed RMSEA and CFI values in the simulation study would be...
+
+
+----- START OF CUT MATERIAL FROM MODEL FIT AGREEMENT SECTION --------
+
+The frequent disagreement between RMSEA and CFI can be also be understood by considering how the relative and absolute fit indices differ in how they describe model fit. As an example, consider an orthogonal model with ten major factors, five items per factor, and major common factor loadings fixed at 0.4. The population correlation matrix without model error for this condition ($\bOmega$) would be a $50 \times 50$ block-diagonal correlation matrix, with correlations of $0.16$ between items that load on the same factor, and zero otherwise. To obtain a population correlation matrix ($\bSigma$) with sufficient model error to indicate Poor model fit (based on an RMSEA value of 0.09), the elements of the $\mathbf{W}$ matrix would have to be large enough to ensure that the square average squared difference between the off-diagonal elements of $\bOmega$ and $\bSigma$ was 0.0081. Because the "noise" correlations from the minor common factors would be relatively large compared to the non-zero elements of $\bOmega$, the $\bSigma$ matrix would not have a clear factor structure. Thus, the major-factor model would not fit the $\bSigma$ very well because the model would be unable to account for the correlations between the items represented in the off-block-diagonal elements of $\bSigma$ introduced by the $\mathbf{WW}^\prime$ matrix. 
+
+In addition to affecting the fit of the hypothesized model, large non-zero off-block-diagonal elements of $\bSigma$ also negatively affect the fit of the baseline (independence) model because the independence model implies that $\bSigma$ should be an identity matrix. However, unless the hypothesized model leads to a much smaller minimized discrepancy function value than the baseline model, the resulting CFI value will be relatively small. This is demonstrated in \@ref(fig:cfi-as-factors-increase), which shows the minimized discrepancy function values for the hypothesized and baseline models as the number of major factors increased from one to ten, along with the corresponding CFI and RMSEA values. The hypothesized models (i.e., the population models without model error) were all orthogonal models with salient major factor loadings of 0.4, 15 items per factor, and between 1 and 10 common factors. The $\bSigma$ matrices were generated using the $\TKLrmsea$ method with a target RMSEA value of 0.09. To interpret Panel A of the figure, recall that the $\textrm{CFI} = 1 - F_t / F_b$ as defined in \autoref{eq:cfi}, where $F_t / F_b$ is the ratio of the minimized discrepancy function values for the hypothesized and baseline models. Panel A of \@ref(fig:cfi-as-factors-increase) shows that both $F_t$ and $F_b$ increased as the number of factors increased, holding everything else constant. However, $F_t$ grew fast enough that $F_t / F_b$ decreased as the number of factors increased, resulting in lower CFI values as RMSEA remained fixed (as shown in Panels B and C). To keep CFI constant as the number of factors increased, $F_t$ would have needed to increase at the same rate as $F_b$. For instance, Panel A includes a line indicating the values of $F_t$ required to produce a CFI value of 0.90 for each number of factors.
+
+```{r cfi-as-factors-increase, out.width = "100%"}
+#| fig.cap = "Panel A: Minimized discrepancy function values, CFI, and RMSEA values for $\\Sigma$ matrices generated from orthogonal models with salient major factor loadings of 0.4, 15 items per factor, and between 1 and 10 factors. The $\\Sigma$ matrices were generated using the $\\textrm{TKL}_{\\textrm{RMSEA}}$ model-error method with a target RMSEA value of 0.09. The line in the left-most panel labeled ``Target for CFI = 0.90'' indicates the value of $F_t$ that would be needed to obtain a CFI value of 0.90, given the value of $F_b$. Panels B and C: Observed CFI and RMSEA values for each simulated $\\Sigma$ matrix in Panel A."
+
+if (make_plots) {
+  # Show why CFI degrades as the dimensions of Sigma increase
+  factors <- 1:10
+  out <- cbind("factors" = factors, "Ft" = NA, "Fb" = NA, "cfi" = NA, "rmsea" = NA)
+  
+  set.seed(42)
+  out <- lapply(
+    X = factors, 
+    FUN = function(factor_num) {
+      m1 <- simFA(Model = list(NFac = factor_num, NItemPerFac = 15),
+                  Loadings = list(FacLoadRange = .4,
+                                  FacLoadDist = "fixed"))
+      
+      error_mod <- noisemaker(mod = m1, method = "TKL", target_rmsea = 0.09)
+      
+      Omega <- m1$Rpop
+      Sigma <- error_mod$Sigma
+      p <- nrow(Sigma)
+      Ft <- log(det(Omega)) - log(det(Sigma)) + sum(diag(Sigma %*% solve(Omega))) - p
+      Fb <- -log(det(Sigma))
+      
+      c(factors = factor_num, 
+        Ft = Ft, 
+        Fb = Fb, 
+        cfi = cfi(Sigma, Omega), 
+        rmsea = rmsea(Sigma, Omega, k = factor_num))
+    }
+  )
+  
+  out <- out %>% 
+    bind_rows() %>% 
+    mutate(target = .1 * Fb)
+  
+  out <- out %>% 
+    pivot_longer(-factors, names_to = "func_type")
+  
+  labels <- list("Ft" = TeX("$\\mathit{F}_t$"),
+                 "Fb" = TeX("$\\mathit{F}_b$"),
+                 "target" = TeX("Target $\\mathit{F}_t$ for CFI=0.90"))
+  
+  p1 <- out %>% 
+    filter(func_type %in% c("Fb", "Ft", "target")) %>% 
+    ggplot(aes(x = factors, y = value, color = func_type, linetype = func_type)) + 
+    geom_point(size = 1) +
+    geom_line() +
+    scale_x_continuous(breaks = c(2,4,6,8,10)) +
+    scale_color_brewer(palette = "Dark2", type = "qual", labels = labels) +
+    scale_linetype_discrete(labels = labels) +
+    guides(color = guide_legend(title = ""), 
+           linetype = guide_legend(title = "")) +
+    labs(x = "Factors", y = "Minimized Discrepancy Function Value", 
+         color = "Model", linetype = "Model") +
+    theme_bw() +
+    theme(legend.position = "bottom")
+  
+  p2 <- out %>% 
+    filter(func_type == "cfi") %>% 
+    ggplot(aes(x = factors, y = value)) + 
+    geom_point(size = 1) +
+    geom_line() +
+    scale_x_continuous(breaks = c(2,4,6,8,10)) +
+    labs(y = "CFI", x = "Factors") +
+    theme_bw()
+  
+  p3 <- out %>% 
+    filter(func_type == "rmsea") %>% 
+    ggplot(aes(x = factors, y = value)) + 
+    geom_point(size = 1) +
+    geom_line() +
+    scale_x_continuous(breaks = c(2,4,6,8,10)) +
+    scale_y_continuous(limits = c(0, 0.1)) +
+    labs(y = "RMSEA", x = "Factors") +
+    theme_bw()
+  
+  design = "12\n13\n44"
+  cfi_factors_plot <- p1 + p2 + p3 + 
+    guide_area() + 
+    plot_layout(design = design, guides = "collect", heights = c(4,4,1)) +
+    plot_annotation(tag_levels = "A") &
+    theme(plot.tag = element_text(size = 9))
+  
+  ggsave(filename = here("img/cfi_factors_plot.png"),
+         plot = cfi_factors_plot,
+         dpi = 320,
+         height = 4.5,
+         width = 7)
+}
+
+knitr::include_graphics(here("img/cfi_factors_plot.png"))
+```
+
+The effects of the model error introduced by the minor common factors can be seen in \@ref(fig:omega-wtw-sigma-example), which contains visual representations of the $\bOmega$, $\mathbf{WW}^\prime$, and $\bSigma$ matrices. The $\mathbf{WW}^\prime$ and $\bSigma$ matrices shown in the figure were obtained using the $\TKLrmsea$ method with a target RMSEA value of 0.09. The observed RMSEA and CFI values for $\bSigma$ were 0.09 and 0.25, respectively. Notice that the elements of the $\mathbf{WW}^\prime$ matrix in \@ref(fig:omega-wtw-sigma-example) were large (in absolute value) relative to the $\bOmega$ matrix. Also notice that $\bOmega$ had off-block-diagonal elements relative to the number of block-diagonal elements. Both of these features helped to explain the incompatibility between RMSEA and CFI for models with many factors, weak major common factor loadings, and target RMSEA and CFI values reflecting poor model fit. To get an RMSEA value close to the target value, all of the elements of $\bOmega$ had to be perturbed by making the elements of $\mathbf{WW}^\prime$ relatively large (in absolute value). The changes to the off-block-diagonal elements of $\bOmega$ were important in terms of the resulting CFI value because they were incompatible with the major common factor model (i.e., they should have been zero under that model). Therefore, they degraded the fit of the major factor model for $\bSigma$ while improving the fit of the independence model. Moreover, perturbing the off-block-diagonal elements had a larger effect on CFI as the number of factors increased because the number of off-block-diagonal elements increased more quickly than the number of block-diagonal elements as the total number of items increased. This can be seen in \@ref(fig:off-diag-elements), which shows the number of block diagonal elements and off-block-diagonal elements in the lower triangle of $\bSigma$ as the number of factors increased for an orthogonal model with five items per factor.
+
+```{r omega-wtw-sigma-example, out.width='100%'}
+#| fig.cap = "The population correlation matrix without model error ($\\bm{\\Sigma}$), the matrix of item correlations due to the minor common factors ($\\mathbf{WW}^\\prime$), and the population matrix with model error ($\\bm{\\Sigma}$) for an orthogonal model with ten major factors, five items per factor, and major common factor loadings fixed at .4. The RMSEA and CFI values for this example were 0.09 and 0.25."
+
+if (make_plots) {
+  c129 <- readRDS(here("data/results_129.RDS"))
+  
+  Sigma <- c129[[1]]$sigma_tkl_rmsea$value$Sigma
+  W <- c129[[1]]$sigma_tkl_rmsea$value$W
+  Omega <- fungible::simFA(
+    Model = list(NFac = 10, NItemPerFac = 5),
+    Loadings = list(FacLoadDist = "fixed",
+                    FacLoadRange = .3)
+  )$Rpop
+  
+  p3 <- Sigma %>%
+    as_tibble() %>%
+    rownames_to_column() %>%
+    pivot_longer(cols = V1:V50) %>%
+    rename("var1" = "rowname", "var2" = "name") %>%
+    mutate(var2 = as.numeric(str_extract(var2, "[0-9]+")),
+           var1 = as.numeric(var1)) %>%
+    mutate(value = case_when(var1 == var2 ~ NA_real_,
+                             var1 != var2 ~ value)) %>%
+    ggplot(aes(x = fct_rev(as.factor(var2)), y = var1, fill = value)) +
+    geom_raster() +
+    colorspace::scale_fill_continuous_diverging("Purple-Green", 
+                                                limits = c(-.4, .4)) +
+    labs(fill = "Correlation") +
+    theme_void()
+  
+  p2 <- tcrossprod(W) %>%
+    as_tibble() %>%
+    rownames_to_column() %>%
+    pivot_longer(cols = V1:V50) %>%
+    rename("var1" = "rowname", "var2" = "name") %>%
+    mutate(var2 = as.numeric(str_extract(var2, "[0-9]+")),
+           var1 = as.numeric(var1)) %>%
+    mutate(value = case_when(var1 == var2 ~ NA_real_,
+                             var1 != var2 ~ value)) %>%
+    ggplot(aes(x = fct_rev(as.factor(var2)), y = var1, fill = value)) +
+    geom_raster() +
+    colorspace::scale_fill_continuous_diverging("Purple-Green", 
+                                                limits = c(-.4, .4)) +
+    labs(fill = "Correlation") +
+    theme_void()
+  
+  p1 <- Omega %>%
+    as_tibble() %>%
+    rownames_to_column() %>%
+    pivot_longer(cols = V1:V50) %>%
+    rename("var1" = "rowname", "var2" = "name") %>%
+    mutate(var2 = as.numeric(str_extract(var2, "[0-9]+")),
+           var1 = as.numeric(var1)) %>%
+    mutate(value = case_when(var1 == var2 ~ NA_real_,
+                             var1 != var2 ~ value)) %>%
+    ggplot(aes(x = fct_rev(as.factor(var2)), y = var1, fill = value)) +
+    geom_raster() +
+    colorspace::scale_fill_continuous_diverging("Purple-Green", 
+                                                limits = c(-.4, .4)) +
+    labs(fill = "Correlation") +
+    theme_void()
+  
+  Omega_plus_WtW <- p1 + plot_spacer() + p2 + plot_spacer() + p3 + 
+    plot_layout(guides = "collect", widths = c(4, 1, 4, 1, 4)) &
+    theme(plot.margin = margin(t = 15, l = 5, r = 5))
+  
+  ggsave(Omega_plus_WtW, filename = here("img/Omega_plus_WtW.png"),
+         dpi = 320,
+         width = 7,
+         height = 2.1,
+         scale = 1.5)
+}
+
+knitr::include_graphics(here("img/omega_plus_WtW_with_annotations.png"))
+```
+
+```{r off-diag-elements, fig.align='center', out.width='60%'}
+#| fig.cap = "The number of block-diagonal elements in the lower-triangle of $\\bm{\\Sigma}$ compared to the number of off-block-diagonal elements for an orthogonal model with five items per factor."
+if (make_plots) {
+  count_diag_off_diag <- function(items_per_factor, factors) {
+    p <- items_per_factor * factors
+    block_diag_elements <- (items_per_factor * (items_per_factor - 1) / 2) * factors
+    off_diag_elements <- (p * (p - 1)) / 2
+    off_block_diag_elements <- off_diag_elements - block_diag_elements
+    
+    list("block_diag_elements" = block_diag_elements,
+         "off_block_diag_elements" = off_block_diag_elements)
+  }
+  
+  factors <- 1:10
+  
+  off_diag <- count_diag_off_diag(items_per_factor = 5, factors = factors)
+  off_diag <- as.data.frame(off_diag)
+  off_diag$k <- factors
+  off_diag <- pivot_longer(off_diag, 
+                           cols = block_diag_elements:off_block_diag_elements, 
+                           names_to = "type", 
+                           values_to = "elements")
+  
+  off_diag %>%
+    mutate(type = factor(type, 
+                         levels = c("block_diag_elements", 
+                                    "off_block_diag_elements"),
+                         labels = c("Block-Diagonal",
+                                    "Off-Block-Diagonal"))) %>%
+    ggplot(aes(x = k, y = elements, color = type, 
+               linetype = type, shape = type)) +
+    geom_point() +
+    geom_line(aes(group = type)) +
+    scale_y_continuous(label = scales::comma) +
+    scale_x_continuous(breaks = c(0, 2, 4, 6, 8, 10)) +
+    scale_color_brewer(palette = "Dark2", type = "qual") +
+    theme_minimal() +
+    labs(y = "Elements in Lower Triangle",
+         x = "Factors",
+         color = "", linetype = "", shape = "") +
+    theme_bw() +
+    theme(legend.position = "bottom")
+  
+  ggsave(filename = here("img/off-diagonal-elements.png"),
+         dpi = 320,
+         height = 3.5,
+         width = 3.5)
+}
+
+knitr::include_graphics(here("img/off-diagonal-elements.png"))
+```
+
+----- END OF CUT MATERIAL FROM MODEL FIT AGREEMENT SECTION --------

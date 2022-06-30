@@ -327,7 +327,11 @@ if (make_plots) {
            !(error_method %in% c("CB", "WB"))) %>%
     ggplot(aes(y = v, x = eps, color = error_method)) +
     geom_point(alpha = .1, size = .75) +
-    scale_color_brewer(palette = "Dark2", type = "qual") +
+    scale_color_brewer(
+      palette = "Dark2", type = "qual",
+      labels = list("TKL (RMSEA)" = TeX("$TKL_{RMSEA}$"),
+                    "TKL (RMSEA/CFI)" = TeX("$TKL_{RMSEA/CFI}$"),
+                    "TKL (CFI)" = TeX("$TKL_{CFI}"))) +
     scale_x_continuous(breaks = c(0.0, 0.2, 0.4, 0.6, 0.8, 1.0)) +
     facet_grid(factors_rec * items_per_factor_rec ~ loading_rec) +
     labs(y = TeX("$\\nu_e$"), x = TeX("$\\epsilon$"), color = "Error Method") +
@@ -546,12 +550,12 @@ if (make_plots) {
 }
 ```
 
-To better understand why the $\TKLrmsea$ method so often led to solutions that violated the constraints on $\mathbf{W}$ compared to the $\TKLcfi$ and $\TKLrmseacfi$ methods, I evaluated the objective function over a grid of $62,500$ $\epsilon$ and $\nu_{\textrm{e}}$ values for a single pair of $\bOmega$ and $\mathbf{W}^*$ matrices and each of the three TKL model-error methods. The $\bOmega$ population correlation matrix without model error corresponded to a model with 10 orthogonal major factors and 15 items per factor, with salient factor loadings fixed at 0.4. The penalty value, $\lambda$, was fixed at 1,000 to penalize solutions with minor factors that had more than two factor loadings greater or equal to 0.3 in absolute value. The objective function surfaces for each of the three TKL model-error methods are shown in \@ref(fig:obj-function-landscape). To make it easier to compare the objective function surfaces, I made separate plots for cases where the $\mathbf{W}$ constraints were and were not violated. Moreover, I scaled the objective function values ($F_{\textrm{obj}}$) in each panel of \@ref(fig:obj-function-landscape) to fall between zero and one so that the surfaces could be easily compared. The figure showed clear differences between the objective function surfaces for the $\TKLrmsea$ method compared to the $\TKLcfi$ and $\TKLrmseacfi$ methods. In particular, the figure showed that the values of $F_{\textrm{obj}}$ decreased as $\epsilon$ and $\nu_{\textrm{e}}$ increased. In contrast, the values of $F_{\textrm{obj}}$ increased as $\epsilon$ and $\nu_{\textrm{e}}$ increased for the $\TKLcfi$ and $\TKLrmseacfi$ methods. 
+To better understand why the $\TKLrmsea$ method so often led to solutions that violated the constraints on $\mathbf{W}$ compared to the $\TKLcfi$ and $\TKLrmseacfi$ methods, I evaluated the objective function over a grid of $62,500$ $\epsilon$ and $\nu_{\textrm{e}}$ values for a single pair of $\bOmega$ and $\mathbf{W}^*$ matrices and each of the three TKL model-error methods. The $\bOmega$ population correlation matrix without model error corresponded to a model with 10 orthogonal major factors and 15 items per factor, with salient factor loadings fixed at 0.4. The penalty value, $\lambda$, was fixed at 1,000 to penalize solutions with minor factors that had more than two factor loadings greater or equal to 0.3 in absolute value. The objective function surfaces for each of the three TKL model-error methods are shown in \@ref(fig:obj-function-landscape). To make it easier to compare the objective function surfaces, I made separate plots for cases where the $\mathbf{W}$ constraints were and were not violated. Moreover, I scaled the objective function values ($G_{\textrm{obj}}$) in each panel of \@ref(fig:obj-function-landscape) to fall between zero and one so that the surfaces could be easily compared. The figure showed clear differences between the objective function surfaces for the $\TKLrmsea$ method compared to the $\TKLcfi$ and $\TKLrmseacfi$ methods. In particular, the figure showed that the values of $F_{\textrm{obj}}$ decreased as $\epsilon$ and $\nu_{\textrm{e}}$ increased. In contrast, the values of $F_{\textrm{obj}}$ increased as $\epsilon$ and $\nu_{\textrm{e}}$ increased for the $\TKLcfi$ and $\TKLrmseacfi$ methods. 
 
 The results shown in \@ref(fig:obj-function-landscape) helped explain why the $\TKLrmsea$ method often led to solutions with violated $\mathbf{W}$ constraints even when such solutions were heavily penalized. The figure shows that for $\epsilon$ and $\nu_{\textrm{e}}$ needed to be relatively large to produce solutions with RMSEA values that were close to the target RMSEA value of 0.09. In fact, the lowest $F_{\textrm{obj}}$ values were produced when $\epsilon$ and $\nu_{\textrm{e}}$ were as large as possible without violating the $\mathbf{W}$ constraints. The objective function value increased sharply after $\epsilon$ and $\nu_{\textrm{e}}$ became large enough to violate the $\mathbf{W}$ constraints, but then decreased again as $\epsilon$ and $\nu_{\textrm{e}}$ increased. Therefore, the optimization procedure was likely to move in the direction of steepest descent toward larger values of $\epsilon$ and $\nu_{\textrm{e}}$ corresponding to local minima, regardless of whether the constraints on $\mathbf{W}$ were violated.
 
 ```{r obj-function-landscape, out.width = '100%'}
-#| fig.cap = "Heatmaps of the scaled objective function surface for combinations of $\\epsilon$ and $\\nu_{\\textrm{e}}$ values and each of the Tucker, Koopman, and Linn (TKL; 1969) model-error methods. Objective function values were computed using a $\\bm{\\Omega}$ matrix with ten orthogonal major factors, 15 items per factor, and salient factor loadings fixed at 0.4. The penalty value, $\\lambda$, was fixed at 1,000 to penalize solutions with minor factors that had more than two factor loadings greater or equal to 0.3 in absolute value. To aid visualization, the the objective function values for combinations of $\\epsilon$ and $\\nu_{\\textrm{e}}$ where the constraints on $\\mathbf{W}$ were violated were scaled and plotted separately from combinations that did not lead to constraint violations."
+#| fig.cap = "Heatmaps of the scaled objective function surface for combinations of $\\epsilon$ and $\\nu_{\\textrm{e}}$ values and each of the Tucker, Koopman, and Linn (TKL; 1969) model-error methods. Objective function values ($G_{\textrm{obj}}$) were computed using a $\\bm{\\Omega}$ matrix with ten orthogonal major factors, 15 items per factor, and salient factor loadings fixed at 0.4. The penalty value, $\\lambda$, was fixed at 1,000 to penalize solutions with minor factors that had more than two factor loadings greater or equal to 0.3 in absolute value. To aid visualization, the the objective function values for combinations of $\\epsilon$ and $\\nu_{\\textrm{e}}$ where the constraints on $\\mathbf{W}$ were violated were scaled and plotted separately from combinations that did not lead to constraint violations."
 
 if (make_plots) {
   par_grid <- expand.grid(
@@ -639,7 +643,7 @@ if (make_plots) {
     theme_bw() +
     labs(x = "",
          y = latex2exp::TeX("$\\nu_e$"),
-         fill = latex2exp::TeX("$F_{obj}$"),
+         fill = latex2exp::TeX("$\\textit{G}_{obj}$"),
          title = "Constraints on W Not Violated") +
     theme(panel.spacing = unit(20, "points"))
   
@@ -658,7 +662,7 @@ if (make_plots) {
     theme_bw() +
     labs(x = "",
          y = latex2exp::TeX("$\\nu_e$"),
-         fill = latex2exp::TeX("$F_{obj}$"),
+         fill = latex2exp::TeX("$\\textit{G}_{obj}$"),
          title = "Constraints on W Violated") +
     theme(panel.spacing = unit(20, "points"))
   
@@ -915,9 +919,14 @@ The percent of simulated correlation matrices with model error that led to fit i
 Breaking these results out further by level of target model fit, the $\TKLcfi$ and $\TKLrmseacfi$ methods almost always led to qualitative model fit agreement rates of 100% in conditions with Very Good model fit. The other model-error methods led to similar rates of qualitative model fit agreement in conditions with Very Good target model fit and strong factor loadings (i.e., Loading = 0.8), but led to much lower rates of agreement in conditions with Very Good model fit and weaker factor loadings. Results for conditions with Fair or Poor target model fit were less straightforward. When target model fit was Fair, the $\TKLcfi$ method often led to the highest rates of qualitative fit agreement of the model-error methods, particularly when factor loadings were weak and when there were many major common factors. When target model fit was Poor, all of the model error methods had low qualitative fit agreement rates except when factor loadings were 0.8.
 
 ```{r fit-agreement-fig, out.width='100%'}
-#| fig.cap = "The percent of cases where the observed RMSEA and CFI values led to the same qualitative evaluation of model fit based on the threshold values suggested by Hu and Bentler (1999)."
+#| fig.cap = "The percent of cases where the observed RMSEA and CFI values led to the same qualitative evaluation of model fit based on the threshold values suggested by Hu and Bentler (1999). TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 
 if (make_plots) {
+  
+  labels <- list("TKL (RMSEA)" = TeX("$TKL_{RMSEA}$"),
+                 "TKL (RMSEA/CFI)" = TeX("$TKL_{RMSEA/CFI}$"),
+                 "TKL (CFI)" = TeX("$TKL_{CFI}"))
+  
   results_matrix %>%
     mutate(
       rmsea_subj_fit = case_when(rmsea <= 0.05 ~ "Good",
@@ -937,7 +946,12 @@ if (make_plots) {
     scale_x_continuous(breaks = 1:10) +
     geom_point() +
     geom_line() +
-    scale_color_brewer(palette = "Dark2", type = "qual") +
+    scale_color_brewer(palette = "Dark2", type = "qual", labels = labels) +
+    scale_shape_discrete(labels = labels) +
+    scale_linetype_discrete(labels = labels) +
+    guides(color = guide_legend(title = "Error Method"),
+           shape = guide_legend(title = "Error Method"),
+           linetype = guide_legend(title = "Error Method")) + 
     labs(y = "Fit Index Agreement", x = "Factors",
          shape = "Error Method", color = "Error Method", linetype = "Error Method") +
     facet_grid(model_fit_rec ~ loading_rec) +
@@ -981,7 +995,7 @@ fit_agreement_table %>%
                           "CB", "WB"),
             digits = c(0, 1, 0, 1, 1, 1, 1, 1),
             align = "rrlrrrrr",
-            col_spanners = list("Model-Error Method" = c(4, 8)),
+            col_spanners = list("Qualitative Fit Agreement (\\%)" = c(4, 8)),
             format.args = list("na_string" = "---"),
             caption = "(ref:fit-agreement-table-caption)",
             label = "fit-agreement-table",
@@ -992,15 +1006,22 @@ fit_agreement_table %>%
 It was both interesting and unexpected that the $\TKLcfi$ and $\TKLrmseacfi$ methods led to similar results, both in terms of $D$ and in terms of observed RMSEA and CFI values, whereas the $\TKLrmsea$ method often led to results that were more similar to those of the CB and WB methods. The similarity between the $\TKLcfi$ and $\TKLrmseacfi$ results suggested that the CFI had more influence in \autoref{eq:rmsea-cfi-obj-function} than RMSEA, even when the fit indices were equally weighted. A possible explanation is provided in \@ref(fig:rmsea-cfi-distributions), which shows observed RMSEA and CFI values for solutions from the $\TKLrmsea$, $\TKLcfi$, and $\TKLrmseacfi$ methods, conditioned on number of factors and model fit. The figure shows that solutions generated using the $\TKLrmsea$ method had little variability in terms of RMSEA values. On the other hand, the CFI values for those solutions often had much more variability, particularly in conditions with weak factor loadings. When the $\TKLcfi$ method was used, solutions had RMSEA and CFI values that were generally constrained to a small range within each condition. These results indicated that the range of possible CFI values was much larger for solutions with a fixed RMSEA value than the range of RMSEA values for solutions with a fixed CFI value in many conditions. Therefore, the $\TKLcfi$ and $\TKLrmseacfi$ might have led to such similar results because including a CFI target constrained the range of RMSEA values. Put another way, incorporating a target RMSEA value in addition to a target CFI value might have had little effect compared to using only a target CFI value because making small changes to CFI often led to large changes in RMSEA.
 
 ```{r rmsea-cfi-distributions, out.width='100%'}
-#| fig.cap = "RMSEA and CFI values for the TKL-based model-error methods, conditioned on number of factors and model fit."
+#| fig.cap = "RMSEA and CFI values for the TKL-based model-error methods, conditioned on number of factors and model fit. The dashed vertical and horizontal lines indicate the target RMSEA and CFI values, respectively. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 if (make_plots) {
+    labels <- list("TKL (RMSEA)" = TeX("$TKL_{RMSEA}$"),
+                 "TKL (RMSEA/CFI)" = TeX("$TKL_{RMSEA/CFI}$"),
+                 "TKL (CFI)" = TeX("$TKL_{CFI}"))
+  
   results_matrix %>%
     filter(rmsea < 3, str_detect(error_method, "TKL"),
            factors != 3, loading_numeric != .6) %>%
     ggplot(aes(x = rmsea, y = cfi)) +
-    geom_jitter(alpha = .1, size = 1, 
+    geom_vline(aes(xintercept = target_rmsea), size = .3, linetype = "dashed") +
+    geom_hline(aes(yintercept = target_cfi), size = .3, linetype = "dashed") +
+    geom_jitter(alpha = .1, size = 1.25, 
                 aes(color = error_method, shape = error_method)) +
-    scale_color_brewer(palette = "Dark2", type = "qual") +
+    scale_color_brewer(palette = "Dark2", type = "qual", labels = labels) +
+    scale_shape_discrete(labels = labels) +
     facet_grid(model_fit_rec~ factors_rec * loading_rec, scales = "fixed") +
     labs(x = "RMSEA", y = "CFI", color = "Error Method", shape = "Error Method") +
     guides(color = guide_legend(override.aes = list(alpha = 1, size = 1.5))) +
@@ -1017,10 +1038,10 @@ if (make_plots) {
 knitr::include_graphics(path = here("img/rmsea-cfi-distributions.png"))
 ```
 
-To better understand the conditional distribution of CFI values for solutions with fixed RMSEA values, I used the $\TKLrmsea$ method to generate solutions with a range of target RMSEA values for each of a subset of conditions from the main simulation study. Specifically, I generated 100 solutions for each of 16 target RMSEA values equally-spaced between .025 and .100 for each condition of the main simulation design with uncorrelated major common factors. (Conditions with correlated major common factors were omitted to make the number of conditions manageable.) The results can be seen in Figure \@ref(fig:rmsea-conditional-cfi), which shows the CFI and RMSEA values for each condition. The solid black lines in the figure indicate where RMSEA is equal to $1 - \textrm{CFI}$ and can be used to easily determine which fit index changed most quickly as a function of the other fit index. RMSEA and $1 - CFI$ are comparable in this context because they indicate roughly the same level of qualitative model fit over the range of target RMSEA values. For example, both $\textrm{RMSEA} = 0.05$ and $\textrm{CFI} = .95$ have been used as threshold values for good model fit [@hu1999]. Figure \@ref(fig:rmsea-conditional-cfi) shows that CFI values decreased faster than RMSEA values increased for most of the included conditions, with the exception of conditions with relatively few major factors and strong factor loadings.
+To better understand the conditional distribution of CFI values for solutions with fixed RMSEA values, I used the $\TKLrmsea$ method to generate solutions with a range of target RMSEA values for each of a subset of conditions from the main simulation study. Specifically, I generated 100 solutions for each of 16 target RMSEA values equally-spaced between .025 and .100 for each condition of the main simulation design with uncorrelated major common factors. (Conditions with correlated major common factors were omitted to make the number of conditions manageable.) The results can be seen in Figure \@ref(fig:rmsea-conditional-cfi), which shows the CFI and RMSEA values for each condition. The solid black lines in the figure indicate where RMSEA is equal to $1 - \textrm{CFI}$ and can be used to easily determine which fit index changed most quickly as a function of the other fit index. RMSEA and $1 - \textrm{CFI}$ are comparable in this context because they indicate roughly the same level of qualitative model fit over the range of target RMSEA values. For example, both $\textrm{RMSEA} = 0.05$ and $\textrm{CFI} = .95$ have been used as threshold values for good model fit [@hu1999]. Figure \@ref(fig:rmsea-conditional-cfi) shows that CFI values decreased faster than RMSEA values increased for most of the included conditions, with the exception of conditions with relatively few major factors and strong factor loadings.
 
 ```{r rmsea-conditional-cfi, out.width='100%'}
-#| fig.cap = "Observed CFI and RMSEA values for solutions generated using the $\\textrm{TKL}_{\\textrm{RMSEA}}$ method. For each combination of number of factors, number of items per factor, and factor loading strength, 100 solutions were generated for each of 16 target RMSEA values equally-spaced between 0.025 and 0.1. The solid black line indicates where CFI and $1 - \\textrm{RMSEA}$ were equal."
+#| fig.cap = "Observed CFI and RMSEA values for solutions generated using the $\\textrm{TKL}_{\\textrm{RMSEA}}$ method. For each combination of number of factors, number of items per factor, and factor loading strength, 100 solutions were generated for each of 16 target RMSEA values equally-spaced between 0.025 and 0.1. The solid black line indicates where RMSEA and $1 - \\textrm{CFI}$ were equal."
 
 if (make_plots) {
   # Show possible CFI values for a range of RMSEA values
@@ -1107,10 +1128,10 @@ knitr::include_graphics(
 )
 ```
 
-In addition to looking at the conditional distribution of CFI values at fixed RMSEA values, I also looked at the conditional distribution of RMSEA values at fixed CFI values. Similar to the procedure described in the previous paragraph, I used the $\TKLcfi$ method to generate 100 solutions with 19 target CFI values equally-spaced between 0.90 and 0.99 for each condition of the main simulation design with uncorrelated major common factors. The results are shown in \@ref(fig:cfi-conditional-rmsea). As in \@ref(fig:rmsea-conditional-cfi), the points in \@ref(fig:cfi-conditional-cfi) were often below the solid black line indicating (roughly) equivalent qualitative model fit. Points falling below the line denoted cases with RMSEA values that indicated better model fit than their corresponding CFI values. [XXX CONTINUE HERE XXX].
+In addition to looking at the conditional distribution of CFI values at fixed RMSEA values, I also looked at the conditional distribution of RMSEA values at fixed CFI values. Similar to the previous procedure for RMSEA, I used the $\TKLcfi$ method to generate 100 solutions with 19 target CFI values equally-spaced between 0.90 and 0.99 for each condition of the main simulation design with uncorrelated major common factors. The results are shown in \@ref(fig:cfi-conditional-rmsea). As in the previous figure, the points in \@ref(fig:cfi-conditional-rmsea) were often below the solid black line indicating (roughly) equivalent qualitative model fit. Points falling below the line denoted cases with RMSEA values that indicated better model fit than their corresponding CFI values. The figure also shows that CFI changed more quickly as a function of RMSEA than RMSEA changed as a function of CFI. Finally, the figure shows that there was little variability in the conditional RMSEA values for a particular CFI value in all of the conditions except conditions with one factor and five items per factor.
 
 ```{r cfi-conditional-rmsea, out.width = '100%'}
-#| fig.cap = "Observed RMSEA and CFI values for solutions generated using the $\\textrm{TKL}_{\\textrm{CFI}}$ method. For each combination of number of factors, number of items per factor, and factor loading strength, 100 solutions were generated for each of 19 target CFI values equally-spaced between 0.90 and 0.99. The solid black line indicates where CFI and $1 - \\textrm{RMSEA}$ were equal."
+#| fig.cap = "Observed RMSEA and CFI values for solutions generated using the $\\textrm{TKL}_{\\textrm{CFI}}$ method. For each combination of number of factors, number of items per factor, and factor loading strength, 100 solutions were generated for each of 19 target CFI values equally-spaced between 0.90 and 0.99. The solid black line indicates where RMSEA and $1 - \\textrm{CFI}$ were equal."
 
 if (make_plots) {
   reps <- 100
@@ -1194,93 +1215,11 @@ if (make_plots) {
 knitr::include_graphics(here("img/cfi_conditional_rmsea.png"))
 ```
 
-Taken together, the results in \@ref(fig:rmsea-cfi-distributions) and \@ref(fig:rmsea-conditional-cfi) can help explain why the $\TKLcfi$ and $\TKLrmseacfi$ model-error methods often led to similar results. Because CFI values decreased more quickly than RMSEA values increased in most conditions, changes to parameter values that led to an RMSEA value that was closer to the target RMSEA value but moved the CFI value further from the target CFI value were more costly than changes that prioritized the target CFI value. Moreover, Figure \@ref(fig:rmsea-conditional-cfi) also provided an indication of which conditions were most likely to lead to conflicting qualitative interpretations of RMSEA and CFI. Points far from the line indicated RMSEA and CFI pairs that led to conflicting qualitative interpretations of model fit because RMSEA and $1 - \textrm{CFI}$ indicated approximately the same qualitative model fit over the range of target RMSEA values. The figure shows that conditions with weak factor loadings, many factors and items, and high RMSEA values (or low CFI values) were most likely to result in conflicting fit index interpretations.
+Taken together, the results in \@ref(fig:rmsea-cfi-distributions), \@ref(fig:rmsea-conditional-cfi), and \@ref(fig:cfi-conditional-rmsea) can help explain why the $\TKLcfi$ and $\TKLrmseacfi$ model-error methods often led to similar results. Because CFI values decreased more quickly than RMSEA values increased in most conditions, changes to parameter values that led to an RMSEA value that was closer to the target RMSEA value but moved the CFI value further from the target CFI value were more costly than changes that prioritized the target CFI value. Moreover, \@ref(fig:rmsea-conditional-cfi) and \@ref(fig:cfi-conditional-rmsea) also provided indications of which conditions were most likely to lead to conflicting qualitative interpretations of RMSEA and CFI. Points far from the line indicated RMSEA and CFI pairs that led to conflicting qualitative interpretations of model fit because RMSEA and $1 - \textrm{CFI}$ indicated approximately the same qualitative model fit over the range of target RMSEA values. Both figures show that conditions with weak factor loadings, many factors and items, and high RMSEA values (or low CFI values) were most likely to result in conflicting fit index interpretations.
 
-The frequent disagreement between RMSEA and CFI can be also be understood by considering how the relative and absolute fit indices differ in how they describe model fit. As an example, consider an orthogonal model with ten major factors, five items per factor, and major common factor loadings fixed at 0.4. The population correlation matrix without model error for this condition ($\bOmega$) would be a $50 \times 50$ block-diagonal correlation matrix, with correlations of $0.16$ between items that load on the same factor, and zero otherwise. To obtain a population correlation matrix ($\bSigma$) with sufficient model error to indicate Poor model fit (based on an RMSEA value of 0.09), the elements of the $\mathbf{W}$ matrix would have to be large enough to ensure that the square average squared difference between the off-diagonal elements of $\bOmega$ and $\bSigma$ was 0.0081. Because the "noise" correlations from the minor common factors would be relatively large compared to the non-zero elements of $\bOmega$, the $\bSigma$ matrix would not have a clear factor structure. Thus, the major-factor model would not fit the $\bSigma$ very well because the model would be unable to account for the correlations between the items represented in the off-block-diagonal elements of $\bSigma$ introduced by the $\mathbf{WW}^\prime$ matrix. The non-zero off-block-diagonal elements would also negatively affect the fit of the baseline (independence) model because it implies that $\bSigma$ should be an identity matrix. However, unless the hypothesized model led to much better model fit (i.e., a much smaller minimized discrepancy function value) compared to the baseline model, the resulting CFI value would be relatively small. Indeed, the median CFI value for the corresponding conditions in the simulation study using the $\TKLrmsea$ method was 0.24, indicating completely unacceptable model fit. On the other hand, the RMSEA values were all equal to $0.09\pm0.001$, indicating marginally poor model fit.
+The frequent disagreement between RMSEA and CFI can be also be understood by considering how these fit indices differ in how they describe model fit. Recall from \ref{population-model-fit} that in the population context, absolute fit indices (e.g., RMSEA) indicate how different the $\bSigma$ and $\bOmega$ matrices are from one another. On the other hand, relative model fit indices (e.g., CFI) indicate how much better the population model fits $\bSigma$ compared to the independence model. Generating a $\bSigma$ matrix corresponding to a particular RMSEA value is therefore a relatively straightforward matter of perturbing $\bOmega$ until the discrepancy between $\bSigma$ and $\bOmega$ results in the target RMSEA value.[^rmsea-complication] On the other hand, generating a $\bSigma$ matrix corresponding to a particular CFI value is more complex because CFI takes into account both the fit of the hypothesized model indicated by $\bOmega$ and the fit of the baseline (independence) model. Thus, perturbing the elements of $\bOmega$ to create $\bSigma$ negatively affects the fit of the baseline model in addition to the fit of the hypothesized model because the independence model implies that $\bSigma$ should be an identity matrix. However, unless the hypothesized model leads to a much worse fit (i.e., a much smaller minimized discrepancy function value) than the baseline model, the resulting CFI value will be relatively small.
 
-Recall that the $\textrm{CFI} = 1 - F_t / F_b$ as defined in \autoref{eq:cfi}, where $F_t / F_b$ is the ratio of the minimized discrepancy function values for the hypothesized and baseline models, and where the baseline model is the independence model. 
-
-
-[XXX THIS ISN'T CORRECT, NEED TO FIX --- Moreover, because the addition of the $\mathbf{WW}^\prime$ matrix would increase (in absolute value) the correlations between nearly all of the items that were uncorrelated in $\bOmega$, the independence model used as a baseline for computing CFI would fit $\bSigma$ relatively well. 
-
-CFI might actually be better for models with one factor because a model with many minor factors actually looks a lot like a unidimensional model.
-XXX]
-
-```{r omega-wtw-sigma-example, out.width='100%'}
-#| fig.cap = "The population correlation matrix without model error ($\\bm{\\Sigma}$), the matrix of item correlations due to the minor common factors ($\\mathbf{WW}^\\prime$), and the population matrix with model error ($\\bm{\\Sigma}$) for an orthogonal model with ten major factors, five items per factor, and major common factor loadings fixed at .4. The RMSEA and CFI values for this example were 0.09 and 0.25."
-
-if (make_plots) {
-  c129 <- readRDS(here("data/results_129.RDS"))
-  
-  Sigma <- c129[[1]]$sigma_tkl_rmsea$value$Sigma
-  W <- c129[[1]]$sigma_tkl_rmsea$value$W
-  Omega <- fungible::simFA(
-    Model = list(NFac = 10, NItemPerFac = 5),
-    Loadings = list(FacLoadDist = "fixed",
-                    FacLoadRange = .3)
-  )$Rpop
-  
-  p3 <- Sigma %>%
-    as_tibble() %>%
-    rownames_to_column() %>%
-    pivot_longer(cols = V1:V50) %>%
-    rename("var1" = "rowname", "var2" = "name") %>%
-    mutate(var2 = as.numeric(str_extract(var2, "[0-9]+")),
-           var1 = as.numeric(var1)) %>%
-    mutate(value = case_when(var1 == var2 ~ NA_real_,
-                             var1 != var2 ~ value)) %>%
-    ggplot(aes(x = fct_rev(as.factor(var2)), y = var1, fill = value)) +
-    geom_raster() +
-    colorspace::scale_fill_continuous_diverging("Purple-Green", 
-                                                limits = c(-.4, .4)) +
-    labs(fill = "Correlation") +
-    theme_void()
-  
-  p2 <- tcrossprod(W) %>%
-    as_tibble() %>%
-    rownames_to_column() %>%
-    pivot_longer(cols = V1:V50) %>%
-    rename("var1" = "rowname", "var2" = "name") %>%
-    mutate(var2 = as.numeric(str_extract(var2, "[0-9]+")),
-           var1 = as.numeric(var1)) %>%
-    mutate(value = case_when(var1 == var2 ~ NA_real_,
-                             var1 != var2 ~ value)) %>%
-    ggplot(aes(x = fct_rev(as.factor(var2)), y = var1, fill = value)) +
-    geom_raster() +
-    colorspace::scale_fill_continuous_diverging("Purple-Green", 
-                                                limits = c(-.4, .4)) +
-    labs(fill = "Correlation") +
-    theme_void()
-  
-  p1 <- Omega %>%
-    as_tibble() %>%
-    rownames_to_column() %>%
-    pivot_longer(cols = V1:V50) %>%
-    rename("var1" = "rowname", "var2" = "name") %>%
-    mutate(var2 = as.numeric(str_extract(var2, "[0-9]+")),
-           var1 = as.numeric(var1)) %>%
-    mutate(value = case_when(var1 == var2 ~ NA_real_,
-                             var1 != var2 ~ value)) %>%
-    ggplot(aes(x = fct_rev(as.factor(var2)), y = var1, fill = value)) +
-    geom_raster() +
-    colorspace::scale_fill_continuous_diverging("Purple-Green", 
-                                                limits = c(-.4, .4)) +
-    labs(fill = "Correlation") +
-    theme_void()
-  
-  Omega_plus_WtW <- p1 + plot_spacer() + p2 + plot_spacer() + p3 + 
-    plot_layout(guides = "collect", widths = c(4, 1, 4, 1, 4)) &
-    theme(plot.margin = margin(t = 15, l = 5, r = 5))
-  
-  ggsave(Omega_plus_WtW, filename = here("img/Omega_plus_WtW.png"),
-         dpi = 320,
-         width = 7,
-         height = 2.1,
-         scale = 1.5)
-}
-
-knitr::include_graphics(here("img/omega_plus_WtW_with_annotations.png"))
-```
+This is demonstrated in \@ref(fig:cfi-as-factors-increase), which shows the minimized discrepancy function values for the hypothesized and baseline models as the number of major factors increased from one to ten, along with the corresponding CFI and RMSEA values. The hypothesized models (i.e., the population models without model error) were all orthogonal models with salient major factor loadings of 0.4, 15 items per factor, and between 1 and 10 common factors. The $\bSigma$ matrices were generated using the $\TKLrmsea$ method with a target RMSEA value of 0.09. To interpret Panel A of the figure, recall that the $\textrm{CFI} = 1 - F_t / F_b$ as defined in \autoref{eq:cfi}, where $F_t / F_b$ is the ratio of the minimized discrepancy function values for the hypothesized and baseline models. Panel A of \@ref(fig:cfi-as-factors-increase) shows that both $F_t$ and $F_b$ increased as the number of factors increased, holding everything else constant. However, $F_t$ grew fast enough that $F_t / F_b$ decreased as the number of factors increased, resulting in lower CFI values as RMSEA remained fixed (as shown in Panels B and C). To keep CFI constant as the number of factors increased, $F_t$ would have needed to increase at the same rate as $F_b$. For instance, Panel A includes a line indicating the values of $F_t$ required to produce a CFI value of 0.90 for each number of factors. Although the figure only shows results for a specific set of conditions, it demonstrates the tension between RMSEA and CFI that occurs as the order of $\bOmega$ increases. Specifically, it shows that fixing RMSEA at a value indicating Fair or Poor model fit when there are many items or factors requires an $F_m$ value that is too large (relative to $F_b$) to produce an acceptable CFI value.
 
 ```{r cfi-as-factors-increase, out.width = "100%"}
 #| fig.cap = "Panel A: Minimized discrepancy function values, CFI, and RMSEA values for $\\Sigma$ matrices generated from orthogonal models with salient major factor loadings of 0.4, 15 items per factor, and between 1 and 10 factors. The $\\Sigma$ matrices were generated using the $\\textrm{TKL}_{\\textrm{RMSEA}}$ model-error method with a target RMSEA value of 0.09. The line in the left-most panel labeled ``Target for CFI = 0.90'' indicates the value of $F_t$ that would be needed to obtain a CFI value of 0.90, given the value of $F_b$. Panels B and C: Observed CFI and RMSEA values for each simulated $\\Sigma$ matrix in Panel A."
@@ -1319,19 +1258,22 @@ if (make_plots) {
     mutate(target = .1 * Fb)
   
   out <- out %>% 
-    pivot_longer(-factors, names_to = "func_type") %>% 
-    mutate(func_type = case_when(func_type == "Ft" ~ "Hypothesized",
-                                 func_type == "Fb" ~ "Baseline", 
-                                 func_type == "target" ~ "Target for CFI=0.90",
-                                 TRUE ~ func_type))
+    pivot_longer(-factors, names_to = "func_type")
+  
+  labels <- list("Ft" = TeX("$\\mathit{F}_t$"),
+                 "Fb" = TeX("$\\mathit{F}_b$"),
+                 "target" = TeX("Target $\\mathit{F}_t$ for CFI=0.90"))
   
   p1 <- out %>% 
-    filter(func_type %in% c("Hypothesized", "Baseline", "Target for CFI=0.90")) %>% 
+    filter(func_type %in% c("Fb", "Ft", "target")) %>% 
     ggplot(aes(x = factors, y = value, color = func_type, linetype = func_type)) + 
     geom_point(size = 1) +
     geom_line() +
     scale_x_continuous(breaks = c(2,4,6,8,10)) +
-    scale_color_brewer(palette = "Dark2", type = "qual") +
+    scale_color_brewer(palette = "Dark2", type = "qual", labels = labels) +
+    scale_linetype_discrete(labels = labels) +
+    guides(color = guide_legend(title = ""), 
+           linetype = guide_legend(title = "")) +
     labs(x = "Factors", y = "Minimized Discrepancy Function Value", 
          color = "Model", linetype = "Model") +
     theme_bw() +
@@ -1371,60 +1313,6 @@ if (make_plots) {
 }
 
 knitr::include_graphics(here("img/cfi_factors_plot.png"))
-```
-
-The effects of the model error introduced by the minor common factors can be seen in \@ref(fig:omega-wtw-sigma-example), which contains visual representations of the $\bOmega$, $\mathbf{WW}^\prime$, and $\bSigma$ matrices. The $\mathbf{WW}^\prime$ and $\bSigma$ matrices shown in the figure were obtained using the $\TKLrmsea$ method with a target RMSEA value of 0.09. The observed RMSEA and CFI values for $\bSigma$ were 0.09 and 0.25, respectively. Notice that the elements of the $\mathbf{WW}^\prime$ matrix in \@ref(fig:omega-wtw-sigma-example) were large (in absolute value) relative to the $\bOmega$ matrix. Also notice that $\bOmega$ had off-block-diagonal elements relative to the number of block-diagonal elements. Both of these features helped to explain the incompatibility between RMSEA and CFI for models with many factors, weak major common factor loadings, and target RMSEA and CFI values reflecting poor model fit. To get an RMSEA value close to the target value, all of the elements of $\bOmega$ had to be perturbed by making the elements of $\mathbf{WW}^\prime$ relatively large (in absolute value). The changes to the off-block-diagonal elements of $\bOmega$ were important in terms of the resulting CFI value because they were incompatible with the major common factor model (i.e., they should have been zero under that model). Therefore, they degraded the fit of the major factor model for $\bSigma$ while improving the fit of the independence model. Moreover, perturbing the off-block-diagonal elements had a larger effect on CFI as the number of factors increased because the number of off-block-diagonal elements increased more quickly than the number of block-diagonal elements as the total number of items increased. This can be seen in \@ref(fig:off-diag-elements), which shows the number of block diagonal elements and off-block-diagonal elements in the lower triangle of $\bSigma$ as the number of factors increased for an orthogonal model with five items per factor.
-
-```{r off-diag-elements, fig.align='center', out.width='60%'}
-#| fig.cap = "The number of block-diagonal elements in the lower-triangle of $\\bm{\\Sigma}$ compared to the number of off-block-diagonal elements for an orthogonal model with five items per factor."
-if (make_plots) {
-  count_diag_off_diag <- function(items_per_factor, factors) {
-    p <- items_per_factor * factors
-    block_diag_elements <- (items_per_factor * (items_per_factor - 1) / 2) * factors
-    off_diag_elements <- (p * (p - 1)) / 2
-    off_block_diag_elements <- off_diag_elements - block_diag_elements
-    
-    list("block_diag_elements" = block_diag_elements,
-         "off_block_diag_elements" = off_block_diag_elements)
-  }
-  
-  factors <- 1:10
-  
-  off_diag <- count_diag_off_diag(items_per_factor = 5, factors = factors)
-  off_diag <- as.data.frame(off_diag)
-  off_diag$k <- factors
-  off_diag <- pivot_longer(off_diag, 
-                           cols = block_diag_elements:off_block_diag_elements, 
-                           names_to = "type", 
-                           values_to = "elements")
-  
-  off_diag %>%
-    mutate(type = factor(type, 
-                         levels = c("block_diag_elements", 
-                                    "off_block_diag_elements"),
-                         labels = c("Block-Diagonal",
-                                    "Off-Block-Diagonal"))) %>%
-    ggplot(aes(x = k, y = elements, color = type, 
-               linetype = type, shape = type)) +
-    geom_point() +
-    geom_line(aes(group = type)) +
-    scale_y_continuous(label = scales::comma) +
-    scale_x_continuous(breaks = c(0, 2, 4, 6, 8, 10)) +
-    scale_color_brewer(palette = "Dark2", type = "qual") +
-    theme_minimal() +
-    labs(y = "Elements in Lower Triangle",
-         x = "Factors",
-         color = "", linetype = "", shape = "") +
-    theme_bw() +
-    theme(legend.position = "bottom")
-  
-  ggsave(filename = here("img/off-diagonal-elements.png"),
-         dpi = 320,
-         height = 3.5,
-         width = 3.5)
-}
-
-knitr::include_graphics(here("img/off-diagonal-elements.png"))
 ```
 
 The trade-off between CFI and RMSEA can also be seen by examining the differences between the $\mathbf{\Sigma}$ matrices produced by each of the model-error methods for a condition that often led to conflicting RMSEA and CFI values. \@ref(fig:c129-heat-maps) shows heat-maps of the $\mathbf{\Sigma}$ matrices for each of the five model-error methods. The $\bSigma$ matrices corresponded to the condition with ten orthogonal major common factors, five items per factor, weak factor loadings of 0.3, and Poor model fit.[^more-sigma-heat-maps] The figure shows clear differences between the model-error methods that incorporated a target CFI value ($\TKLcfi$ and $\TKLrmseacfi$) and the remaining model-error methods that only incorporated a target RMSEA value. The $\bSigma$ matrices produced by the $\TKLcfi$ and $\TKLrmseacfi$ methods included relatively small amounts of model error (in terms of the differences between the elements of $\bSigma$ and $\bOmega$), as can be seen by looking at their heat-map representations in \@ref(fig:c129-heat-maps). The block-diagonal structure of $\bOmega$ was well-preserved in both of the $\bSigma$ matrices, with no large off-block-diagonal correlations. On the other hand, the $\bSigma$ matrices produced by the other model-error methods had many off-block-diagonal correlations that were relatively large, many as large (or larger) than the block-diagonal correlations. The figure thus reaffirms the previously reported result that the model-error methods that included a target CFI value led to solutions that perturbed $\bOmega$ less than solutions from model-error methods that did not include a target CFI value.
@@ -1703,7 +1591,7 @@ if (make_plots) {
 knitr::include_graphics(here("img/cfi_diff_factors.png"))
 ```
 
-Overall, the results of the present simulation study suggested that any of the model-error methods evaluated in this simulation study could provide a useful starting point for researchers who would like to generate $\bSigma$ matrices with particular $RMSEA_{\bOmegaHat}$ or $CFI_{\bOmegaHat}$ values. However, all of the model-error methods (including the CB methods) sometimes produced solutions with large $\rmseaDelta$ or $cfiDelta$ values, particularly in conditions with Poor model fit and weak factor loadings. Thus, researchers interested in generating solutions with particular $\textrm{RMSEA}_{\bOmegaHat}$ or $\textrm{CFI}_{\bOmegaHat}$ values should check the fit indices of each solution and reject solutions with fit indices outside of the desired range. Because the fit indices based on $\bOmegaHat$ almost always indicated better fit than the indices based on $\bOmega$, it might also be useful to specify target RMSEA values that are slightly higher (or CFI values that are slightly lower) than the desired $\textrm{RMSEA}_{\bOmegaHat}$ or $\textrm{CFI}_{\bOmegaHat}$ values.
+Overall, the results of the present simulation study suggested that any of the model-error methods evaluated in this simulation study could provide a useful starting point for researchers who would like to generate $\bSigma$ matrices with particular $\RMSEA_{\bOmegaHat}$ or $\CFI_{\bOmegaHat}$ values. However, all of the model-error methods (including the CB methods) sometimes produced solutions with large $\rmseaDelta$ or $\cfiDelta$ values, particularly in conditions with Poor model fit and weak factor loadings. Thus, researchers interested in generating solutions with particular $\textrm{RMSEA}_{\bOmegaHat}$ or $\textrm{CFI}_{\bOmegaHat}$ values should check the fit indices of each solution and reject solutions with fit indices outside of the desired range. Because the fit indices based on $\bOmegaHat$ almost always indicated better fit than the indices based on $\bOmega$, it might also be useful to specify target RMSEA values that are slightly higher (or CFI values that are slightly lower) than the desired $\textrm{RMSEA}_{\bOmegaHat}$ or $\textrm{CFI}_{\bOmegaHat}$ values.
 
 ## TKL Method Recovery of Model Fit Indices
 

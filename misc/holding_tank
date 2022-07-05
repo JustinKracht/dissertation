@@ -243,3 +243,12 @@ knitr::include_graphics(here("img/off-diagonal-elements.png"))
 ```
 
 ----- END OF CUT MATERIAL FROM MODEL FIT AGREEMENT SECTION --------
+
+For instance, in a test using an orthogonal model with 50 items (five factors, with ten items per factor) the CB method had a median completion time of almost 24 seconds over 10 trials, compared to less than a second for each of the TKL-based methods.^[wb-method-time]
+[^wb-method-time]: The WB method had a median completion time of about nine seconds, but that timing includes the relatively computationally-expensive setup steps that need only be conducted once per model.
+
+In addition to leading to the lowest average $D$ values and the highest rate of qualitative fit agreement, the $\TKLcfi$ method also avoided several issues that plagued the 
+
+In addition to producing solutions with low $D$ values and high rates of qualitative fit agreement, there were at least two additional reasons to prefer the $\TKLcfi$ and $\TKLrmseacfi$ model-error methods to the alternatives. First, the TKL-based model-error methods (and the WB method) never produced indefinite $\bSigma$ matrices. As noted in \@ref(indefinite-matrices), indefinite $\bSigma$ matrices are unacceptable candidates for population correlation matrices with model error because all correlation and covariance matrices are at least positive semi-definite by definition [@wothke1993; @lorenzo-seva2020a; @kracht2022]. In contrast, the CB method often led to indefinite $\bSigma$ matrices, particularly in conditions with many factors, many items per factor, and Poor model fit. Even worse, the CB method became very slow as the number of factors and items increased. As a result, the CB method is likely an impractical choice for researchers who wish to generate large $\bSigma$ matrices with Poor model fit.
+
+Both methods led to solutions without any major minor factors, despite the failure of the objective function penalty. On the other hand, the $\TKLrmsea$ method often led to solutions with major minor factors in some conditions. Although it is not possible to explicitly check for major minor factors with the CB and WB methods, neither method is able to avoid the problem. In conditions where the $\TKLrmsea$ method is likely to produce solutions with major minor factors, the CB method tended to produce solutions that were indefinite. Moreover, neither the CB or WB method provides any mechanism to avoid producing solutions that are better conceptualized as having more than the specified number of major common factors.

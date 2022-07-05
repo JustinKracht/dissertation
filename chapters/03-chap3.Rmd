@@ -5,7 +5,7 @@ I conducted a simulation study to investigate and compare characteristics of the
 
 In the simulation study, I compared model-error methods by generating error-perturbed covariance matrices using a variety of population models and comparing the results based on several model fit indices. For simplicity, I used covariance matrices with unit diagonals (i.e., correlation matrices). Moreover, I focused on four model fit indices: the RMSEA, the CFI, the Tucker-Lewis Index [TLI\; @tucker1973], and the Correlation Mean Squared Residual [CRMR\; @bollen1989; @ogasawara2001]. Although many other fit indices have been proposed [see @marsh2005], the selected fit indices are among the most commonly-used and include both measures of absolute fit (RMSEA, CRMR) and incremental fit (CFI, TLI).
 
-Because the relationship between fit indices is affected by model characteristics [@lai2016], I included a variety of distinct population models created by systematically varying: (a) the number of major factors (Factors $\in \{1, 3, 5, 10\}$), (b) the number of items per factor (Items/Factor $\in \{5, 15 \}$), (c) the correlation between factors ($\phi \in \{0, .3, .6\}$), and (d) the strength of the item factor loadings (Loadings $\in \{0.4, 0.6, 0.8 \}$). Each item loaded on only a single factor and factor loadings were fixed at values representing weak, moderate, and strong factor loadings, respectively [@hair2018]. These factor loading and factor correlation values were intended to represent a range of values representative of values observed in empirical research. For instance, in a confirmatory factor analysis of sub-tests from the Ball Aptitude Battery believed to measure aspects of intelligence, @neuman2000 reported estimated factor loadings between 0.26 and 0.95 and factor correlations between .18 and .73.
+Because the relationship between fit indices is affected by model characteristics [@lai2016], I included a variety of distinct population models created by systematically varying: (a) the number of major factors (Factors $\in \{1, 3, 5, 10\}$), (b) the number of items per factor (Items/Factor $\in \{5, 15 \}$), (c) the correlation between factors ($\phi \in \{0, .3, .6\}$), and (d) the strength of the item factor loadings (Loadings $\in \{0.4, 0.6, 0.8 \}$). Each item loaded on only a single factor and factor loadings were fixed at values representing weak, moderate, and strong factor loadings, respectively [@hair2018]. Examples of factor loading matrices corresponding to the weak, moderate, and strong factor loading conditions are shown in \@ref(tab:factor-loadings). The factor loading and factor correlation values used in the simulation study were intended to represent a range of values representative of values observed in empirical research. For instance, in a confirmatory factor analysis of sub-tests from the Ball Aptitude Battery believed to measure aspects of intelligence, @neuman2000 reported estimated factor loadings between 0.26 and 0.95 and factor correlations between .18 and .73.
 
 ```{r loading-tables, results='asis'}
 cat(readLines(here::here("tab", "loading_tables.txt")),
@@ -26,10 +26,12 @@ In addition to randomly initializing the starting values of $\nu_{\textrm{e}}$ a
 
 Repeating each of the TKL method variations 500 times with random starting values was important because the multiple-target TKL method is not guaranteed to find the global optimum for a particular problem. Moreover, the results of the multiple-target TKL method depend on the $\mathbf{W}^*$ matrix. Therefore, evaluating the multiple-target TKL method with a single set of starting values and a single $\mathbf{W}^*$ matrix might have led to results that were idiosyncratic and not representative of the method's general performance. It might reasonably be asked why $\mathbf{W}^*$ was not held fixed over the 500 repetitions with random starting values to find the global optimum parameter values *for that particular* $\mathbf{W}^*$ *matrix*. However, the purpose of the multiple-target TKL method was to produce solutions with fit index values that were "close enough" to the target values to be reasonable over the entire space of $\mathbf{W}^*$ matrices, not to find the best solution for one particular $\mathbf{W}^*$ matrix.
 
-As with the multiple-target TKL methods, the CB and WB methods were also repeated 500 times for each condition of the simulation design. For the CB method, each repetition had a different, randomly-generated $\mathbf{y}$ vector (see \ref{cb}). Each repetition of the WB method represented an independent sample from the inverse Wishart distribution associated with each condition. Therefore, a large number of samples were required to ensure that the simulation results for the WB method represented the full range of potential outcomes. Unlike the CB model-error method, the WB model-error method did not allow precise control of RMSEA values and produced RMSEA values that were only approximately equal to the target value. Simply using a target RMSEA value to solve for a value of $v$ was unlikely to result in $\mathbf{\Sigma}$ matrices that had RMSEA values close to the target RMSEA value, unless the target RMSEA value was relatively small. This was because $v = \varepsilon^2 + o_\textrm{p}(\varepsilon^2)$ [@wu2015], where $o_\textrm{p}(\varepsilon^2)$ (read as "little-o-p-$\varepsilon^2$") indicates that the difference between $v$ and $\varepsilon^2$ is bounded in probability at the rate $\varepsilon^2$ [@vaart1998, p. 12]. To resolve this issue, I developed a method to find a value of $v$ such that the median RMSEA value from the resulting error-perturbed covariance matrices was close to the target RMSEA value. The method is as follows. First, initial values of $v$ were obtained by squaring each element in a sequence of 20 equally-spaced RMSEA values ranging from 0.01 to 0.095. For each $v$ value, 50 error-perturbed covariance matrices were sampled from the inverse Wishart distribution and the median RMSEA value was computed. Next, $v$ was regressed on the linear and squared median RMSEA terms. The fitted model was then used to predict an appropriate $v$ value such that the median RMSEA value for simulated, error-perturbed covariance matrices was close to the target value.
+As with the multiple-target TKL methods, the CB and WB methods were also repeated 500 times for each condition of the simulation design. For the CB method, each repetition produced slightly different results due to differences in the randomly-generated $\mathbf{y}$ vector (see \ref{cb}). For the WB method, each repetition represented an independent sample from the inverse Wishart distribution associated with each condition. Therefore, a large number of samples were required to ensure that the simulation results for the WB method represented the full range of potential outcomes. Unlike the CB model-error method, the WB model-error method did not allow precise control of RMSEA values and produced RMSEA values that were only approximately equal to the target value. Simply using a target RMSEA value to solve for a value of $v$ was unlikely to result in $\mathbf{\Sigma}$ matrices that had RMSEA values close to the target RMSEA value, unless the target RMSEA value was relatively small. This was because $v = \varepsilon^2 + o_\textrm{p}(\varepsilon^2)$ [@wu2015], where $o_\textrm{p}(\varepsilon^2)$ (read as "little-o-p-$\varepsilon^2$") indicates that the difference between $v$ and $\varepsilon^2$ is bounded in probability at the rate $\varepsilon^2$ [@vaart1998, p. 12]. To resolve this issue, I developed a method to find a value of $v$ such that the median RMSEA value from the resulting error-perturbed covariance matrices was close to the target RMSEA value. The method is as follows. First, initial values of $v$ were obtained by squaring each element in a sequence of 20 equally-spaced RMSEA values ranging from 0.01 to 0.095. For each $v$ value, 50 error-perturbed covariance matrices were sampled from the inverse Wishart distribution and the median RMSEA value was computed. Next, $v$ was regressed on the linear and squared median RMSEA terms. The fitted model was then used to predict an appropriate $v$ value such that the median RMSEA value for simulated, error-perturbed covariance matrices was close to the target value.
 <!-- [***COME BACK TO THIS; Wu and Browne p. 580***] -->
 
-```{r make-wb-mod-plot, fig.align = "center", warning = FALSE, message = FALSE}
+```{r make-wb-mod-plot, fig.align = "center", warning = FALSE, message = FALSE, out.width='80%'}
+#| fig.cap = "The relationship between $\\sqrt{\\tilde{v}}$ and $\\epsilon$ for a 5-factor model. The solid gray line indicates where the target RMSEA and median RMSEA values (from 50 samples) would be equal. The dashed orange line indicates the predicted value of $\\sqrt{v}$ that will produce a given RMSEA value."
+
 if (make_plots) {
   set.seed(123)
   
@@ -46,7 +48,7 @@ if (make_plots) {
     for (rep in 1:reps) {
       Rwb <- noisemaker::wb(mod, target_rmsea = target_rmsea[i],
                             adjust_target = FALSE)
-      rmsea_vec[rep] <- noisemaker::rmsea(Rwb, mod$Rpop, k = NFac)
+      rmsea_vec[rep] <- noisemaker::rmsea(Rwb$Sigma, mod$Rpop, k = NFac)
     }
     median_rmsea[i] <- median(rmsea_vec)
   }
@@ -59,13 +61,11 @@ if (make_plots) {
                 formula = y ~ poly(x, 2), 
                 se = FALSE, color = "darkorange", lty = 2, size = .75) +
     geom_abline(intercept = 0, slope = 1, color = "gray") +
-    theme_minimal() + 
+    theme_bw() + 
     labs(x = latex2exp::TeX("median $\\epsilon$"),
-         y = latex2exp::TeX("$\\sqrt{v} = \\epsilon_T$"),
-         title = latex2exp::TeX("Relationship between $\\sqrt{\\tilde{v}}$ and $\\epsilon$ for a 5-factor model"),
-         caption = )
+         y = latex2exp::TeX("$\\sqrt{v} = \\epsilon_T$"))
   
-  ggsave(filename = "img/wb-plot.png",
+  ggsave(filename = here("img/wb-plot.png"),
          plot = wb_plot,
          dpi = 320,
          height = 4, 
@@ -73,12 +73,8 @@ if (make_plots) {
          scale = 1.1)
 }
 
-```
-
-```{r wb-mod-plot, fig.cap = 'The solid gray line indicates where the target RMSEA and median RMSEA values (from 50 samples) would be equal. The dashed orange line indicates the predicted value of $\\sqrt{v}$ that will produce a given RMSEA value.', align = "center"}
-
 knitr::include_graphics(
-  "img/wb-plot.png",
+  here("img/wb-plot.png"),
   dpi = 300
 )
 ```

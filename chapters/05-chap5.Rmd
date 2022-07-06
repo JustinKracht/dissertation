@@ -30,7 +30,7 @@ In addition to leading to better fit index agreement results (both in terms of $
 
 ## Limitations
 
-As with any study, I acknowledge that the simulation study reported in this dissertation was subject to certain limitations. For instance, I designed the simulation study to include a wide range of models that would representative of models that might plausibly be encountered in psychological research. However, there were still many  
+As with any study, I acknowledge that the simulation study reported in this dissertation was subject to certain limitations. For instance, I designed the study to include a wide range of models that might plausibly be encountered in psychological research. However, there were still many types of models that were not included in the study design. 
 
 <!---
 [] I recommend using the $\TKLcfi$ method because it led to the best agreement rates. However, using the $\TKLrmseacfi$ method should lead to very similar results.

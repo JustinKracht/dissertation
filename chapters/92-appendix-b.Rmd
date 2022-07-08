@@ -569,7 +569,7 @@ knitr::include_graphics(here("img/c129_R_plots_with_annotation.png"))
 
 #### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$ for the Condition with Ten Orthogonal Factors, Ten Items per Factor, Weak Factor Loadings, and Poor Model Fit
 
-```{r c156-with-annotation, out.width='70%'}
+```{r c156-with-annotation, out.width='67%'}
 #| fig.cap = "Correlation matrices with model error ($\\mathbf{\\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\\mathbf{\\Sigma}$ ($\\hat{\\mathbf{\\Omega}}$) for each model-error method. Results are shown for a set of solution matrices from the condition with ten orthogonal factors, ten items per factor, weak factor loadings of 0.4, and Poor model fit. Note that the Cudeck and Browne method is omitted because it was not used for conditions with ten factors and 15 items per factor. TKL = Tucker, Koopman, and Linn; WB = Wu and Browne."
 
 knitr::include_graphics(here("img/c156_R_plots_with_annotation.png"))

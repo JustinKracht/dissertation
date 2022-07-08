@@ -5,7 +5,7 @@
 \setstretch{1}
     <!-- Set Appendices to single spacing -->
 
-## Implementations of Model Error Methods
+## Implementations of Model Error Methods {#noisemaker-code}
 
 The implementations of the model error methods used are also available bundled as an R package, *noisemaker*, which can be downloaded from [https://www.github.com/JustinKracht/noisemaker](https://www.github.com/JustinKracht/noisemaker).
 
@@ -25,7 +25,7 @@ read_files <- function(files) {
 
 ```
 
-## Main Simulation Code
+## Main Simulation Code {#main-simulation}
 
 ```{r find-simulation-code-files}
 simulation_code_files <- list.files(here::here("code/model-error-simulation"), 

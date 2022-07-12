@@ -1,0 +1,76 @@
+
+\begin{center}
+\begin{longtable}{l D{)}{)}{11)3}}
+\hline
+ & \multicolumn{1}{c}{ } \\
+\hline
+\endfirsthead
+\hline
+ & \multicolumn{1}{c}{ } \\
+\hline
+\endhead
+\hline
+\endfoot
+\hline
+\multicolumn{2}{l}{\scriptsize{$^{***}p<0.001$; $^{**}p<0.01$; $^{*}p<0.05$}}\\
+\caption{Coefficient estimates and standard errors for the logistic regression model predicting the probability of producing a solution with qualitative fit index agreement.}
+\label{tab:qualitative-fit-mod-summary}
+\endlastfoot \\
+Constant                                                  & 1.30 \;  (0.03)^{***}   \\
+Factors                                                   & -3.76 \;  (0.04)^{***}  \\
+Items/Factor                                              & -3.02 \;  (0.04)^{***}  \\
+Factor Correlation                                        & 0.59 \;  (0.02)^{***}   \\
+Loading                                                   & 16.25 \;  (0.11)^{***}  \\
+Model Fit (Fair)                                          & -4.45 \;  (0.04)^{***}  \\
+Model Fit (Poor)                                          & -9.82 \;  (0.06)^{***}  \\
+Error Method ($\TKLcfi$)                                  & 5.14 \;  (0.06)^{***}   \\
+Error Method ($\TKLrmseacfi$)                             & 29.97 \; (36.77)        \\
+Error Method (CB)                                         & -0.08 \;  (0.04)^{*}    \\
+Error Method (WB)                                         & -0.13 \;  (0.03)^{***}  \\
+Factors $\times$ Items/Factor                             & -3.24 \;  (0.03)^{***}  \\
+Factors $\times$ Factor Correlation                       & -0.04 \;  (0.01)^{**}   \\
+Factors $\times$ Loading                                  & 7.37 \;  (0.06)^{***}   \\
+Factors $\times$ Model Fit (Fair)                         & 0.09 \;  (0.03)^{**}    \\
+Factors $\times$ Model Fit (Poor)                         & -2.86 \;  (0.04)^{***}  \\
+Factors $\times$ Error Method ($\TKLcfi$)                 & 4.52 \;  (0.04)^{***}   \\
+Factors $\times$ Error Method ($\TKLrmseacfi$)            & 0.33 \;  (0.05)^{***}   \\
+Factors $\times$ Error Method (CB)                        & 0.19 \;  (0.04)^{***}   \\
+Factors $\times$ Error Method (WB)                        & 0.21 \;  (0.04)^{***}   \\
+Items/Factor $\times$ Factor Correlation                  & -0.56 \;  (0.02)^{***}  \\
+Items/Factor $\times$ Loading                             & 4.85 \;  (0.07)^{***}   \\
+Items/Factor $\times$ Model Fit (Fair)                    & 0.40 \;  (0.04)^{***}   \\
+Items/Factor $\times$ Model Fit (Poor)                    & -3.57 \;  (0.05)^{***}  \\
+Items/Factor $\times$ Error Method ($\TKLcfi$)            & 4.25 \;  (0.05)^{***}   \\
+Items/Factor $\times$ Error Method ($\TKLrmseacfi$)       & -1.09 \;  (0.06)^{***}  \\
+Items/Factor $\times$ Error Method (CB)                   & 0.29 \;  (0.04)^{***}   \\
+Items/Factor $\times$ Error Method (WB)                   & 0.11 \;  (0.04)^{**}    \\
+Factor Correlation $\times$ Loading                       & 0.97 \;  (0.04)^{***}   \\
+Factor Correlation $\times$ Model Fit (Fair)              & -0.58 \;  (0.02)^{***}  \\
+Factor Correlation $\times$ Model Fit (Poor)              & -0.65 \;  (0.03)^{***}  \\
+Factor Correlation $\times$ Error Method ($\TKLcfi$)      & 0.05 \;  (0.02)^{*}     \\
+Factor Correlation $\times$ Error Method ($\TKLrmseacfi$) & -0.15 \;  (0.03)^{***}  \\
+Factor Correlation $\times$ Error Method (CB)             & 0.02 \;  (0.02)         \\
+Factor Correlation $\times$ Error Method (WB)             & -0.05 \;  (0.02)^{*}    \\
+Loading $\times$ Model Fit (Fair)                         & -8.37 \;  (0.09)^{***}  \\
+Loading $\times$ Model Fit (Poor)                         & 4.22 \;  (0.11)^{***}   \\
+Loading $\times$ Error Method ($\TKLcfi$)                 & -14.16 \;  (0.11)^{***} \\
+Loading $\times$ Error Method ($\TKLrmseacfi$)            & -2.52 \;  (0.12)^{***}  \\
+Loading $\times$ Error Method (CB)                        & -0.51 \;  (0.10)^{***}  \\
+Loading $\times$ Error Method (WB)                        & -1.51 \;  (0.10)^{***}  \\
+Model Fit (Fair) $\times$ Error Method ($\TKLcfi$)        & -0.59 \;  (0.07)^{***}  \\
+Model Fit (Poor) $\times$ Error Method ($\TKLcfi$)        & 1.42 \;  (0.08)^{***}   \\
+Model Fit (Fair) $\times$ Error Method ($\TKLrmseacfi$)   & -30.79 \; (36.77)       \\
+Model Fit (Poor) $\times$ Error Method ($\TKLrmseacfi$)   & -31.44 \; (36.77)       \\
+Model Fit (Fair) $\times$ Error Method (CB)               & 0.44 \;  (0.05)^{***}   \\
+Model Fit (Poor) $\times$ Error Method (CB)               & 0.72 \;  (0.07)^{***}   \\
+Model Fit (Fair) $\times$ Error Method (WB)               & 0.23 \;  (0.05)^{***}   \\
+Model Fit (Poor) $\times$ Error Method (WB)               & 0.32 \;  (0.07)^{***}   \\
+\hline
+AIC                                                       & 181690.26               \\
+BIC                                                       & 182226.97               \\
+Log Likelihood                                            & -90796.13               \\
+Deviance                                                  & 181592.26               \\
+Num. obs.                                                 & 422205                  \\
+\end{longtable}
+\end{center}
+

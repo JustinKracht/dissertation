@@ -1,0 +1,123 @@
+
+\begin{center}
+\begin{longtable}{l D{.}{.}{6.6}}
+\caption{Coefficient estimates and standard errors for the linear regression model predicting $|\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}|$. The "Model Fit (Very Good)" and "Model-Error Method ($\TKLrmsea$)" terms were used as baseline levels and are subsumed within the intercept term.}
+\label{tab:d1-mod-summary}\\
+\hline
+ & \multicolumn{1}{c}{Model 1} \\
+\hline
+\endfirsthead
+\hline
+ & \multicolumn{1}{c}{Model 1} \\
+\hline
+\endhead
+\hline
+\endfoot
+\hline
+\multicolumn{2}{l}{\scriptsize{$^{***}p<0.001$; $^{**}p<0.01$; $^{*}p<0.05$}}\\
+\endlastfoot
+(Intercept)                                                     & 0.000^{***}  \\
+                                                                & (0.000)      \\
+Factors                                                         & -0.002^{***} \\
+                                                                & (0.000)      \\
+Items/Factor                                                    & -0.003^{***} \\
+                                                                & (0.000)      \\
+Factor Correlation                                              & 0.000^{***}  \\
+                                                                & (0.000)      \\
+Loading                                                         & 0.009^{***}  \\
+                                                                & (0.000)      \\
+Model Fit (Fair)                                                & -0.000^{***} \\
+                                                                & (0.000)      \\
+Model Fit (Poor)                                                & -0.001^{***} \\
+                                                                & (0.000)      \\
+Model-Error Method ($\TKLcfi$)                                  & 0.012^{***}  \\
+                                                                & (0.000)      \\
+Model-Error Method ($\TKLrmseacfi$)                             & 0.010^{***}  \\
+                                                                & (0.000)      \\
+Model-Error Method (CB)                                         & 0.000        \\
+                                                                & (0.000)      \\
+Model-Error Method (WB)                                         & 0.001^{***}  \\
+                                                                & (0.000)      \\
+Factors $\times$ Items/Factor                                   & 0.003^{***}  \\
+                                                                & (0.000)      \\
+Factors $\times$ Factor Correlation                             & 0.000^{***}  \\
+                                                                & (0.000)      \\
+Factors $\times$ Loading                                        & -0.004^{***} \\
+                                                                & (0.000)      \\
+Factors $\times$ Model Fit (Fair)                               & 0.002^{***}  \\
+                                                                & (0.000)      \\
+Factors $\times$ Model Fit (Poor)                               & 0.003^{***}  \\
+                                                                & (0.000)      \\
+Factors $\times$ Model-Error Method ($\TKLcfi$)                 & 0.005^{***}  \\
+                                                                & (0.000)      \\
+Factors $\times$ Model-Error Method ($\TKLrmseacfi$)            & 0.009^{***}  \\
+                                                                & (0.000)      \\
+Factors $\times$ Model-Error Method (CB)                        & 0.002^{***}  \\
+                                                                & (0.000)      \\
+Factors $\times$ Model-Error Method (WB)                        & -0.002^{***} \\
+                                                                & (0.000)      \\
+Items/Factor $\times$ Factor Correlation                        & 0.001^{***}  \\
+                                                                & (0.000)      \\
+Items/Factor $\times$ Loading                                   & -0.001^{***} \\
+                                                                & (0.000)      \\
+Items/Factor $\times$ Model Fit (Fair)                          & 0.003^{***}  \\
+                                                                & (0.000)      \\
+Items/Factor $\times$ Model Fit (Poor)                          & 0.005^{***}  \\
+                                                                & (0.000)      \\
+Items/Factor $\times$ Model-Error Method ($\TKLcfi$)            & 0.007^{***}  \\
+                                                                & (0.000)      \\
+Items/Factor $\times$ Model-Error Method ($\TKLrmseacfi$)       & 0.011^{***}  \\
+                                                                & (0.000)      \\
+Items/Factor $\times$ Model-Error Method (CB)                   & 0.002^{***}  \\
+                                                                & (0.000)      \\
+Items/Factor $\times$ Model-Error Method (WB)                   & -0.002^{***} \\
+                                                                & (0.000)      \\
+Factor Correlation $\times$ Loading                             & -0.002^{***} \\
+                                                                & (0.000)      \\
+Factor Correlation $\times$ Model Fit (Fair)                    & -0.000^{***} \\
+                                                                & (0.000)      \\
+Factor Correlation $\times$ Model Fit (Poor)                    & -0.001^{***} \\
+                                                                & (0.000)      \\
+Factor Correlation $\times$ Model-Error Method ($\TKLcfi$)      & -0.002^{***} \\
+                                                                & (0.000)      \\
+Factor Correlation $\times$ Model-Error Method ($\TKLrmseacfi$) & -0.000^{***} \\
+                                                                & (0.000)      \\
+Factor Correlation $\times$ Model-Error Method (CB)             & 0.000^{**}   \\
+                                                                & (0.000)      \\
+Factor Correlation $\times$ Model-Error Method (WB)             & -0.001^{***} \\
+                                                                & (0.000)      \\
+Loading $\times$ Model Fit (Fair)                               & -0.010^{***} \\
+                                                                & (0.000)      \\
+Loading $\times$ Model Fit (Poor)                               & -0.017^{***} \\
+                                                                & (0.000)      \\
+Loading $\times$ Model-Error Method ($\TKLcfi$)                 & -0.030^{***} \\
+                                                                & (0.000)      \\
+Loading $\times$ Model-Error Method ($\TKLrmseacfi$)            & -0.038^{***} \\
+                                                                & (0.000)      \\
+Loading $\times$ Model-Error Method (CB)                        & -0.003^{***} \\
+                                                                & (0.000)      \\
+Loading $\times$ Model-Error Method (WB)                        & 0.000        \\
+                                                                & (0.000)      \\
+Model Fit (Fair) $\times$ Model-Error Method ($\TKLcfi$)        & 0.022^{***}  \\
+                                                                & (0.000)      \\
+Model Fit (Poor) $\times$ Model-Error Method ($\TKLcfi$)        & 0.035^{***}  \\
+                                                                & (0.000)      \\
+Model Fit (Fair) $\times$ Model-Error Method ($\TKLrmseacfi$)   & 0.021^{***}  \\
+                                                                & (0.000)      \\
+Model Fit (Poor) $\times$ Model-Error Method ($\TKLrmseacfi$)   & 0.031^{***}  \\
+                                                                & (0.000)      \\
+Model Fit (Fair) $\times$ Model-Error Method (CB)               & 0.001^{***}  \\
+                                                                & (0.000)      \\
+Model Fit (Poor) $\times$ Model-Error Method (CB)               & 0.002^{***}  \\
+                                                                & (0.000)      \\
+Model Fit (Fair) $\times$ Model-Error Method (WB)               & 0.001^{***}  \\
+                                                                & (0.000)      \\
+Model Fit (Poor) $\times$ Model-Error Method (WB)               & 0.002^{***}  \\
+                                                                & (0.000)      \\
+\hline
+R$^2$                                                           & 0.746        \\
+Adj. R$^2$                                                      & 0.746        \\
+Num. obs.                                                       & 422205       \\
+\end{longtable}
+\end{center}
+

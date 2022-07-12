@@ -252,3 +252,40 @@ In addition to leading to the lowest average $D$ values and the highest rate of 
 In addition to producing solutions with low $D$ values and high rates of qualitative fit agreement, there were at least two additional reasons to prefer the $\TKLcfi$ and $\TKLrmseacfi$ model-error methods to the alternatives. First, the TKL-based model-error methods (and the WB method) never produced indefinite $\bSigma$ matrices. As noted in \@ref(indefinite-matrices), indefinite $\bSigma$ matrices are unacceptable candidates for population correlation matrices with model error because all correlation and covariance matrices are at least positive semi-definite by definition [@wothke1993; @lorenzo-seva2020a; @kracht2022]. In contrast, the CB method often led to indefinite $\bSigma$ matrices, particularly in conditions with many factors, many items per factor, and Poor model fit. Even worse, the CB method became very slow as the number of factors and items increased. As a result, the CB method is likely an impractical choice for researchers who wish to generate large $\bSigma$ matrices with Poor model fit.
 
 Both methods led to solutions without any major minor factors, despite the failure of the objective function penalty. On the other hand, the $\TKLrmsea$ method often led to solutions with major minor factors in some conditions. Although it is not possible to explicitly check for major minor factors with the CB and WB methods, neither method is able to avoid the problem. In conditions where the $\TKLrmsea$ method is likely to produce solutions with major minor factors, the CB method tended to produce solutions that were indefinite. Moreover, neither the CB or WB method provides any mechanism to avoid producing solutions that are better conceptualized as having more than the specified number of major common factors.
+
+<!---
+[] I recommend using the $\TKLcfi$ method because it led to the best agreement rates. However, using the $\TKLrmseacfi$ method should lead to very similar results.
+[] Using the $\TKLcfi$ or $\TKLrmseacfi$ methods has at least three other advantages as well compared to the alternative model-error methods:
+  [] Both methods led to solutions without any major minor factors, despite the failure of the objective function penalty. On the other hand, the $\TKLrmsea$ method often led to solutions with major minor factors in some conditions. Although it is not possible to explicitly check for major minor factors with the CB and WB methods, neither method is able to avoid the problem. In conditions where the $\TKLrmsea$ method is likely to produce solutions with major minor factors, the CB method tended to produce solutions that were indefinite. Moreover, neither the CB or WB method provides any mechanism to avoid producing solutions that are better conceptualized as having more than the specified number of major common factors.
+  
+[] Finally, I demonstrated that the $\TKLrmseacfi$ method was able to generate solutions with RMSEA and CFI values that were extremely close to the specified target RMSEA values ...
+
+[] Limitations:
+  [] None of the model error methods were able to generate solutions with some combinations of RMSEA and CFI values. Further work should be done to determine whether certain combination of RMSEA and CFI are, in fact, impossible for a particular $\bOmega$ value.
+  [] When I designed the optimization procedure for the TKL methods, I assumed that researchers would not have any a priori beliefs about plausible ranges of $\epsilon$ and $\nu_e$. However, a committee member suggested that researchers might consider certain parameter values implausible in practice. For instance, for an orthogonal model with all salient major factor loadings fixed at 0.8, a $\nu_e$ value of .90 would indicate that 94.4% of the variance for each item was reliable, which is highly-implausible in most contexts. To allow for researchers to include their a priori beliefs about plausible ranges of $\nu_e$ and $\eps$, the L-BFGS-B box-constraints in the TKL optimization procedure could be specified by a user. This change would allow users to specify upper and lower bounds on either $\epsilon$ or $nu_e$, or both simultaneously. The implementations of the TKL methods in the `noisemaker` package have been updated to enable this functionality.
+  [] It might also be the case that researchers are more interested in producing solutions with RMSEA and CFI values that fall within a particular range, rather than finding RMSEA and CFI values that are as close as possible to the provided target values. Future work should be done to develop and implement an appropriate objective function that will penalize solutions with RMSEA and CFI values that fall outside of provided ranges. [Need to think about whether this makes sense or not.]
+  [] 
+--->
+
+
+<!---
+Find a way to work in: all methods led to similar results (in terms of RMSEA, CFI, CRMR, and TLI) in conditions with few factors, strong factor loadings, and very good model fit. However, the methods led to very different results in conditons with many major factors, relatively weak factor loadings, and poor model fit.
+
+1. Model-error methods led to different outcomes in terms of RMSEA and CFI values.
+  a. RMSEA
+    i. The model-error methods that only used RMSEA targets led to (unsurprisingly) similar results in terms of RMSEA. In particular, the TKL_RMSEA, and CB methods both produced solutions with RMSEA values that were very close to the target RMSEA values. The distributions of observed RMSEA values for the solutions produced by the WB method were centered around the target RMSEA value, but were more variable than the RMSEA distributions for the TKL_RMSEA and CB methods.
+    ii. On the other hand, the TKL_CFI, and TKL_RMSEA_CFI methods typically led to observed RMSEA values that were not as close to the target RMSEA values. In many cases, TKL_CFI, and TKL_RMSEA_CFI led to RMSEA values that were somewhat lower than the target values, particularly in conditions with many factors. 
+  b. CFI
+    i. When evaluated on CFI, the model-error methods again fell into groups according to whether or not they incorporated a CFI target value. 
+    ...
+    
+2. When assessing which of these methods to use in simulation work, there are other considerations. (A) Completion time; (B) Non-convergence; (C) Indefinite Matrices.
+
+Future Research:
+
+1. More flexible targets; target fit index ranges rather than fit index values.
+2. Marsh et al. in search of golden rules: use more varied (realistic) model error methods to establish rule-of-thumb cutoff values.
+3. The proposed model-error methods will give researchers the ability to generate more realistic population models with model error and user-specified fit index values. This could help us better understand how fit indices 
+4. User-specified bounds of v and epsilon for noisemaker.
+5. What do my results say about which model-error method should be preferred?
+--->

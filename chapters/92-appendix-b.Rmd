@@ -1,6 +1,254 @@
 # Supplemental Tables and Figures {#appendix-b}
 
+```{r set-fit-mods}
+fit_mods <- FALSE # Refit models?
+```
+
 ## Supplemental Tables
+
+```{r create-scaled-results-matrix-for-modeling}
+results_matrix_scaled <- results_matrix %>% 
+  select(cfi:tli_thetahat,
+         d1:d3,
+         w_has_major_factors,
+         error_method,
+         factors:factor_cor,
+         loading_numeric,
+         model_fit) %>% 
+  mutate(across(all_of(c("factors", "items_per_factor", 
+                         "factor_cor", "loading_numeric")),
+                ~ as.vector(scale(., 
+                                  center = mean(unique(.)), 
+                                  scale = mean(unique(.))))))
+
+fix_coef_names <- function(names) {
+  names <- str_replace_all(names, "\\(Intercept\\)", "Constant")
+  names <- str_replace_all(names, ":", " $\\\\times$ ")
+  names <- str_replace_all(names, "factors", "Factors")
+  names <- str_replace_all(names, "items_per_factor", "Items/Factor")
+  names <- str_replace_all(names, "factor_cor", "Factor Correlation")
+  names <- str_replace_all(names, "loading_numeric", "Loading")
+  names <- str_replace_all(names, "model_fitFair", "Model Fit (Fair)")
+  names <- str_replace_all(names, "model_fitPoor", "Model Fit (Poor)")
+  names <- str_replace_all(names, "error_methodTKL \\(CFI\\)", "Error Method ($\\\\TKLcfi$)")
+  names <- str_replace_all(names, "error_methodTKL \\(RMSEA/CFI\\)", "Error Method ($\\\\TKLrmseacfi$)")
+  names <- str_replace_all(names, "error_methodCB", "Error Method (CB)")
+  names <- str_replace_all(names, "error_methodWB", "Error Method (WB)")
+  names
+}
+
+fix_apa_coef_names <- function(names) {
+  names <- str_replace(names, "Items per factor", "Items/Factor")
+  names <- str_replace(names, "Factor cor", "Factor Correlation")
+  names <- str_replace(names, "Loading numeric", "Loading")
+  names <- str_replace(names, "Model fit", "Model Fit")
+  names <- str_replace(names, "Error method", "Error Method")
+  names
+}
+```
+
+### Logistic Regression on $W$ Constraint Violations
+
+\@ref(tab:mmf-mod-summary) gives a summary of the logistic regression of each of the independent simulation study variables and their interactions on a variable indicating whether a solution violated the constraints imposed on $W$ (i.e., whether the solution had major minor factors). Note that some standard errors were quite large because the data were linearly separable due to there being some combinations of conditions that did not produce solutions with violated $W$ constraints. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable. The "Model Fit (Very Good)" and "Error Method ($\TKLrmsea$)" terms were used as baseline levels and were subsumed within the "Constant" term.
+
+```{r mmf-coef-tab, results='asis'}
+if (fit_mods) {
+  major_minor_factors_mod <- glm(w_has_major_factors ~ 
+                                   (factors + items_per_factor + factor_cor + 
+                                      loading_numeric + model_fit + error_method)^2,
+                                 data = results_matrix_scaled %>% 
+                                   filter(str_detect(error_method, "TKL")),
+                                 family = binomial())
+  
+  # Fix coefficient names
+  original_coef_names <- names(major_minor_factors_mod$coefficients)
+  coef_name_list <- as.list(original_coef_names)
+  names(coef_name_list) <- original_coef_names
+  coef_names <- map(coef_name_list, fix_coef_names)
+  
+  mmf_coef_tab <- texreg::texreg(
+    l = major_minor_factors_mod,
+    custom.coef.map = coef_names,
+    digits = 2,
+    single.row = TRUE,
+    custom.model.names = " ",
+    dcolumn = TRUE,
+    longtable = TRUE,
+    use.packages = FALSE,
+    caption.above = FALSE,
+    caption = 'Coefficient estimates and standard errors for the logistic regression model predicting the probability of producing a solution with violated $W$ constraints (i.e., at least one minor factor with more than two absolute factor loadings greater than 0.3).',
+    label = "tab:mmf-mod-summary"
+  )
+  
+  writeLines(mmf_coef_tab, here("tab/mmf-coef-tab.txt"))
+}
+
+cat(readLines(here("tab/mmf-coef-tab.txt")),
+    sep = "\n")
+```
+
+\pagebreak
+
+### $|\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}|$ Analysis of Variance
+
+\@ref(tab:d1-coef-tab) gives a summary of the analysis of variance for the absolute difference between the observed and target RMSEA values ($|\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}|$). Small values of $|\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}|$ indicated that a model-error method recovered the target RMSEA value well, whereas large values indicated that a model-error method recovered the target RMSEA value poorly. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
+
+```{r d1-coef-tab, results='asis'}
+d1_mod <- aov(abs(d1) ~(factors + items_per_factor + factor_cor + 
+                           loading_numeric + model_fit + error_method)^2,
+               data = results_matrix_scaled)
+
+d1_apa <- apa_print(d1_mod)
+d1_apa$table$Effect <- fix_apa_coef_names(d1_apa$table$Effect)
+apa_table(d1_apa$table,
+          caption = "Analysis of Variance for the absolute difference between the observed and target RMSEA values ($|\\textrm{RMSEA}_{\\textrm{obs}} - \\textrm{RMSEA}_{\\textrm{T}}|$).",
+          note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
+          placement = "hb",
+          align = "lrrrrrr")
+```
+
+\pagebreak
+
+### $|\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$ Analysis of Variance
+
+\@ref(tab:d2-coef-tab) gives a summary of the analysis of variance for the absolute difference between the observed and target CFI values ($|\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$). Small values of $|\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$ indicated that a model-error method recovered the target CFI value well, whereas large values indicated that a model-error method recovered the target CFI value poorly. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
+
+```{r d2-coef-tab, results='asis'}
+d2_mod <- aov(abs(d2) ~(factors + items_per_factor + factor_cor + 
+                           loading_numeric + model_fit + error_method)^2,
+               data = results_matrix_scaled)
+
+d2_apa <- apa_print(d2_mod)
+d2_apa$table$Effect <- fix_apa_coef_names(d2_apa$table$Effect)
+apa_table(d2_apa$table,
+          caption = "Analysis of Variance for the absolute difference between the observed and target CFI values ($|\\textrm{CFI}_{\\textrm{obs}} - \\textrm{CFI}_{\\textrm{T}}|$).",
+          note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
+          placement = "hb",
+          align = "lrrrrrr")
+```
+
+\pagebreak
+
+### $D$ Analysis of Variance
+
+\@ref(tab:d3-coef-tab) gives a summary of the analysis of variance for the sum of the absolute differences between the observed and target CFI values and the observed and target RMSEA values, $D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$. Small $D$ values indicated that a model-error method recovered both the target CFI and target RMSEA values well, whereas large $D$ values indicated that a model-error method recovered one (or both) of the target RMSEA or CFI values poorly. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
+
+```{r d3-coef-tab, results='asis'}
+d3_mod <- aov(abs(d3) ~(factors + items_per_factor + factor_cor + 
+                           loading_numeric + model_fit + error_method)^2,
+               data = results_matrix_scaled)
+
+d3_apa <- apa_print(d3_mod)
+d3_apa$table$Effect <- fix_apa_coef_names(d3_apa$table$Effect)
+apa_table(d3_apa$table,
+          caption = "Analysis of Variance for $D$.",
+          note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
+          placement = "hb",
+          align = "lrrrrrr")
+```
+
+\pagebreak
+
+### Logistic Regression on Qualitative Model Fit Index Agreement
+
+\@ref(tab:mmf-mod-summary) gives a summary of the logistic regression of each of the independent simulation study variables and their interactions on a variable indicating whether a solution produced RMSEA and CFI values that indicated the same qualitative degree of model fit. Note that some standard errors were quite large because the data were linearly separable due to there being some combinations of conditions with either 100% or 0% rates of qualitative fit agreement. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable. The "Model Fit (Very Good)" and "Error Method ($\TKLrmsea$)" terms were used as baseline levels and were subsumed within the "Constant" term.
+
+```{r qualitative-fit-coef-tab, results='asis'}
+if (fit_mods) {
+  
+  results_matrix_scaled <- results_matrix_scaled %>% mutate(
+    rmsea_subj_fit = case_when(rmsea <= 0.05 ~ "Good",
+                               rmsea > 0.05 & rmsea <= 0.1 ~ "Acceptable",
+                               rmsea > 0.1 ~ "Unacceptable"),
+    cfi_subj_fit = case_when(cfi >= .95 ~ "Good",
+                             cfi < .95 & cfi >= .9 ~ "Acceptable",
+                             cfi < .9 ~ "Unacceptable")
+  ) %>% mutate(
+    fit_agreement = (rmsea_subj_fit == cfi_subj_fit)
+  ) %>% mutate(
+    fit_agreement = factor(fit_agreement, 
+                           levels = c(FALSE, TRUE), 
+                           labels = c("No", "Yes"))
+  )
+  
+  fit_agreement_mod <- glm(fit_agreement ~ 
+                                   (factors + items_per_factor + factor_cor + 
+                                      loading_numeric + model_fit + error_method)^2,
+                                 data = results_matrix_scaled,
+                                 family = binomial())
+  
+  # Fix coefficient names
+  original_coef_names <- names(fit_agreement_mod$coefficients)
+  coef_name_list <- as.list(original_coef_names)
+  names(coef_name_list) <- original_coef_names
+  coef_names <- map(coef_name_list, fix_coef_names)
+  
+  fit_agreement_coef_tab <- texreg::texreg(
+    l = fit_agreement_mod,
+    custom.coef.map = coef_names,
+    digits = 2,
+    single.row = TRUE,
+    custom.model.names = " ",
+    dcolumn = TRUE,
+    longtable = TRUE,
+    use.packages = FALSE,
+    caption.above = FALSE,
+    caption = 'Coefficient estimates and standard errors for the logistic regression model predicting the probability of producing a solution with qualitative fit index agreement.',
+    label = "tab:qualitative-fit-mod-summary"
+  )
+  
+  writeLines(fit_agreement_coef_tab, here("tab/fit-agreement-coef-tab.txt"))
+}
+
+cat(readLines(here("tab/fit-agreement-coef-tab.txt")),
+    sep = "\n")
+```
+
+\pagebreak
+
+### $\textrm{RMSEA}_{\Delta}$ Analysis of Variance
+
+\@ref(tab:rmsea-delta-coef-tab) gives a summary of the analysis of variance for the difference between RMSEA and $\textrm{RMSEA}_{\bOmegaHat}$, $\textrm{RMSEA}_{\Delta} = \textrm{RMSEA} - \textrm{RMSEA}_{\bOmegaHat}$. Small values of $\textrm{RMSEA}_{\Delta}$ indicated that a model-error method led to similar values of RMSEA and $\textrm{RMSEA}_{\bOmegaHat}$ whereas large values indicated that the two fit indices were quite different. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
+
+```{r rmsea-delta-coef-tab, results='asis'}
+results_matrix_scaled <- results_matrix_scaled %>% 
+  mutate(rmsea_delta = rmsea - rmsea_thetahat,
+         cfi_delta = cfi - cfi_thetahat)
+
+rmsea_delta_mod <- aov(rmsea_delta ~(factors + items_per_factor + factor_cor + 
+                           loading_numeric + model_fit + error_method)^2,
+               data = results_matrix_scaled)
+
+rmsea_delta_apa <- apa_print(rmsea_delta_mod)
+rmsea_delta_apa$table$Effect <- fix_apa_coef_names(rmsea_delta_apa$table$Effect)
+apa_table(rmsea_delta_apa$table,
+          caption = "Analysis of Variance for $\\textrm{RMSEA}_{\\Delta}$.",
+          note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
+          placement = "hb",
+          align = "lrrrrrr")
+```
+
+\pagebreak
+
+### $\textrm{CFI}_{\Delta}$ Analysis of Variance
+
+\@ref(tab:cfi-delta-coef-tab) gives a summary of the analysis of variance for the difference between CFI and $\textrm{CFI}_{\bOmegaHat}$, $\textrm{CFI}_{\Delta} = \textrm{CFI} - \textrm{CFI}_{\bOmegaHat}$. Small values of $\textrm{CFI}_{\Delta}$ indicated that a model-error method led to similar values of CFI and $\textrm{CFI}_{\bOmegaHat}$ whereas large values indicated that the two fit indices were quite different. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
+
+```{r cfi-delta-coef-tab, results='asis'}
+cfi_delta_mod <- aov(cfi_delta ~(factors + items_per_factor + factor_cor + 
+                           loading_numeric + model_fit + error_method)^2,
+               data = results_matrix_scaled)
+
+cfi_delta_apa <- apa_print(cfi_delta_mod)
+cfi_delta_apa$table$Effect <- fix_apa_coef_names(cfi_delta_apa$table$Effect)
+apa_table(cfi_delta_apa$table,
+          caption = "Analysis of Variance for $\\textrm{CFI}_{\\Delta}$.",
+          note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
+          placement = "hb",
+          align = "lrrrrrr")
+```
+
+\pagebreak
 
 ## Supplemental Figures
 

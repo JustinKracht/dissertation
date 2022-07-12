@@ -59,6 +59,7 @@ library(kableExtra)
 library(here)
 library(scales)
 library(purrrgress)
+library(texreg)
 library(noisemaker) # devtools::install_github("JustinKracht/noisemaker")
 
 # Set knitr chunk options

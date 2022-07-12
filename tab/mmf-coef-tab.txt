@@ -1,0 +1,62 @@
+
+\begin{center}
+\begin{longtable}{l D{)}{)}{12)3}}
+\hline
+ & \multicolumn{1}{c}{ } \\
+\hline
+\endfirsthead
+\hline
+ & \multicolumn{1}{c}{ } \\
+\hline
+\endhead
+\hline
+\endfoot
+\hline
+\multicolumn{2}{l}{\scriptsize{$^{***}p<0.001$; $^{**}p<0.01$; $^{*}p<0.05$}}\\
+\caption{Coefficient estimates and standard errors for the logistic regression model predicting the probability of producing a solution with violated $W$ constraints (i.e., at least one minor factor with more than two absolute factor loadings greater than 0.3).}
+\label{tab:mmf-mod-summary}
+\endlastfoot \\
+Constant                                                  & -26.88 \; (353.54)      \\
+Factors                                                   & 3.87 \; (273.30)        \\
+Items/Factor                                              & 4.06 \; (273.65)        \\
+Factor Correlation                                        & 0.56 \; (110.83)        \\
+Loading                                                   & -5.22 \; (451.83)       \\
+Model Fit (Fair)                                          & 23.97 \; (353.54)       \\
+Model Fit (Poor)                                          & 26.34 \; (353.54)       \\
+Error Method ($\TKLcfi$)                                  & 2.15 \; (579.47)        \\
+Error Method ($\TKLrmseacfi$)                             & 5.28 \; (425.86)        \\
+Factors $\times$ Items/Factor                             & 1.08 \;   (0.08)^{***}  \\
+Factors $\times$ Factor Correlation                       & -0.28 \;   (0.04)^{***} \\
+Factors $\times$ Loading                                  & -0.23 \;   (0.12)       \\
+Factors $\times$ Model Fit (Fair)                         & -1.08 \; (273.30)       \\
+Factors $\times$ Model Fit (Poor)                         & -0.99 \; (273.30)       \\
+Factors $\times$ Error Method ($\TKLcfi$)                 & -8.08 \;   (1.77)^{***} \\
+Factors $\times$ Error Method ($\TKLrmseacfi$)            & -4.59 \;   (0.87)^{***} \\
+Items/Factor $\times$ Factor Correlation                  & 0.01 \;   (0.05)        \\
+Items/Factor $\times$ Loading                             & 1.80 \;   (0.18)^{***}  \\
+Items/Factor $\times$ Model Fit (Fair)                    & 1.02 \; (273.65)        \\
+Items/Factor $\times$ Model Fit (Poor)                    & -0.07 \; (273.65)       \\
+Items/Factor $\times$ Error Method ($\TKLcfi$)            & -5.71 \;   (0.79)^{***} \\
+Items/Factor $\times$ Error Method ($\TKLrmseacfi$)       & -5.09 \;   (0.82)^{***} \\
+Factor Correlation $\times$ Loading                       & -0.05 \;   (0.07)       \\
+Factor Correlation $\times$ Model Fit (Fair)              & -0.47 \; (110.83)       \\
+Factor Correlation $\times$ Model Fit (Poor)              & -0.44 \; (110.83)       \\
+Factor Correlation $\times$ Error Method ($\TKLcfi$)      & -0.61 \;   (0.75)       \\
+Factor Correlation $\times$ Error Method ($\TKLrmseacfi$) & -0.15 \;   (0.41)       \\
+Loading $\times$ Model Fit (Fair)                         & -1.00 \; (451.83)       \\
+Loading $\times$ Model Fit (Poor)                         & 0.65 \; (451.83)        \\
+Loading $\times$ Error Method ($\TKLcfi$)                 & 13.33 \;   (2.94)^{***} \\
+Loading $\times$ Error Method ($\TKLrmseacfi$)            & 5.02 \;   (1.19)^{***}  \\
+Model Fit (Fair) $\times$ Error Method ($\TKLcfi$)        & -13.51 \; (579.47)      \\
+Model Fit (Poor) $\times$ Error Method ($\TKLcfi$)        & -14.03 \; (579.47)      \\
+Model Fit (Fair) $\times$ Error Method ($\TKLrmseacfi$)   & -24.05 \; (451.18)      \\
+Model Fit (Poor) $\times$ Error Method ($\TKLrmseacfi$)   & -13.22 \; (425.86)      \\
+\hline
+AIC                                                       & 35836.61                \\
+BIC                                                       & 36204.33                \\
+Log Likelihood                                            & -17883.30               \\
+Deviance                                                  & 35766.61                \\
+Num. obs.                                                 & 270000                  \\
+\end{longtable}
+\end{center}
+

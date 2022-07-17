@@ -47,7 +47,7 @@ fix_apa_coef_names <- function(names) {
 }
 ```
 
-### Logistic Regression on $W$ Constraint Violations
+### Logistic Regression on $W$ Constraint Violations {#w-constraints-regression-table}
 
 \@ref(tab:mmf-mod-summary) gives a summary of the logistic regression of each of the independent simulation study variables and their interactions on a variable indicating whether a solution violated the constraints imposed on $W$ (i.e., whether the solution had major minor factors). Note that some standard errors were quite large because the data were linearly separable due to there being some combinations of conditions that did not produce solutions with violated $W$ constraints. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable. The "Model Fit (Very Good)" and "Error Method ($\TKLrmsea$)" terms were used as baseline levels and were subsumed within the "Constant" term.
 
@@ -89,7 +89,7 @@ cat(readLines(here("tab/mmf-coef-tab.txt")),
 
 \pagebreak
 
-### $|\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}|$ Analysis of Variance
+### $|\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}|$ Analysis of Variance {#rmsea-anova-summary}
 
 \@ref(tab:d1-coef-tab) gives a summary of the analysis of variance for the absolute difference between the observed and target RMSEA values ($|\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}|$). Small values of $|\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}|$ indicated that a model-error method recovered the target RMSEA value well, whereas large values indicated that a model-error method recovered the target RMSEA value poorly. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
 
@@ -109,7 +109,7 @@ apa_table(d1_apa$table,
 
 \pagebreak
 
-### $|\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$ Analysis of Variance
+### $|\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$ Analysis of Variance {#cfi-anova-summary}
 
 \@ref(tab:d2-coef-tab) gives a summary of the analysis of variance for the absolute difference between the observed and target CFI values ($|\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$). Small values of $|\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$ indicated that a model-error method recovered the target CFI value well, whereas large values indicated that a model-error method recovered the target CFI value poorly. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
 
@@ -129,7 +129,7 @@ apa_table(d2_apa$table,
 
 \pagebreak
 
-### $D$ Analysis of Variance
+### $D$ Analysis of Variance {#d-anova-summary}
 
 \@ref(tab:d3-coef-tab) gives a summary of the analysis of variance for the sum of the absolute differences between the observed and target CFI values and the observed and target RMSEA values, $D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$. Small $D$ values indicated that a model-error method recovered both the target CFI and target RMSEA values well, whereas large $D$ values indicated that a model-error method recovered one (or both) of the target RMSEA or CFI values poorly. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
 
@@ -149,7 +149,7 @@ apa_table(d3_apa$table,
 
 \pagebreak
 
-### Logistic Regression on Qualitative Model Fit Index Agreement
+### Logistic Regression on Qualitative Model Fit Index Agreement {#qual-fit-regression-summary}
 
 \@ref(tab:mmf-mod-summary) gives a summary of the logistic regression of each of the independent simulation study variables and their interactions on a variable indicating whether a solution produced RMSEA and CFI values that indicated the same qualitative degree of model fit. Note that some standard errors were quite large because the data were linearly separable due to there being some combinations of conditions with either 100% or 0% rates of qualitative fit agreement. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable. The "Model Fit (Very Good)" and "Error Method ($\TKLrmsea$)" terms were used as baseline levels and were subsumed within the "Constant" term.
 
@@ -206,7 +206,7 @@ cat(readLines(here("tab/fit-agreement-coef-tab.txt")),
 
 \pagebreak
 
-### $\textrm{RMSEA}_{\Delta}$ Analysis of Variance
+### $\textrm{RMSEA}_{\Delta}$ Analysis of Variance {#rmsea-delta-anova}
 
 \@ref(tab:rmsea-delta-coef-tab) gives a summary of the analysis of variance for the difference between RMSEA and $\textrm{RMSEA}_{\bOmegaHat}$, $\textrm{RMSEA}_{\Delta} = \textrm{RMSEA} - \textrm{RMSEA}_{\bOmegaHat}$. Small values of $\textrm{RMSEA}_{\Delta}$ indicated that a model-error method led to similar values of RMSEA and $\textrm{RMSEA}_{\bOmegaHat}$ whereas large values indicated that the two fit indices were quite different. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
 
@@ -230,7 +230,7 @@ apa_table(rmsea_delta_apa$table,
 
 \pagebreak
 
-### $\textrm{CFI}_{\Delta}$ Analysis of Variance
+### $\textrm{CFI}_{\Delta}$ Analysis of Variance {#cfi-delta-anova}
 
 \@ref(tab:cfi-delta-coef-tab) gives a summary of the analysis of variance for the difference between CFI and $\textrm{CFI}_{\bOmegaHat}$, $\textrm{CFI}_{\Delta} = \textrm{CFI} - \textrm{CFI}_{\bOmegaHat}$. Small values of $\textrm{CFI}_{\Delta}$ indicated that a model-error method led to similar values of CFI and $\textrm{CFI}_{\bOmegaHat}$ whereas large values indicated that the two fit indices were quite different. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
 
@@ -343,6 +343,41 @@ if (make_plots) {
 }
 
 knitr::include_graphics(here("img/major_minor_factors_full.png"))
+```
+
+### Values of $\epsilon$ and $\nu_{\textrm{e}}$ {#eps-and-nu-full}
+
+```{r eps-and-v-values-by-W-violations-full}
+#| fig.cap = "Values of the TKL parameters ($\\epsilon$ and $\\nu_{\\textrm{e}}$) by model-error method, number of factors, number of items per factor, and factor loading strength when model fit was Poor. TKL = Tucker, Koopman, and Linn."
+
+if (make_plots) {
+  eps_and_nu_plot_full <- results_matrix %>%
+    mutate(w_has_major_factors = factor(w_has_major_factors, 
+                                        levels = c(FALSE, TRUE),
+                                        labels = c("No", "Yes"))) %>%
+    filter(!(error_method %in% c("CB", "WB")),
+           model_fit == "Poor") %>%
+    ggplot(aes(y = v, x = eps, color = error_method)) +
+    geom_point(alpha = .1, size = .75) +
+    scale_color_brewer(
+      palette = "Dark2", type = "qual",
+      labels = list("TKL (RMSEA)" = TeX("$TKL_{RMSEA}$"),
+                    "TKL (RMSEA/CFI)" = TeX("$TKL_{RMSEA/CFI}$"),
+                    "TKL (CFI)" = TeX("$TKL_{CFI}"))) +
+    scale_x_continuous(breaks = c(0.0, 0.2, 0.4, 0.6, 0.8, 1.0)) +
+    facet_grid(factors_rec * items_per_factor_rec ~ loading_rec) +
+    labs(y = TeX("$\\nu_e$"), x = TeX("$\\epsilon$"), color = "Error Method") +
+    guides(color = guide_legend(override.aes = list(alpha = 1, size = 1.5))) +
+    theme_bw() +
+    theme(legend.position = "bottom")
+
+  ggsave(filename = here("img/eps_and_nu_w_violations_full.png"),
+         eps_and_nu_plot_full,
+         dpi = 320,
+         height = 10, width = 7)
+}
+
+knitr::include_graphics(here("img/eps_and_nu_w_violations_full.png"))
 ```
 
 ### Observed RMSEA Values

@@ -47,9 +47,9 @@ fix_apa_coef_names <- function(names) {
 }
 ```
 
-### Logistic Regression on $W$ Constraint Violations {#w-constraints-regression-table}
+### Logistic Regression on $\mathbf{W}$ Constraint Violations {#w-constraints-regression-table}
 
-\@ref(tab:mmf-mod-summary) gives a summary of the logistic regression of each of the independent simulation study variables and their interactions on a variable indicating whether a solution violated the constraints imposed on $W$ (i.e., whether the solution had major minor factors). Note that some standard errors were quite large because the data were linearly separable due to there being some combinations of conditions that did not produce solutions with violated $W$ constraints. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable. The "Model Fit (Very Good)" and "Error Method ($\TKLrmsea$)" terms were used as baseline levels and were subsumed within the "Constant" term.
+\@ref(tab:mmf-mod-summary) gives a summary of the logistic regression of each of the independent simulation study variables and their interactions on a variable indicating whether a solution violated the constraints imposed on $W$ (i.e., whether the solution had major minor factors). Note that some standard errors were quite large because the data were linearly separable due to there being some combinations of conditions that did not produce solutions with violated $\mathbf{W}$ constraints. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable. The "Model Fit (Very Good)" and "Error Method ($\TKLrmsea$)" terms were used as baseline levels and were subsumed within the "Constant" term.
 
 ```{r mmf-coef-tab, results='asis'}
 if (fit_mods) {
@@ -76,7 +76,7 @@ if (fit_mods) {
     longtable = TRUE,
     use.packages = FALSE,
     caption.above = FALSE,
-    caption = 'Coefficient estimates and standard errors for the logistic regression model predicting the probability of producing a solution with violated $W$ constraints (i.e., at least one minor factor with more than two absolute factor loadings greater than 0.3).',
+    caption = 'Coefficient estimates and standard errors for the logistic regression model predicting the probability of producing a solution with violated $\\mathbf{W}$ constraints (i.e., at least one minor factor with more than two absolute factor loadings greater than 0.3).',
     label = "tab:mmf-mod-summary"
   )
   
@@ -656,6 +656,39 @@ if (make_plots) {
 
 knitr::include_graphics(here("img/crmr_thetahat_distributions.png"))
 ```
+
+### Fit Index Agreement ($D$) {#full-d3-plot}
+
+```{r full-d3-plot, out.width="90%"}
+#| fig.cap = "The sum of the absolute differences between the observed and target RMSEA and CFI values ($D$), conditioned on number of factors, model fit, and factor loading strength. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+if (make_plots) {
+  d_plot <- 
+    results_matrix %>%
+    filter(rmsea < 3) %>%
+    ggplot(aes(x = fct_rev(error_method_rec), y = d3)) +
+    geom_boxplot(outlier.size = .5, outlier.stroke = .25, lwd = .5,
+                 fatten = 1.5) +
+    coord_flip() +
+    scale_x_discrete(labels = parse(text=levels(results_matrix$error_method_rec)[5:1])) +
+    facet_grid(model_fit_rec * loading_rec ~ 
+                 factors_rec) +
+    labs(x = "",
+         y = latex2exp::TeX("\\textit{D}")) +
+    theme_bw() +
+    theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
+  
+  ggsave(
+    filename = here("img/d_plot_full.png"), 
+    plot = d_plot,
+    dpi = 320,
+    height = 6.5, width = 5.25,
+    scale = 1.4
+  )
+}
+
+knitr::include_graphics(here("img/d_plot_full.png"))
+```
+
 ### Conditional Distributions of CFI at Fixed RMSEA Values {#conditional-cfi-with-factor-cor}
 
 ```{r conditional-cfi-with-factor-cor-plot, out.width='90%'}

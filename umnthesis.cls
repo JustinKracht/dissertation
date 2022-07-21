@@ -2,7 +2,7 @@
 
 \NeedsTeXFormat{LaTeX2e}%
 \ProvidesClass{umnthesis}[2021/12/20 v1.0 University of Minnesota Doctoral Thesis]
-\LoadClass[11pt, oneside]{book}
+\LoadClass[12pt, oneside]{book}
 
 %% ------------------------------------------------------------------- %%
 %% Useful LaTeX packages for mathematics

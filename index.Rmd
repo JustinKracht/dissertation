@@ -21,9 +21,9 @@ monofont: "Courier"
 # Link highlighting ---------------------------------------
 link-citations: true
 colored-not-bordered-links: true
-urlcolor-hex: "2C6DAC"   # web addresses
-citecolor-hex: "2C6DAC"  # citations
-linkcolor-hex: "2C6DAC"  # links to sections in your thesis
+urlcolor-hex: "000000"   # web addresses
+citecolor-hex: "000000"  # citations
+linkcolor-hex: "000000"  # links to sections in your thesis
 
 # Bibliography/References ---------------------------------
 

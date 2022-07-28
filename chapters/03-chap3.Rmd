@@ -5,7 +5,7 @@ I conducted a simulation study to investigate and compare characteristics of the
 
 In the simulation study, I compared model-error methods by generating error-perturbed covariance matrices using a variety of population models and comparing the results based on several model fit indices. For simplicity, I used covariance matrices with unit diagonals (i.e., correlation matrices). Moreover, I focused on four model fit indices: the RMSEA, the CFI, the Tucker-Lewis Index [TLI\; @tucker1973], and the Correlation Mean Squared Residual [CRMR\; @bollen1989; @ogasawara2001]. Although many other fit indices have been proposed [see @marsh2005], the selected fit indices are among the most commonly-used and include both measures of absolute fit (RMSEA, CRMR) and incremental fit [CFI, TLI\; @kline2011].
 
-Because the relationship between fit indices is affected by model characteristics [@lai2016], I included a variety of distinct population models created by systematically varying: (a) the number of major factors (Factors $\in \{1, 3, 5, 10\}$), (b) the number of items per factor (Items/Factor $\in \{5, 15 \}$), (c) the correlation between factors ($\phi \in \{0, .3, .6\}$), and (d) the strength of the item factor loadings (Loadings $\in \{0.4, 0.6, 0.8 \}$). Each item loaded on only a single factor and factor loadings were fixed at values representing weak, moderate, and strong factor loadings, respectively [@hair2018]. Examples of factor loading matrices corresponding to the weak, moderate, and strong factor loading conditions are shown in \@ref(tab:factor-loadings). The factor loading and factor correlation values used in the simulation study were intended to represent a range of values representative of values observed in empirical research. For instance, in a confirmatory factor analysis of sub-tests from the Ball Aptitude Battery believed to measure aspects of intelligence, @neuman2000 reported estimated factor loadings between 0.26 and 0.95 and factor correlations between .18 and .73.
+Because the relationship between fit indices is affected by model characteristics [@lai2016], I included a variety of distinct population models created by systematically varying: (a) the number of major factors (Factors $\in \{1, 3, 5, 10\}$), (b) the number of items per factor (Items/Factor $\in \{5, 15 \}$), (c) the correlation between factors ($\phi \in \{0, .3, .6\}$), and (d) the strength of the salient item factor loadings (Loadings $\in \{0.4, 0.6, 0.8 \}$). Each item loaded on only a single factor and factor loadings were fixed at values representing weak, moderate, and strong factor loadings, respectively [@hair2018]. Examples of factor loading matrices corresponding to the weak, moderate, and strong factor loading conditions are shown in \@ref(tab:factor-loadings). The factor loading and factor correlation values used in the simulation study were intended to represent a range of values representative of values observed in empirical research. For instance, in a confirmatory factor analysis of sub-tests from the Ball Aptitude Battery believed to measure aspects of intelligence, @neuman2000 reported estimated factor loadings between 0.26 and 0.95 and factor correlations between .18 and .73.
 
 ```{r loading-tables, results='asis'}
 cat(readLines(here::here("tab", "loading_tables.txt")),
@@ -24,7 +24,7 @@ Although the TKL method has so far been discussed as a single model-error method
 
 For all of the TKL-based methods, the L-BFGS-B optimization procedure was restarted with new starting values of $\nu_\textrm{e}$ if it failed to converge within 1,000 iterations. Starting values were randomly generated using $\nu_{\textrm{e}0} \sim \mathcal{U}(.2, .9)$ and $\epsilon_0 \sim \mathcal{U}(0, .8)$, where $\nu_{\textrm{e}0}$ and $\epsilon_0$ denote the starting values of $\nu_{\textrm{e}}$ and $\epsilon$ and $\mathcal{U}(a, b)$ denotes a uniform distribution on the interval $[a, b]$. These distributions were chosen because initial testing indicated that the multiple-target TKL method was more likely to result in a converged solution if the range of the starting values were somewhat restricted. 
 
-In addition to randomly initializing the starting values of $\nu_{\textrm{e}}$ and $\epsilon$, the values of the $\mathbf{W}^*$ matrix were also randomly initialized at each repetition. In the multiple-target TKL method, the $p \times q$ provisional matrix $\mathbf{W}^*$ was initialized such that each column consisted of $p$ samples from a standard normal distribution. The $\mathbf{W}$ matrix was then obtained as follows. Let $\epsilon_j$ and $\nu_{\textrm{e}j}$ denote the proposed values of $\epsilon$ and $\nu_{\textrm{e}}$ at iteration $j$ of the multiple-target TKL optimization procedure. At the $j$th iteration, the columns of the $\mathbf{W}^*$ were scaled using $\mathbf{W}^*_j = \mathbf{W}^* \mathbf{V}$, where $\mathbf{V}$ denotes a $q \times q$ diagonal matrix with diagonal elements $(1-\epsilon_j)^0, (1-\epsilon_j)^1, \dots, (1-\epsilon_j)^{q-1}$. Then, $\mathbf{W}^*_j$ was scaled as described in \@ref(tkl-method) to form a $\mathbf{W}_j$ matrix to ensure that the proportion of variance accounted for by the $q$ minor common factors was equal to $\nu_{\mathrm{e}j}$.
+In addition to randomly initializing the starting values of $\nu_{\textrm{e}}$ and $\epsilon$, the values of the $\mathbf{W}^*$ matrix were also randomly initialized at each repetition. In the multiple-target TKL method, the $p \times q$ provisional matrix $\mathbf{W}^*$ (defined in \@ref(tkl-method)) was initialized such that each column consisted of $p$ samples from a standard normal distribution. The $\mathbf{W}$ matrix was then obtained as follows. Let $\epsilon_j$ and $\nu_{\textrm{e}j}$ denote the proposed values of $\epsilon$ and $\nu_{\textrm{e}}$ at iteration $j$ of the multiple-target TKL optimization procedure. At the $j$th iteration, the columns of the $\mathbf{W}^*$ were scaled using $\mathbf{W}^*_j = \mathbf{W}^* \mathbf{V}$, where $\mathbf{V}$ denotes a $q \times q$ diagonal matrix with diagonal elements $(1-\epsilon_j)^0, (1-\epsilon_j)^1, \dots, (1-\epsilon_j)^{q-1}$. Then, $\mathbf{W}^*_j$ was scaled as described in \@ref(tkl-method) to form a $\mathbf{W}_j$ matrix to ensure that the proportion of variance accounted for by the $q = 50$ minor common factors was equal to $\nu_{\mathrm{e}j}$.
 
 Repeating each of the TKL method variations 500 times with random starting values was important because the multiple-target TKL method is not guaranteed to find the global optimum for a particular problem. Moreover, the results of the multiple-target TKL method depend on the $\mathbf{W}^*$ matrix. Therefore, evaluating the multiple-target TKL method with a single set of starting values and a single $\mathbf{W}^*$ matrix might have led to results that were idiosyncratic and not representative of the method's general performance. Another reasonable question is why $\mathbf{W}^*$ was not held fixed over the 500 repetitions with random starting values to find the global optimum parameter values *for that particular* $\mathbf{W}^*$ *matrix*. However, the purpose of the multiple-target TKL method was to produce solutions with fit index values that were "close enough" to the target values to be reasonable over the entire space of $\mathbf{W}^*$ matrices, not to find the best solution for one particular $\mathbf{W}^*$ matrix.
 
@@ -35,8 +35,8 @@ To resolve this issue, I developed a method to find a value of $v$ such that the
 
 <!-- [***COME BACK TO THIS; Wu and Browne p. 580***] -->
 
-```{r make-wb-mod-plot, fig.align = "center", warning = FALSE, message = FALSE, out.width='80%'}
-#| fig.cap = "The relationship between $\\sqrt{\\tilde{v}}$ and $\\epsilon$ for a 5-factor model. The solid gray line indicates where the target RMSEA and median RMSEA values (from 50 samples) would be equal. The dashed orange line indicates the predicted value of $\\sqrt{v}$ that will produce a given RMSEA value."
+```{r make-wb-mod-plot, fig.align = "center", warning = FALSE, message = FALSE, out.width='70%'}
+#| fig.cap = "The relationship between $\\sqrt{\\tilde{v}}$ and $\\epsilon$. Each point indicates the observed median $\\varepsilon$ value for 50 simulated $\\bSigma$ matrices corresponding to an orthogonal, five-factor model with salient factor loadings sampled uniformly from 0.3 and 0.7. The solid gray line indicates where the target RMSEA and median RMSEA values (from 50 samples) would be equal. The dashed orange line indicates the predicted value of $\\sqrt{v}$ that will produce a given RMSEA value."
 
 if (make_plots) {
   set.seed(123)
@@ -69,13 +69,14 @@ if (make_plots) {
     geom_abline(intercept = 0, slope = 1, color = "gray") +
     theme_bw() + 
     labs(x = latex2exp::TeX("median $\\epsilon$"),
-         y = latex2exp::TeX("$\\sqrt{v} = \\epsilon_T$"))
+         y = latex2exp::TeX("$\\sqrt{v} = \\epsilon_T$")) +
+    coord_fixed(xlim = c(0.01, .125), ylim = c(0.01, .125))
   
   ggsave(filename = here("img/wb-plot.png"),
          plot = wb_plot,
          dpi = 320,
          height = 4, 
-         width = 5,
+         width = 4,
          scale = 1.1)
 }
 

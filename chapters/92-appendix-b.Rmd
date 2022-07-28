@@ -49,7 +49,7 @@ fix_apa_coef_names <- function(names) {
 
 ### Logistic Regression on $\mathbf{W}$ Constraint Violations {#w-constraints-regression-table}
 
-\@ref(tab:mmf-mod-summary) gives a summary of the logistic regression of each of the independent simulation study variables and their interactions on a variable indicating whether a solution violated the constraints imposed on $W$ (i.e., whether the solution had major minor factors). Note that some standard errors were quite large because the data were linearly separable due to there being some combinations of conditions that did not produce solutions with violated $\mathbf{W}$ constraints. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable. The "Model Fit (Very Good)" and "Error Method ($\TKLrmsea$)" terms were used as baseline levels and were subsumed within the "Constant" term.
+\@ref(tab:mmf-mod-summary) gives a summary of the logistic regression of each of the independent simulation study variables and their interactions on a variable indicating whether a solution violated the constraints imposed on $\mathbf{W}$ (i.e., whether the solution had major minor factors). Note that some standard errors were quite large because the data were linearly separable due to there being some combinations of conditions that did not produce solutions with violated $\mathbf{W}$ constraints. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable. The "Model Fit (Very Good)" and "Error Method ($\TKLrmsea$)" terms were used as baseline levels and were subsumed within the "Constant" term.
 
 ```{r mmf-coef-tab, results='asis'}
 if (fit_mods) {
@@ -76,6 +76,7 @@ if (fit_mods) {
     longtable = TRUE,
     use.packages = FALSE,
     caption.above = FALSE,
+    fontsize = "small",
     caption = 'Coefficient estimates and standard errors for the logistic regression model predicting the probability of producing a solution with violated $\\mathbf{W}$ constraints (i.e., at least one minor factor with more than two absolute factor loadings greater than 0.3).',
     label = "tab:mmf-mod-summary"
   )
@@ -104,6 +105,7 @@ apa_table(d1_apa$table,
           caption = "Analysis of Variance for the absolute difference between the observed and target RMSEA values ($|\\textrm{RMSEA}_{\\textrm{obs}} - \\textrm{RMSEA}_{\\textrm{T}}|$).",
           note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
           placement = "hb",
+          font_size = "small",
           align = "lrrrrrr")
 ```
 
@@ -124,6 +126,7 @@ apa_table(d2_apa$table,
           caption = "Analysis of Variance for the absolute difference between the observed and target CFI values ($|\\textrm{CFI}_{\\textrm{obs}} - \\textrm{CFI}_{\\textrm{T}}|$).",
           note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
           placement = "hb",
+          font_size = "small",
           align = "lrrrrrr")
 ```
 
@@ -144,6 +147,7 @@ apa_table(d3_apa$table,
           caption = "Analysis of Variance for $D$.",
           note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
           placement = "hb",
+          font_size = "small",
           align = "lrrrrrr")
 ```
 
@@ -193,6 +197,7 @@ if (fit_mods) {
     longtable = TRUE,
     use.packages = FALSE,
     caption.above = FALSE,
+    fontsize = "small",
     caption = 'Coefficient estimates and standard errors for the logistic regression model predicting the probability of producing a solution with qualitative fit index agreement.',
     label = "tab:qualitative-fit-mod-summary"
   )
@@ -225,6 +230,7 @@ apa_table(rmsea_delta_apa$table,
           caption = "Analysis of Variance for $\\textrm{RMSEA}_{\\Delta}$.",
           note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
           placement = "hb",
+          font_size = "small",
           align = "lrrrrrr")
 ```
 
@@ -245,6 +251,7 @@ apa_table(cfi_delta_apa$table,
           caption = "Analysis of Variance for $\\textrm{CFI}_{\\Delta}$.",
           note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
           placement = "hb",
+          font_size = "small",
           align = "lrrrrrr")
 ```
 
@@ -254,7 +261,7 @@ apa_table(cfi_delta_apa$table,
 
 ### Percent of CB Solutions that were Indefinite
 
-```{r fig-percent-indefinite-matrices-expanded, fig.cap = "The percent of Cudeck-Browne (CB) method solutions that were indefinite, conditioned on number of factors, factor loading, number of items per factor, factor correlation, and model fit.", out.width='90%'}
+```{r fig-percent-indefinite-matrices-expanded, fig.cap = "The percent of Cudeck-Browne (CB) method solutions that were indefinite, conditioned on number of factors, factor loading, number of items per factor, factor correlation, and model fit.", out.width='75%'}
 if (make_plots) {
   cb_percent_indefinite <- results_matrix %>%
     filter(error_method == "CB") %>%
@@ -305,7 +312,7 @@ knitr::include_graphics(here("img/cb_percent_indefinite_full.png"))
 
 ### Percent of TKL Solutions Where the Constraints on $\mathbf{W}$ were Violated
 
-```{r w-major-factors-plot-expanded, fig.cap = "The percent of cases where the constraints on $\\mathbf{W}$ were violated when the $\\textrm{TKL}_{\\textrm{RMSEA}}$ model-error method was used, conditioned on number of factors, number of items per factor, factor loading, factor correlation, and model fit.", out.width='85%'}
+```{r w-major-factors-plot-expanded, fig.cap = "The percent of cases where the constraints on $\\mathbf{W}$ were violated when the $\\textrm{TKL}_{\\textrm{RMSEA}}$ model-error method was used, conditioned on number of factors, number of items per factor, factor loading, factor correlation, and model fit.", out.width='75%'}
 if (make_plots) {
   percent_w_major_factors_table <- results_matrix %>%
     filter(!(error_method %in% c("CB", "WB"))) %>%
@@ -484,7 +491,7 @@ knitr::include_graphics(here("img/tli_distributions_full.png"))
 
 ### Observed CRMR Values
 
-```{r crmr-distributions-full, fig.cap="Distributions of the CRMR values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Recommendations for threshold values of SRMR/CRMR are not as fine-grained as for some other fit indices, but threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values. The dashed lines indicate these two threshold values. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width="65%"}
+```{r crmr-distributions-full, fig.cap="Distributions of the CRMR values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values; the dashed lines indicate these two threshold values. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width="65%"}
 if (make_plots) {
   crmr_distributions <- 
     results_matrix %>%
@@ -624,7 +631,7 @@ knitr::include_graphics(here("img/tli_thetahat_distributions.png"))
 #### $\textrm{CRMR}_{\hat{\bm{\Omega}}}$
 
 ```{r crmr-thetahat-distributions, out.width="90%"}
-#| fig.cap = "Distributions of the $\\textrm{TLI}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Recommendations for threshold values of SRMR/CRMR are not as fine-grained as for some other fit indices, but threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values. The dashed lines indicate these two threshold values. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Distributions of the $\\textrm{TLI}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values; the dashed lines indicate these two threshold values. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 if (make_plots) {
   crmr_thetahat_distributions <- 
     results_matrix %>%
@@ -871,6 +878,8 @@ if (make_plots) {
          scale = 1.15,
          dpi = 320)
 }
+
+knitr::include_graphics(here("img/cfi_conditional_rmsea_with_factor_cor.png"))
 ```
 
 ### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$ {#sigma-heat-maps}
@@ -878,7 +887,7 @@ if (make_plots) {
 #### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$ for the Condition with Ten Orthogonal Factors, Five Items per Factor, Weak Factor Loadings, and Poor Model Fit
 
 ```{r c129-with-annotation, out.width = '55%'}
-#| fig.cap = "Correlation matrices with model error ($\\mathbf{\\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\\mathbf{\\Sigma}$ ($\\hat{\\mathbf{\\Omega}}$) for each model-error method. Results are shown for a set of solution matrices from the condition with ten orthogonal factors, five items per factor, weak factor loadings of 0.3, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Correlation matrices with model error ($\\mathbf{\\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\\mathbf{\\Sigma}$ ($\\hat{\\mathbf{\\Omega}}$) for each model-error method. Results are shown for the condition with ten orthogonal factors, five items per factor, weak factor loadings of 0.3, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 
 knitr::include_graphics(here("img/c129_R_plots_with_annotation.png"))
 ```
@@ -886,8 +895,42 @@ knitr::include_graphics(here("img/c129_R_plots_with_annotation.png"))
 #### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$ for the Condition with Ten Orthogonal Factors, Ten Items per Factor, Weak Factor Loadings, and Poor Model Fit
 
 ```{r c156-with-annotation, out.width='67%'}
-#| fig.cap = "Correlation matrices with model error ($\\mathbf{\\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\\mathbf{\\Sigma}$ ($\\hat{\\mathbf{\\Omega}}$) for each model-error method. Results are shown for a set of solution matrices from the condition with ten orthogonal factors, ten items per factor, weak factor loadings of 0.4, and Poor model fit. Note that the Cudeck and Browne method is omitted because it was not used for conditions with ten factors and 15 items per factor. TKL = Tucker, Koopman, and Linn; WB = Wu and Browne."
+#| fig.cap = "Correlation matrices with model error ($\\mathbf{\\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\\mathbf{\\Sigma}$ ($\\hat{\\mathbf{\\Omega}}$) for each model-error method. Results are shown for the condition with ten orthogonal factors, ten items per factor, weak factor loadings of 0.4, and Poor model fit. Note that the Cudeck and Browne method is omitted because it was not used for conditions with ten factors and 15 items per factor. TKL = Tucker, Koopman, and Linn; WB = Wu and Browne."
 
 knitr::include_graphics(here("img/c156_R_plots_with_annotation.png"))
 ```
 
+### Model Fit Index Recovery for the TKL-based Methods {#fit-index-recovery-full}
+
+```{r fit-index-recovery-full, out.width='95%'}
+#| fig.cap = "Observed RMSEA and CFI values for the $\\textrm{TKL}_{\\textrm{RMSEA/CFI}}$ model-error method and the corresponding known-to-be-possible target RMSEA and CFI values (indicated by the black lines), conditioned on number of factors, number of items per factor, factor loading strength, and factor correlation."
+if (make_plots) {
+  noisy_data <- readRDS(here("data/noisy_data.RDS"))
+  
+  target_values <- noisy_data %>%
+    select(factors, items_per_factor, factor_corr, factor_loading,
+           target_rmsea, target_cfi) %>%
+    distinct()
+  
+  noisy_data %>%
+    ggplot(aes(x = rmsea, y = cfi)) +
+    geom_point(size = 1) +
+    geom_hline(aes(yintercept = target_cfi), data = target_values,
+               size = .25) +
+    geom_vline(aes(xintercept = target_rmsea), data = target_values,
+               size = .25) +
+    facet_grid(factors * factor_loading ~ items_per_factor * factor_corr) +
+    labs(x = "RMSEA", y = "CFI") +
+    theme_bw()
+  
+  ggsave(filename = "rmsea_cfi_recovery_full.png",
+         path = here("img"),
+         plot = last_plot(),
+         dpi = 320,
+         height = 9.5,
+         width = 7.5,
+         scale = 1.25)
+}
+
+knitr::include_graphics(here("img/rmsea_cfi_recovery_full.png"))
+```

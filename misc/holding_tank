@@ -307,3 +307,75 @@ Simulating data sets
 Incorporating the effects of model error in Monte Carlo simulation studies is important because it makes simulated data sets more representative of empirical data sets, which are unlikely to have population covariance matrices that are perfectly fit by any simple covariance structure model. To that end, a few model-error methods have been proposed for simulating error-perturbed covariance matrices from the population covariance matrices implied by a covariance structure model. For instance, the Tucker, Koopman, and Linn (TKL; 1969), Cudeck and Browne (1992), and Wu and Browne (2015) model-error methods have variously been proposed.
 
 Although the incorporation of model error in Monte Carlo simulation studies of covariance structure models (particularly the common factor analysis model) has become more common, there are no published comparisons of the model-error methods. Additionally, it is not clear how users should choose parameter values for each of the model-error methods to produce solutions with a particular degree of model fit. The CB and WB model-error methods each have a single user-specified parameter that allows the user to specify a desired root mean square error of approximation (RMSEA) value with varying precision. The TKL method has two user-specified parameters that are often chosen by trial-and-error to produce solutions with RMSEA values that are reasonably close to a desired value. This presents at least two problems: First, it is difficult and time-consuming to select TKL parameter values that lead to acceptable RMSEA values over the wide variety of common factor models often used in Monte Carlo simulation studies. Second, RMSEA alone is not sufficient for a complete understanding of the degree of model fit. In the following dissertation, I address these issues as follows. First, I review the psychometric literature on model error, introduce the TKL, CB, and WB model-error methods, and describe four commonly-used fit indices that provide 
+
+
+```{r}
+if (make_plots) {
+  cb_nonconverged <- results_matrix %>% 
+    filter(error_method == "CB") %>% 
+    mutate(delta = rmsea_thetahat - target_rmsea) %>%
+    group_by(factors, items_per_factor_rec, loading_numeric, model_fit_rec) %>% 
+    summarise(percent_nonconverged = mean(abs(delta) >= .01, na.rm = TRUE)) %>% 
+    mutate(factors = as.factor(factors)) %>% 
+    ggplot(aes(x = loading_numeric, y = percent_nonconverged, color = factors,
+               group = factors, shape = factors)) +
+    geom_point() +
+    geom_line() +
+    scale_color_brewer(palette = "Dark2", type = "qual") +
+    facet_grid(items_per_factor_rec ~ model_fit_rec) +
+    scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+    labs(x = "Loading", y = "Percent Non-Converged", color = "Factors",
+         shape = "Factors") +
+    theme_bw()
+  
+  ggsave(plot = cb_nonconverged,
+         filename = here("img/cb_nonconverged.png"),
+         dpi = 320,
+         height = 4, 
+         width = 6.5)
+}
+
+# knitr::include_graphics(here("img/cb_nonconverged.png"))
+```
+
+
+
+
+
+### Percent of Cases with Qualitative Fit Index Agreement {#fit-index-agreement-table}
+
+(ref:fit-agreement-table-caption) The percent of cases where the observed RMSEA and CFI values led to the same qualitative evaluation of model fit based on the threshold values suggested by Hu and Bentler [-@hu1999].
+
+```{r fit-agreement-table}
+fit_agreement_table <- results_matrix %>%
+  mutate(
+    rmsea_subj_fit = case_when(rmsea <= 0.05 ~ "Good",
+                               rmsea > 0.05 & rmsea <= 0.1 ~ "Acceptable",
+                               rmsea > 0.1 ~ "Unacceptable"),
+    cfi_subj_fit = case_when(cfi >= .95 ~ "Good",
+                             cfi < .95 & cfi >= .9 ~ "Acceptable",
+                             cfi < .9 ~ "Unacceptable")
+  ) %>% mutate(
+    fit_agreement = (rmsea_subj_fit == cfi_subj_fit)
+  ) %>% group_by(factors, loading_numeric, model_fit, error_method) %>%
+  summarize(agreement_rate = mean(fit_agreement, na.rm = TRUE)) %>%
+  pivot_wider(names_from = error_method, 
+              values_from = agreement_rate) %>%
+  ungroup()
+
+fit_agreement_table %>%
+    mutate(across(.cols = c(`TKL (RMSEA)`:WB), ~ . * 100)) %>%
+  apa_table(col.names = c("Factors", "Loading", "Model Fit", 
+                          "$\\textrm{TKL}_{\\textrm{RMSEA}}$", 
+                          "$\\textrm{TKL}_{\\textrm{CFI}}$", 
+                          "$\\textrm{TKL}_{\\textrm{RMSEA/CFI}}$", 
+                          "CB", "WB"),
+            digits = c(0, 1, 0, 1, 1, 1, 1, 1),
+            align = "rrlrrrrr",
+            col_spanners = list("Qualitative Fit Agreement (\\%)" = c(4, 8)),
+            format.args = list("na_string" = "---"),
+            caption = "(ref:fit-agreement-table-caption)",
+            label = "fit-agreement-table",
+            font_size = "small",
+            note = "TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.")
+```

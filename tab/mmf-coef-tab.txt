@@ -1,5 +1,6 @@
 
 \begin{center}
+\begin{small}
 \begin{longtable}{l D{)}{)}{12)3}}
 \hline
  & \multicolumn{1}{c}{ } \\
@@ -12,8 +13,8 @@
 \hline
 \endfoot
 \hline
-\multicolumn{2}{l}{\scriptsize{$^{***}p<0.001$; $^{**}p<0.01$; $^{*}p<0.05$}}\\
-\caption{Coefficient estimates and standard errors for the logistic regression model predicting the probability of producing a solution with violated $W$ constraints (i.e., at least one minor factor with more than two absolute factor loadings greater than 0.3).}
+\multicolumn{2}{l}{\tiny{$^{***}p<0.001$; $^{**}p<0.01$; $^{*}p<0.05$}}\\
+\caption{Coefficient estimates and standard errors for the logistic regression model predicting the probability of producing a solution with violated $\mathbf{W}$ constraints (i.e., at least one minor factor with more than two absolute factor loadings greater than 0.3).}
 \label{tab:mmf-mod-summary}
 \endlastfoot \\
 Constant                                                  & -26.88 \; (353.54)      \\
@@ -58,5 +59,6 @@ Log Likelihood                                            & -17883.30           
 Deviance                                                  & 35766.61                \\
 Num. obs.                                                 & 270000                  \\
 \end{longtable}
+\end{small}
 \end{center}
 

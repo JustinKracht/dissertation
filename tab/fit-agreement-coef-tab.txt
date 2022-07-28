@@ -1,5 +1,6 @@
 
 \begin{center}
+\begin{small}
 \begin{longtable}{l D{)}{)}{11)3}}
 \hline
  & \multicolumn{1}{c}{ } \\
@@ -12,7 +13,7 @@
 \hline
 \endfoot
 \hline
-\multicolumn{2}{l}{\scriptsize{$^{***}p<0.001$; $^{**}p<0.01$; $^{*}p<0.05$}}\\
+\multicolumn{2}{l}{\tiny{$^{***}p<0.001$; $^{**}p<0.01$; $^{*}p<0.05$}}\\
 \caption{Coefficient estimates and standard errors for the logistic regression model predicting the probability of producing a solution with qualitative fit index agreement.}
 \label{tab:qualitative-fit-mod-summary}
 \endlastfoot \\
@@ -72,5 +73,6 @@ Log Likelihood                                            & -90796.13           
 Deviance                                                  & 181592.26               \\
 Num. obs.                                                 & 422205                  \\
 \end{longtable}
+\end{small}
 \end{center}
 

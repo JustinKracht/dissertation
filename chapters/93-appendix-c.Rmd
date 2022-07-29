@@ -1,0 +1,936 @@
+# Supplemental Tables and Figures {#appendix-b}
+
+```{r set-fit-mods}
+fit_mods <- FALSE # Refit models?
+```
+
+## Supplemental Tables
+
+```{r create-scaled-results-matrix-for-modeling}
+results_matrix_scaled <- results_matrix %>% 
+  select(cfi:tli_thetahat,
+         d1:d3,
+         w_has_major_factors,
+         error_method,
+         factors:factor_cor,
+         loading_numeric,
+         model_fit) %>% 
+  mutate(across(all_of(c("factors", "items_per_factor", 
+                         "factor_cor", "loading_numeric")),
+                ~ as.vector(scale(., 
+                                  center = mean(unique(.)), 
+                                  scale = mean(unique(.))))))
+
+fix_coef_names <- function(names) {
+  names <- str_replace_all(names, "\\(Intercept\\)", "Constant")
+  names <- str_replace_all(names, ":", " $\\\\times$ ")
+  names <- str_replace_all(names, "factors", "Factors")
+  names <- str_replace_all(names, "items_per_factor", "Items/Factor")
+  names <- str_replace_all(names, "factor_cor", "Factor Correlation")
+  names <- str_replace_all(names, "loading_numeric", "Loading")
+  names <- str_replace_all(names, "model_fitFair", "Model Fit (Fair)")
+  names <- str_replace_all(names, "model_fitPoor", "Model Fit (Poor)")
+  names <- str_replace_all(names, "error_methodTKL \\(CFI\\)", "Error Method ($\\\\TKLcfi$)")
+  names <- str_replace_all(names, "error_methodTKL \\(RMSEA/CFI\\)", "Error Method ($\\\\TKLrmseacfi$)")
+  names <- str_replace_all(names, "error_methodCB", "Error Method (CB)")
+  names <- str_replace_all(names, "error_methodWB", "Error Method (WB)")
+  names
+}
+
+fix_apa_coef_names <- function(names) {
+  names <- str_replace(names, "Items per factor", "Items/Factor")
+  names <- str_replace(names, "Factor cor", "Factor Correlation")
+  names <- str_replace(names, "Loading numeric", "Loading")
+  names <- str_replace(names, "Model fit", "Model Fit")
+  names <- str_replace(names, "Error method", "Error Method")
+  names
+}
+```
+
+### Logistic Regression on $\mathbf{W}$ Constraint Violations {#w-constraints-regression-table}
+
+\@ref(tab:mmf-mod-summary) gives a summary of the logistic regression of each of the independent simulation study variables and their interactions on a variable indicating whether a solution violated the constraints imposed on $\mathbf{W}$ (i.e., whether the solution had major minor factors). Note that some standard errors were quite large because the data were linearly separable due to there being some combinations of conditions that did not produce solutions with violated $\mathbf{W}$ constraints. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable. The "Model Fit (Very Good)" and "Error Method ($\TKLrmsea$)" terms were used as baseline levels and were subsumed within the "Constant" term.
+
+```{r mmf-coef-tab, results='asis'}
+if (fit_mods) {
+  major_minor_factors_mod <- glm(w_has_major_factors ~ 
+                                   (factors + items_per_factor + factor_cor + 
+                                      loading_numeric + model_fit + error_method)^2,
+                                 data = results_matrix_scaled %>% 
+                                   filter(str_detect(error_method, "TKL")),
+                                 family = binomial())
+  
+  # Fix coefficient names
+  original_coef_names <- names(major_minor_factors_mod$coefficients)
+  coef_name_list <- as.list(original_coef_names)
+  names(coef_name_list) <- original_coef_names
+  coef_names <- map(coef_name_list, fix_coef_names)
+  
+  mmf_coef_tab <- texreg::texreg(
+    l = major_minor_factors_mod,
+    custom.coef.map = coef_names,
+    digits = 2,
+    single.row = TRUE,
+    custom.model.names = " ",
+    dcolumn = TRUE,
+    longtable = TRUE,
+    use.packages = FALSE,
+    caption.above = FALSE,
+    fontsize = "small",
+    caption = 'Coefficient estimates and standard errors for the logistic regression model predicting the probability of producing a solution with violated $\\mathbf{W}$ constraints (i.e., at least one minor factor with more than two absolute factor loadings greater than 0.3).',
+    label = "tab:mmf-mod-summary"
+  )
+  
+  writeLines(mmf_coef_tab, here("tab/mmf-coef-tab.txt"))
+}
+
+cat(readLines(here("tab/mmf-coef-tab.txt")),
+    sep = "\n")
+```
+
+\pagebreak
+
+### $|\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}|$ Analysis of Variance {#rmsea-anova-summary}
+
+\@ref(tab:d1-coef-tab) gives a summary of the analysis of variance for the absolute difference between the observed and target RMSEA values ($|\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}|$). Small values of $|\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}|$ indicated that a model-error method recovered the target RMSEA value well, whereas large values indicated that a model-error method recovered the target RMSEA value poorly. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
+
+```{r d1-coef-tab, results='asis'}
+d1_mod <- aov(abs(d1) ~(factors + items_per_factor + factor_cor + 
+                           loading_numeric + model_fit + error_method)^2,
+               data = results_matrix_scaled)
+
+d1_apa <- apa_print(d1_mod)
+d1_apa$table$Effect <- fix_apa_coef_names(d1_apa$table$Effect)
+apa_table(d1_apa$table,
+          caption = "Analysis of Variance for the absolute difference between the observed and target RMSEA values ($|\\textrm{RMSEA}_{\\textrm{obs}} - \\textrm{RMSEA}_{\\textrm{T}}|$).",
+          note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
+          placement = "hb",
+          font_size = "small",
+          align = "lrrrrrr")
+```
+
+\pagebreak
+
+### $|\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$ Analysis of Variance {#cfi-anova-summary}
+
+\@ref(tab:d2-coef-tab) gives a summary of the analysis of variance for the absolute difference between the observed and target CFI values ($|\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$). Small values of $|\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$ indicated that a model-error method recovered the target CFI value well, whereas large values indicated that a model-error method recovered the target CFI value poorly. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
+
+```{r d2-coef-tab, results='asis'}
+d2_mod <- aov(abs(d2) ~(factors + items_per_factor + factor_cor + 
+                           loading_numeric + model_fit + error_method)^2,
+               data = results_matrix_scaled)
+
+d2_apa <- apa_print(d2_mod)
+d2_apa$table$Effect <- fix_apa_coef_names(d2_apa$table$Effect)
+apa_table(d2_apa$table,
+          caption = "Analysis of Variance for the absolute difference between the observed and target CFI values ($|\\textrm{CFI}_{\\textrm{obs}} - \\textrm{CFI}_{\\textrm{T}}|$).",
+          note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
+          placement = "hb",
+          font_size = "small",
+          align = "lrrrrrr")
+```
+
+\pagebreak
+
+### $D$ Analysis of Variance {#d-anova-summary}
+
+\@ref(tab:d3-coef-tab) gives a summary of the analysis of variance for the sum of the absolute differences between the observed and target CFI values and the observed and target RMSEA values, $D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$. Small $D$ values indicated that a model-error method recovered both the target CFI and target RMSEA values well, whereas large $D$ values indicated that a model-error method recovered one (or both) of the target RMSEA or CFI values poorly. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
+
+```{r d3-coef-tab, results='asis'}
+d3_mod <- aov(abs(d3) ~(factors + items_per_factor + factor_cor + 
+                           loading_numeric + model_fit + error_method)^2,
+               data = results_matrix_scaled)
+
+d3_apa <- apa_print(d3_mod)
+d3_apa$table$Effect <- fix_apa_coef_names(d3_apa$table$Effect)
+apa_table(d3_apa$table,
+          caption = "Analysis of Variance for $D$.",
+          note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
+          placement = "hb",
+          font_size = "small",
+          align = "lrrrrrr")
+```
+
+\pagebreak
+
+### Logistic Regression on Qualitative Model Fit Index Agreement {#qual-fit-regression-summary}
+
+\@ref(tab:mmf-mod-summary) gives a summary of the logistic regression of each of the independent simulation study variables and their interactions on a variable indicating whether a solution produced RMSEA and CFI values that indicated the same qualitative degree of model fit. Note that some standard errors were quite large because the data were linearly separable due to there being some combinations of conditions with either 100% or 0% rates of qualitative fit agreement. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable. The "Model Fit (Very Good)" and "Error Method ($\TKLrmsea$)" terms were used as baseline levels and were subsumed within the "Constant" term.
+
+```{r qualitative-fit-coef-tab, results='asis'}
+if (fit_mods) {
+  
+  results_matrix_scaled <- results_matrix_scaled %>% mutate(
+    rmsea_subj_fit = case_when(rmsea <= 0.05 ~ "Good",
+                               rmsea > 0.05 & rmsea <= 0.1 ~ "Acceptable",
+                               rmsea > 0.1 ~ "Unacceptable"),
+    cfi_subj_fit = case_when(cfi >= .95 ~ "Good",
+                             cfi < .95 & cfi >= .9 ~ "Acceptable",
+                             cfi < .9 ~ "Unacceptable")
+  ) %>% mutate(
+    fit_agreement = (rmsea_subj_fit == cfi_subj_fit)
+  ) %>% mutate(
+    fit_agreement = factor(fit_agreement, 
+                           levels = c(FALSE, TRUE), 
+                           labels = c("No", "Yes"))
+  )
+  
+  fit_agreement_mod <- glm(fit_agreement ~ 
+                                   (factors + items_per_factor + factor_cor + 
+                                      loading_numeric + model_fit + error_method)^2,
+                                 data = results_matrix_scaled,
+                                 family = binomial())
+  
+  # Fix coefficient names
+  original_coef_names <- names(fit_agreement_mod$coefficients)
+  coef_name_list <- as.list(original_coef_names)
+  names(coef_name_list) <- original_coef_names
+  coef_names <- map(coef_name_list, fix_coef_names)
+  
+  fit_agreement_coef_tab <- texreg::texreg(
+    l = fit_agreement_mod,
+    custom.coef.map = coef_names,
+    digits = 2,
+    single.row = TRUE,
+    custom.model.names = " ",
+    dcolumn = TRUE,
+    longtable = TRUE,
+    use.packages = FALSE,
+    caption.above = FALSE,
+    fontsize = "small",
+    caption = 'Coefficient estimates and standard errors for the logistic regression model predicting the probability of producing a solution with qualitative fit index agreement.',
+    label = "tab:qualitative-fit-mod-summary"
+  )
+  
+  writeLines(fit_agreement_coef_tab, here("tab/fit-agreement-coef-tab.txt"))
+}
+
+cat(readLines(here("tab/fit-agreement-coef-tab.txt")),
+    sep = "\n")
+```
+
+\pagebreak
+
+### $\textrm{RMSEA}_{\Delta}$ Analysis of Variance {#rmsea-delta-anova}
+
+\@ref(tab:rmsea-delta-coef-tab) gives a summary of the analysis of variance for the difference between RMSEA and $\textrm{RMSEA}_{\bOmegaHat}$, $\textrm{RMSEA}_{\Delta} = \textrm{RMSEA} - \textrm{RMSEA}_{\bOmegaHat}$. Small values of $\textrm{RMSEA}_{\Delta}$ indicated that a model-error method led to similar values of RMSEA and $\textrm{RMSEA}_{\bOmegaHat}$ whereas large values indicated that the two fit indices were quite different. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
+
+```{r rmsea-delta-coef-tab, results='asis'}
+results_matrix_scaled <- results_matrix_scaled %>% 
+  mutate(rmsea_delta = rmsea - rmsea_thetahat,
+         cfi_delta = cfi - cfi_thetahat)
+
+rmsea_delta_mod <- aov(rmsea_delta ~(factors + items_per_factor + factor_cor + 
+                           loading_numeric + model_fit + error_method)^2,
+               data = results_matrix_scaled)
+
+rmsea_delta_apa <- apa_print(rmsea_delta_mod)
+rmsea_delta_apa$table$Effect <- fix_apa_coef_names(rmsea_delta_apa$table$Effect)
+apa_table(rmsea_delta_apa$table,
+          caption = "Analysis of Variance for $\\textrm{RMSEA}_{\\Delta}$.",
+          note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
+          placement = "hb",
+          font_size = "small",
+          align = "lrrrrrr")
+```
+
+\pagebreak
+
+### $\textrm{CFI}_{\Delta}$ Analysis of Variance {#cfi-delta-anova}
+
+\@ref(tab:cfi-delta-coef-tab) gives a summary of the analysis of variance for the difference between CFI and $\textrm{CFI}_{\bOmegaHat}$, $\textrm{CFI}_{\Delta} = \textrm{CFI} - \textrm{CFI}_{\bOmegaHat}$. Small values of $\textrm{CFI}_{\Delta}$ indicated that a model-error method led to similar values of CFI and $\textrm{CFI}_{\bOmegaHat}$ whereas large values indicated that the two fit indices were quite different. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
+
+```{r cfi-delta-coef-tab, results='asis'}
+cfi_delta_mod <- aov(cfi_delta ~(factors + items_per_factor + factor_cor + 
+                           loading_numeric + model_fit + error_method)^2,
+               data = results_matrix_scaled)
+
+cfi_delta_apa <- apa_print(cfi_delta_mod)
+cfi_delta_apa$table$Effect <- fix_apa_coef_names(cfi_delta_apa$table$Effect)
+apa_table(cfi_delta_apa$table,
+          caption = "Analysis of Variance for $\\textrm{CFI}_{\\Delta}$.",
+          note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
+          placement = "hb",
+          font_size = "small",
+          align = "lrrrrrr")
+```
+
+\pagebreak
+
+## Supplemental Figures
+
+### Percent of CB Solutions that were Indefinite
+
+```{r fig-percent-indefinite-matrices-expanded, fig.cap = "The percent of Cudeck-Browne (CB) method solutions that were indefinite, conditioned on number of factors, factor loading, number of items per factor, factor correlation, and model fit.", out.width='75%'}
+if (make_plots) {
+  cb_percent_indefinite <- results_matrix %>%
+    filter(error_method == "CB") %>%
+    mutate(error= case_when(is.na(error) ~ " ",
+                            TRUE ~ error),
+           items_per_factor = as.factor(items_per_factor),
+           factors = as.factor(factors),
+           model_fit = factor(model_fit,
+                              levels = c("Very Good", "Fair", "Poor"),
+                              labels = c("Fit: Very Good", 
+                                         "Fit: Fair", 
+                                         "Fit: Poor"))) %>%
+    group_by(factors, items_per_factor_rec, 
+             loading_numeric, model_fit, factor_cor_rec) %>%
+    summarise(mean_indefinite = mean(
+      str_detect(error, "indefinite")
+    )) %>%
+    ungroup() %>%
+    ggplot(aes(y = mean_indefinite, x = loading_numeric,
+               color = factors,
+               shape = factors, 
+               linetype = factors,
+               group = factors)) +
+    geom_line() + 
+    geom_point() +
+    scale_color_brewer(palette = "Dark2", type = "qual") +
+    scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
+    scale_x_continuous(breaks = c(.4, .6, .8)) +
+    facet_grid(items_per_factor_rec * factor_cor_rec ~ model_fit) +
+    theme_bw() +
+    labs(color = "Factors",
+         fill = "Factors",
+         linetype = "Factors",
+         shape = "Factors",
+         y = "Indefinite Solutions",
+         x = "Factor Loading") +
+    theme(legend.position = "bottom")
+  
+  ggsave(filename = here("img/cb_percent_indefinite_full.png"),
+         plot = cb_percent_indefinite,
+         dpi = "retina",
+         width = 6,
+         height = 8)
+}
+
+knitr::include_graphics(here("img/cb_percent_indefinite_full.png"))
+```
+
+### Percent of TKL Solutions Where the Constraints on $\mathbf{W}$ were Violated
+
+```{r w-major-factors-plot-expanded, fig.cap = "The percent of cases where the constraints on $\\mathbf{W}$ were violated when the $\\textrm{TKL}_{\\textrm{RMSEA}}$ model-error method was used, conditioned on number of factors, number of items per factor, factor loading, factor correlation, and model fit.", out.width='75%'}
+if (make_plots) {
+  percent_w_major_factors_table <- results_matrix %>%
+    filter(!(error_method %in% c("CB", "WB"))) %>%
+    group_by(factors, items_per_factor_rec, loading_numeric, 
+             model_fit_rec, error_method_rec, factor_cor_rec, error_method) %>%
+    mutate(w_has_major_factors = fn_value >= 1e06) %>%
+    summarise(mean_w_major_factors =
+                mean(w_has_major_factors, na.rm = TRUE))
+  
+  w_major_factors_plot <- percent_w_major_factors_table %>%
+    filter(error_method == "TKL (RMSEA)") %>%
+    mutate(factors = as.factor(factors)) %>%
+    ggplot(aes(y = mean_w_major_factors, 
+               x = loading_numeric, 
+               color = factors, 
+               linetype = factors, 
+               shape = factors, 
+               group = factors)) +
+    geom_line() +
+    geom_point() +
+    scale_color_brewer(palette = "Dark2", type = "qual") +
+    scale_y_continuous(label = scales::percent_format(accuracy = 1)) +
+    scale_x_continuous(breaks = c(.4, .6, .8)) +
+    facet_grid(items_per_factor_rec * factor_cor_rec ~ model_fit_rec) +
+    theme_bw() +
+    labs(x = "Loadings", y = TeX("Cases with Violtated $W$ Constraints"), 
+         color = "Factors", linetype = "Factors", shape = "Factors") +
+    theme(legend.position = "bottom")
+  
+  ggsave(filename = here("img/major_minor_factors_full.png"),
+         w_major_factors_plot,
+         dpi = 320,
+         width = 6, 
+         height = 8)
+}
+
+knitr::include_graphics(here("img/major_minor_factors_full.png"))
+```
+
+### Values of $\epsilon$ and $\nu_{\textrm{e}}$ {#eps-and-nu-full}
+
+```{r eps-and-v-values-by-W-violations-full}
+#| fig.cap = "Values of the TKL parameters ($\\epsilon$ and $\\nu_{\\textrm{e}}$) by model-error method, number of factors, number of items per factor, and factor loading strength when model fit was Poor. TKL = Tucker, Koopman, and Linn."
+
+if (make_plots) {
+  eps_and_nu_plot_full <- results_matrix %>%
+    mutate(w_has_major_factors = factor(w_has_major_factors, 
+                                        levels = c(FALSE, TRUE),
+                                        labels = c("No", "Yes"))) %>%
+    filter(!(error_method %in% c("CB", "WB")),
+           model_fit == "Poor") %>%
+    ggplot(aes(y = v, x = eps, color = error_method)) +
+    geom_point(alpha = .1, size = .75) +
+    scale_color_brewer(
+      palette = "Dark2", type = "qual",
+      labels = list("TKL (RMSEA)" = TeX("$TKL_{RMSEA}$"),
+                    "TKL (RMSEA/CFI)" = TeX("$TKL_{RMSEA/CFI}$"),
+                    "TKL (CFI)" = TeX("$TKL_{CFI}"))) +
+    scale_x_continuous(breaks = c(0.0, 0.2, 0.4, 0.6, 0.8, 1.0)) +
+    facet_grid(factors_rec * items_per_factor_rec ~ loading_rec) +
+    labs(y = TeX("$\\nu_e$"), x = TeX("$\\epsilon$"), color = "Error Method") +
+    guides(color = guide_legend(override.aes = list(alpha = 1, size = 1.5))) +
+    theme_bw() +
+    theme(legend.position = "bottom")
+
+  ggsave(filename = here("img/eps_and_nu_w_violations_full.png"),
+         eps_and_nu_plot_full,
+         dpi = 320,
+         height = 10, width = 7)
+}
+
+knitr::include_graphics(here("img/eps_and_nu_w_violations_full.png"))
+```
+
+### Observed RMSEA Values
+
+```{r rmsea-distributions-full, fig.cap = "Distributions of the RMSEA values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target RMSEA value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width='70%'}
+if (make_plots) {
+  rmsea_distributions <- 
+    results_matrix %>%
+    filter(rmsea < 3) %>%
+    ggplot(aes(x = fct_rev(error_method_rec), y = rmsea)) +
+    geom_hline(aes(yintercept = target_rmsea), 
+               color = "black", linetype = "dashed", size = .25) +
+    geom_boxplot(outlier.size = .5, outlier.stroke = .25, lwd = .5,
+                 fatten = 1.5) +
+    coord_flip() +
+    scale_x_discrete(labels = parse(text=levels(results_matrix$error_method_rec)[5:1])) +
+    facet_grid(model_fit_rec * loading_rec ~ 
+                 factors_rec) +
+    labs(x = "",
+         y = "RMSEA") +
+    theme_bw() +
+    theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
+  
+  ggsave(
+    filename = here("img/rmsea_distributions_full.png"), 
+    plot = rmsea_distributions,
+    dpi = 320,
+    height = 8, width = 5.25,
+    scale = 1.4
+  )
+}
+
+knitr::include_graphics(here("img/rmsea_distributions_full.png"))
+```
+
+### Observed CFI Values
+
+```{r cfi-distributions-full, fig.cap = "Distributions of the CFI values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target CFI value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width='70%'}
+if (make_plots) {
+  cfi_distributions <- 
+    results_matrix %>%
+    filter(rmsea < 3) %>%
+    ggplot(aes(x = fct_rev(error_method_rec), y = cfi)) +
+    geom_hline(aes(yintercept = target_cfi), 
+               color = "black", linetype = "dashed", size = .25) +
+    geom_boxplot(outlier.size = .5, outlier.stroke = .25, lwd = .5,
+                 fatten = 1.5) +
+    coord_flip() +
+    scale_x_discrete(labels = parse(text=levels(results_matrix$error_method_rec)[5:1])) +
+    facet_grid(model_fit_rec * loading_rec ~ 
+                 factors_rec) +
+    labs(x = "",
+         y = "CFI") +
+    theme_bw() +
+    theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
+  
+  ggsave(
+    filename = here("img/cfi_distributions_full.png"), 
+    plot = cfi_distributions,
+    dpi = 320,
+    height = 8, width = 5.25,
+    scale = 1.4
+  )
+}
+
+knitr::include_graphics(here("img/cfi_distributions_full.png"))
+```
+### Observed TLI Values
+
+```{r tli-distributions-full, out.width="70%"}
+#| fig.cap="Distributions of the TLI values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the threshold values of TLI that correspond to the targeted levels of model fit, according to Hu and Bentler (1999). TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+
+if (make_plots) {
+  tli_distributions <- 
+    results_matrix %>%
+    mutate(tli = case_when(tli < 0 ~ 0, TRUE ~ tli)) %>%
+    filter(rmsea < 3) %>%
+    ggplot(aes(x = fct_rev(error_method_rec), y = tli)) +
+    geom_hline(aes(yintercept = target_cfi), 
+               color = "black", linetype = "dashed", size = .25) +
+    geom_boxplot(outlier.size = .5, outlier.stroke = .25, lwd = .5,
+                 fatten = 1.5) +
+    coord_flip() +
+    scale_x_discrete(labels = parse(text=levels(results_matrix$error_method_rec)[5:1])) +
+    facet_grid(model_fit_rec * loading_rec ~ 
+                 factors_rec) +
+    labs(x = "",
+         y = "TLI") +
+    theme_bw() +
+    theme(panel.spacing.x = unit(10, units = "pt"),
+          plot.margin = margin(0, 0, 0, -14, unit = "pt"))
+  
+  ggsave(
+    filename = here("img/tli_distributions_full.png"), 
+    plot = tli_distributions,
+    dpi = 320,
+    height = 8, width = 5.25,
+    scale = 1.4
+  )
+}
+
+knitr::include_graphics(here("img/tli_distributions_full.png"))
+```
+
+### Observed CRMR Values
+
+```{r crmr-distributions-full, fig.cap="Distributions of the CRMR values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values; the dashed lines indicate these two threshold values. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width="65%"}
+if (make_plots) {
+  crmr_distributions <- 
+    results_matrix %>%
+    filter(rmsea < 3) %>%
+    ggplot(aes(x = fct_rev(error_method_rec), y = crmr)) +
+    geom_boxplot(outlier.size = .5, outlier.stroke = .25, lwd = .5,
+                 fatten = 1.5) +
+    geom_hline(yintercept = 0.05, 
+               color = "black", linetype = "dashed", size = .25) +
+    geom_hline(yintercept = 0.08, 
+               color = "black", linetype = "dashed", size = .25) +
+    coord_flip() +
+    scale_x_discrete(labels = parse(text=levels(results_matrix$error_method_rec)[5:1])) +
+    facet_grid(model_fit_rec * loading_rec ~ 
+                 factors_rec) +
+    labs(x = "",
+         y = "CRMR") +
+    theme_bw() +
+    theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
+  
+  ggsave(
+    filename = here("img/crmr_distributions_full.png"), 
+    plot = crmr_distributions,
+    dpi = 320,
+    height = 8, width = 5.25,
+    scale = 1.4
+  )
+}
+
+knitr::include_graphics(here("img/crmr_distributions_full.png"))
+```
+
+### Fit Indices Based on $\hat{\Omega}$ {#sigma-hat-fit-indices}
+
+#### $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$
+
+```{r rmsea-thetahat-distributions, out.width="85%"}
+#| fig.cap = "Distributions of the $\\textrm{RMSEA}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target RMSEA value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+if (make_plots) {
+  rmsea_thetahat_distributions <- 
+    results_matrix %>%
+    filter(rmsea < 3) %>%
+    ggplot(aes(x = fct_rev(error_method_rec), y = rmsea_thetahat)) +
+    geom_hline(aes(yintercept = target_rmsea), 
+               color = "black", linetype = "dashed", size = .25) +
+    geom_boxplot(outlier.size = .5, outlier.stroke = .25, lwd = .5,
+                 fatten = 1.5) +
+    coord_flip() +
+    scale_x_discrete(labels = parse(text=levels(results_matrix$error_method_rec)[5:1])) +
+    facet_grid(model_fit_rec * loading_rec ~ 
+                 factors_rec) +
+    labs(x = "",
+         y = latex2exp::TeX("$RMSEA_{\\hat{\\Omega}}}$")) +
+    theme_bw() +
+    theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
+  
+  ggsave(
+    filename = here("img/rmsea_thetahat_distributions.png"), 
+    plot = rmsea_thetahat_distributions,
+    dpi = 320,
+    height = 7.5, width = 6.5,
+    scale = 1.4
+  )
+}
+
+knitr::include_graphics(here("img/rmsea_thetahat_distributions.png"))
+```
+
+#### $\textrm{CFI}_{\hat{\bm{\Omega}}}$
+
+```{r cfi-thetahat-distributions, out.width="90%"}
+#| fig.cap = "Distributions of the $\\textrm{CFI}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target CFI value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+if (make_plots) {
+  cfi_thetahat_distributions <- 
+    results_matrix %>%
+    filter(rmsea < 3) %>%
+    ggplot(aes(x = fct_rev(error_method_rec), y = cfi_thetahat)) +
+    geom_hline(aes(yintercept = target_cfi), 
+               color = "black", linetype = "dashed", size = .25) +
+    geom_boxplot(outlier.size = .5, outlier.stroke = .25, lwd = .5,
+                 fatten = 1.5) +
+    coord_flip() +
+    scale_x_discrete(labels = parse(text=levels(results_matrix$error_method_rec)[5:1])) +
+    facet_grid(model_fit_rec * loading_rec ~ 
+                 factors_rec) +
+    labs(x = "",
+         y = latex2exp::TeX("$CFI_{\\hat{\\Omega}}$")) +
+    theme_bw() +
+    theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
+  
+  ggsave(
+    filename = here("img/cfi_thetahat_distributions.png"), 
+    plot = cfi_thetahat_distributions,
+    dpi = 320,
+    height = 7.5, width = 6.5,
+    scale = 1.4
+  )
+}
+
+knitr::include_graphics(here("img/cfi_thetahat_distributions.png"))
+```
+
+#### $\textrm{TLI}_{\hat{\bm{\Omega}}}$
+
+```{r tli-thetahat-distributions, out.width="90%"}
+#| fig.cap = "Distributions of the $\\textrm{TLI}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the threshold values of TLI that correspond to the targeted levels of model fit, according to Hu and Bentler (1999). TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+if (make_plots) {
+  tli_thetahat_distributions <- 
+    results_matrix %>%
+    filter(rmsea < 3) %>%
+    ggplot(aes(x = fct_rev(error_method_rec), y = tli_thetahat)) +
+    geom_hline(aes(yintercept = target_cfi), 
+               color = "black", linetype = "dashed", size = .25) +
+    geom_boxplot(outlier.size = .5, outlier.stroke = .25, lwd = .5,
+                 fatten = 1.5) +
+    coord_flip() +
+    scale_x_discrete(labels = parse(text=levels(results_matrix$error_method_rec)[5:1])) +
+    facet_grid(model_fit_rec * loading_rec ~ 
+                 factors_rec) +
+    labs(x = "",
+         y = latex2exp::TeX("$TLI_{\\hat{\\Omega}}$")) +
+    theme_bw() +
+    theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
+  
+  ggsave(
+    filename = here("img/tli_thetahat_distributions.png"), 
+    plot = tli_thetahat_distributions,
+    dpi = 320,
+    height = 7.5, width = 6.5,
+    scale = 1.4
+  )
+}
+
+knitr::include_graphics(here("img/tli_thetahat_distributions.png"))
+```
+
+#### $\textrm{CRMR}_{\hat{\bm{\Omega}}}$
+
+```{r crmr-thetahat-distributions, out.width="90%"}
+#| fig.cap = "Distributions of the $\\textrm{TLI}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values; the dashed lines indicate these two threshold values. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+if (make_plots) {
+  crmr_thetahat_distributions <- 
+    results_matrix %>%
+    filter(rmsea < 3) %>%
+    ggplot(aes(x = fct_rev(error_method_rec), y = crmr_thetahat)) +
+    geom_hline(yintercept = 0.05, 
+               color = "black", linetype = "dashed", size = .25) +
+    geom_hline(yintercept = 0.08, 
+               color = "black", linetype = "dashed", size = .25) +
+    geom_boxplot(outlier.size = .5, outlier.stroke = .25, lwd = .5,
+                 fatten = 1.5) +
+    coord_flip() +
+    scale_x_discrete(labels = parse(text=levels(results_matrix$error_method_rec)[5:1])) +
+    facet_grid(model_fit_rec * loading_rec ~ 
+                 factors_rec) +
+    labs(x = "",
+         y = latex2exp::TeX("$CRMR_{\\hat{\\Omega}}$")) +
+    theme_bw() +
+    theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
+  
+  ggsave(
+    filename = here("img/crmr_thetahat_distributions.png"), 
+    plot = crmr_thetahat_distributions,
+    dpi = 320,
+    height = 7.5, width = 6.5,
+    scale = 1.4
+  )
+}
+
+knitr::include_graphics(here("img/crmr_thetahat_distributions.png"))
+```
+
+### Fit Index Agreement ($D$) {#full-d3-plot}
+
+```{r full-d3-plot, out.width="90%"}
+#| fig.cap = "The sum of the absolute differences between the observed and target RMSEA and CFI values ($D$), conditioned on number of factors, model fit, and factor loading strength. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+if (make_plots) {
+  d_plot <- 
+    results_matrix %>%
+    filter(rmsea < 3) %>%
+    ggplot(aes(x = fct_rev(error_method_rec), y = d3)) +
+    geom_boxplot(outlier.size = .5, outlier.stroke = .25, lwd = .5,
+                 fatten = 1.5) +
+    coord_flip() +
+    scale_x_discrete(labels = parse(text=levels(results_matrix$error_method_rec)[5:1])) +
+    facet_grid(model_fit_rec * loading_rec ~ 
+                 factors_rec) +
+    labs(x = "",
+         y = latex2exp::TeX("\\textit{D}")) +
+    theme_bw() +
+    theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
+  
+  ggsave(
+    filename = here("img/d_plot_full.png"), 
+    plot = d_plot,
+    dpi = 320,
+    height = 6.5, width = 5.25,
+    scale = 1.4
+  )
+}
+
+knitr::include_graphics(here("img/d_plot_full.png"))
+```
+
+### Conditional Distributions of CFI at Fixed RMSEA Values {#conditional-cfi-with-factor-cor}
+
+```{r conditional-cfi-with-factor-cor-plot, out.width='90%'}
+#| fig.cap = "Observed CFI and RMSEA values for solutions generated using the $\\textrm{TKL}_{\\textrm{RMSEA}}$ method. For each combination of number of factors, number of items per factor, factor loading strength, and factor correlation, 50 solutions were generated for each of 16 target RMSEA values equally-spaced between 0.025 and 0.100. The solid black line indicates where RMSEA and $1 - \\textrm{CFI}$ were equal."
+
+if (make_plots) {
+  reps <- 50
+  
+  factors <- unique(results_matrix$factors)
+  items_per_factor <- unique(results_matrix$items_per_factor)
+  loading <- unique(results_matrix$loading_numeric)
+  factor_cor <- c(0, 0.6)
+  target_rmsea <- seq(0.025, 0.1, by = 0.005)
+  
+  conditions_matrix <- expand.grid(
+    factors = factors,
+    items_per_factor = items_per_factor,
+    loading = loading,
+    factor_cor = factor_cor,
+    target_rmsea = target_rmsea
+  )
+  
+  set.seed(666)
+  rmsea_cfi_vals <- pro_map_dfr(
+    .x = 1:nrow(conditions_matrix), 
+    .f = function(condition) {
+      mod <- simFA(
+        Model = list(NFac = conditions_matrix$factors[condition],
+                     NItemPerFac = conditions_matrix$items_per_factor[condition],
+                     Model = "oblique"),
+        Phi = list(MaxAbsPhi = conditions_matrix$factor_cor[condition],
+                   PhiType = "fixed"),
+        Loadings = list(FacLoadDist = "fixed",
+                        FacLoadRange = conditions_matrix$loading[condition])
+      )
+      
+      map_dfr(.x = 1:reps,
+              .f = function(x, target_rmsea) {
+                sol <- noisemaker(mod = mod, 
+                                  method = "TKL", 
+                                  target_rmsea = target_rmsea,
+                                  target_cfi = NULL,
+                                  tkl_ctrl = list(penalty = 1e6,
+                                                  NWmaxLoading = 2,
+                                                  WmaxLoading = .3))
+                w_constraints_violated <- sum(sol$W[,1] >= .3) > 2
+                c(rmsea = sol$rmsea, cfi = sol$cfi, 
+                  w_constraints_violated = w_constraints_violated)
+              }, target_rmsea = conditions_matrix$target_rmsea[condition])
+    }
+  )
+  
+  rmsea_cfi_vals <- bind_cols(
+    rmsea_cfi_vals,
+    conditions_matrix[rep(1:nrow(conditions_matrix), each = reps),]
+  )
+  
+  rmsea_cfi_vals <- rmsea_cfi_vals %>%
+    mutate(
+      factors_rec = factor(factors, 
+                           labels = levels(results_matrix$factors_rec)),
+      loading_rec = factor(loading, 
+                           labels = levels(results_matrix$loading_rec)),
+      items_per_factor_rec = factor(items_per_factor, 
+                                    labels = levels(results_matrix$items_per_factor_rec)),
+      factor_cor_rec = factor(factor_cor,
+                              labels = levels(results_matrix$factor_cor_rec)[c(1,3)])
+    )
+  
+  saveRDS(rmsea_cfi_vals, file = here("data/rmsea_cfi_vals_with_factor_cor.RDS"))
+  
+  rmsea_cfi_vals %>%
+    ggplot(aes(x = rmsea, y = cfi)) +
+    geom_point(size = 1, alpha = .1) +
+    geom_abline(aes(slope = -1, intercept = 1), size = .5, alpha = .5) +
+    facet_grid(factors_rec * items_per_factor_rec ~ loading_rec * factor_cor_rec) +
+    guides(color = guide_legend(override.aes = list(alpha = 1, size = 1.5))) +
+    labs(x = "RMSEA", y = "CFI") +
+    theme_bw() +
+    theme(legend.position = "bottom",
+          panel.spacing.x = unit(14, units = "points"))
+  
+  ggsave(here("img/rmsea_conditional_cfi_with_factor_cor.png"),
+         height = 10,
+         width = 8,
+         dpi = 320)
+}
+
+knitr::include_graphics(here("img/rmsea_conditional_cfi_with_factor_cor.png"))
+```
+
+### Conditional Distributions of RMSEA at Fixed CFI Values {#conditional-rmsea-with-factor-cor}
+
+```{r conditional-rmsea-with-factor-cor-plot, out.width='90%'}
+#| fig.cap = "Observed RMSEA and CFI values for solutions generated using the $\\textrm{TKL}_{\\textrm{CFI}}$ method. For each combination of number of factors, number of items per factor, factor loading strength, and factor correlation, 50 solutions were generated for each of 19 target CFI values equally-spaced between 0.90 and 0.99. The solid black line indicates where RMSEA and $1 - \\textrm{CFI}$ were equal."
+
+if (make_plots) {
+  reps <- 50
+  
+  factors <- unique(results_matrix$factors)
+  items_per_factor <- unique(results_matrix$items_per_factor)
+  loading <- unique(results_matrix$loading_numeric)
+  factor_cor <- c(0, 0.6)
+  target_cfi <- seq(0.90, 0.99, by = 0.005)
+  
+  conditions_matrix <- expand.grid(
+    factors = factors,
+    items_per_factor = items_per_factor,
+    loading = loading,
+    factor_cor = factor_cor,
+    target_cfi = target_cfi
+  )
+  
+  set.seed(666)
+  cfi_rmsea_vals <- pblapply(
+    X = 1:nrow(conditions_matrix), 
+    FUN = function(condition) {
+      mod <- simFA(
+        Model = list(NFac = conditions_matrix$factors[condition],
+                     NItemPerFac = conditions_matrix$items_per_factor[condition],
+                     Model = "oblique"),
+        Phi = list(MaxAbsPhi = conditions_matrix$factor_cor[condition],
+                   PhiType = "fixed"),
+        Loadings = list(FacLoadDist = "fixed",
+                        FacLoadRange = conditions_matrix$loading[condition])
+      )
+      
+      map_dfr(.x = 1:reps,
+              .f = function(x, target_cfi) {
+                sol <- noisemaker(mod = mod, 
+                                  method = "TKL", 
+                                  target_rmsea = NULL,
+                                  target_cfi = target_cfi,
+                                  tkl_ctrl = list(penalty = 1e6,
+                                                  NWmaxLoading = 2,
+                                                  WmaxLoading = .3))
+                w_constraints_violated <- sum(sol$W[,1] >= .3) > 2
+                c(rmsea = sol$rmsea, cfi = sol$cfi, 
+                  w_constraints_violated = w_constraints_violated)
+              }, target_cfi = conditions_matrix$target_cfi[condition])
+    }
+  )
+  
+  cfi_rmsea_vals <- bind_rows(cfi_rmsea_vals)
+  cfi_rmsea_vals <- bind_cols(
+    cfi_rmsea_vals,
+    conditions_matrix[rep(1:nrow(conditions_matrix), each = reps),]
+  )
+  
+  cfi_rmsea_vals <- cfi_rmsea_vals %>%
+    mutate(
+      factors_rec = factor(factors, 
+                           labels = levels(results_matrix$factors_rec)),
+      loading_rec = factor(loading, 
+                           labels = levels(results_matrix$loading_rec)),
+      factor_cor_rec = factor(factor_cor,
+                              labels = levels(results_matrix$factor_cor_rec)[c(1,3)]),
+      items_per_factor_rec = factor(items_per_factor, 
+                                    labels = levels(results_matrix$items_per_factor_rec))
+    )
+  
+  saveRDS(cfi_rmsea_vals, file = here("data/cfi_conditional_rmsea_with_factor_cor.RDS"))
+  
+  cfi_rmsea_vals %>%
+    filter(rmsea < 1) %>% 
+    ggplot(aes(y = rmsea, x = cfi)) +
+    geom_point(size = 1, alpha = .1) +
+    geom_abline(aes(slope = -1, intercept = 1), size = .5, alpha = .5) +
+    facet_grid(factors_rec * items_per_factor_rec ~ loading_rec * factor_cor_rec) +
+    guides(color = guide_legend(override.aes = list(alpha = 1, size = 1.5))) +
+    scale_x_continuous(breaks = c(0.90, 0.94, 0.98, 1.00)) +
+    labs(y = "RMSEA", x = "CFI") +
+    theme_bw() +
+    theme(legend.position = "bottom",
+          panel.spacing.x = unit(14, units = "points"))
+  
+  ggsave(filename = here("img/cfi_conditional_rmsea_with_factor_cor.png"),
+         height = 10,
+         width = 8,
+         scale = 1.15,
+         dpi = 320)
+}
+
+knitr::include_graphics(here("img/cfi_conditional_rmsea_with_factor_cor.png"))
+```
+
+### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$ {#sigma-heat-maps}
+
+#### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$ for the Condition with Ten Orthogonal Factors, Five Items per Factor, Weak Factor Loadings, and Poor Model Fit
+
+```{r c129-with-annotation, out.width = '55%'}
+#| fig.cap = "Correlation matrices with model error ($\\mathbf{\\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\\mathbf{\\Sigma}$ ($\\hat{\\mathbf{\\Omega}}$) for each model-error method. Results are shown for the condition with ten orthogonal factors, five items per factor, weak factor loadings of 0.3, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+
+knitr::include_graphics(here("img/c129_R_plots_with_annotation.png"))
+```
+
+#### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$ for the Condition with Ten Orthogonal Factors, Ten Items per Factor, Weak Factor Loadings, and Poor Model Fit
+
+```{r c156-with-annotation, out.width='67%'}
+#| fig.cap = "Correlation matrices with model error ($\\mathbf{\\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\\mathbf{\\Sigma}$ ($\\hat{\\mathbf{\\Omega}}$) for each model-error method. Results are shown for the condition with ten orthogonal factors, ten items per factor, weak factor loadings of 0.4, and Poor model fit. Note that the Cudeck and Browne method is omitted because it was not used for conditions with ten factors and 15 items per factor. TKL = Tucker, Koopman, and Linn; WB = Wu and Browne."
+
+knitr::include_graphics(here("img/c156_R_plots_with_annotation.png"))
+```
+
+### Model Fit Index Recovery for the TKL-based Methods {#fit-index-recovery-full}
+
+```{r fit-index-recovery-full, out.width='95%'}
+#| fig.cap = "Observed RMSEA and CFI values for the $\\textrm{TKL}_{\\textrm{RMSEA/CFI}}$ model-error method and the corresponding known-to-be-possible target RMSEA and CFI values (indicated by the black lines), conditioned on number of factors, number of items per factor, factor loading strength, and factor correlation."
+if (make_plots) {
+  noisy_data <- readRDS(here("data/noisy_data.RDS"))
+  
+  target_values <- noisy_data %>%
+    select(factors, items_per_factor, factor_corr, factor_loading,
+           target_rmsea, target_cfi) %>%
+    distinct()
+  
+  noisy_data %>%
+    ggplot(aes(x = rmsea, y = cfi)) +
+    geom_point(size = 1) +
+    geom_hline(aes(yintercept = target_cfi), data = target_values,
+               size = .25) +
+    geom_vline(aes(xintercept = target_rmsea), data = target_values,
+               size = .25) +
+    facet_grid(factors * factor_loading ~ items_per_factor * factor_corr) +
+    labs(x = "RMSEA", y = "CFI") +
+    theme_bw()
+  
+  ggsave(filename = "rmsea_cfi_recovery_full.png",
+         path = here("img"),
+         plot = last_plot(),
+         dpi = 320,
+         height = 9.5,
+         width = 7.5,
+         scale = 1.25)
+}
+
+knitr::include_graphics(here("img/rmsea_cfi_recovery_full.png"))
+```

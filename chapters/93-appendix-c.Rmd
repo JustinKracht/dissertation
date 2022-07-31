@@ -100,7 +100,7 @@ d1_mod <- aov(abs(d1) ~(factors + items_per_factor + factor_cor +
                data = results_matrix_scaled)
 
 d1_apa <- apa_print(d1_mod)
-d1_apa$table$Effect <- fix_apa_coef_names(d1_apa$table$Effect)
+d1_apa$table$term <- fix_apa_coef_names(d1_apa$table$term)
 apa_table(d1_apa$table,
           caption = "Analysis of Variance for the absolute difference between the observed and target RMSEA values ($|\\textrm{RMSEA}_{\\textrm{obs}} - \\textrm{RMSEA}_{\\textrm{T}}|$).",
           note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
@@ -121,7 +121,7 @@ d2_mod <- aov(abs(d2) ~(factors + items_per_factor + factor_cor +
                data = results_matrix_scaled)
 
 d2_apa <- apa_print(d2_mod)
-d2_apa$table$Effect <- fix_apa_coef_names(d2_apa$table$Effect)
+d2_apa$table$term <- fix_apa_coef_names(d2_apa$table$term)
 apa_table(d2_apa$table,
           caption = "Analysis of Variance for the absolute difference between the observed and target CFI values ($|\\textrm{CFI}_{\\textrm{obs}} - \\textrm{CFI}_{\\textrm{T}}|$).",
           note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
@@ -142,7 +142,7 @@ d3_mod <- aov(abs(d3) ~(factors + items_per_factor + factor_cor +
                data = results_matrix_scaled)
 
 d3_apa <- apa_print(d3_mod)
-d3_apa$table$Effect <- fix_apa_coef_names(d3_apa$table$Effect)
+d3_apa$table$term <- fix_apa_coef_names(d3_apa$table$term)
 apa_table(d3_apa$table,
           caption = "Analysis of Variance for $D$.",
           note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
@@ -225,7 +225,7 @@ rmsea_delta_mod <- aov(rmsea_delta ~(factors + items_per_factor + factor_cor +
                data = results_matrix_scaled)
 
 rmsea_delta_apa <- apa_print(rmsea_delta_mod)
-rmsea_delta_apa$table$Effect <- fix_apa_coef_names(rmsea_delta_apa$table$Effect)
+rmsea_delta_apa$table$term <- fix_apa_coef_names(rmsea_delta_apa$table$term)
 apa_table(rmsea_delta_apa$table,
           caption = "Analysis of Variance for $\\textrm{RMSEA}_{\\Delta}$.",
           note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
@@ -246,7 +246,7 @@ cfi_delta_mod <- aov(cfi_delta ~(factors + items_per_factor + factor_cor +
                data = results_matrix_scaled)
 
 cfi_delta_apa <- apa_print(cfi_delta_mod)
-cfi_delta_apa$table$Effect <- fix_apa_coef_names(cfi_delta_apa$table$Effect)
+cfi_delta_apa$table$term <- fix_apa_coef_names(cfi_delta_apa$table$term)
 apa_table(cfi_delta_apa$table,
           caption = "Analysis of Variance for $\\textrm{CFI}_{\\Delta}$.",
           note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",

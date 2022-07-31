@@ -1,9 +1,4 @@
-# (APPENDIX) Appendix {-}
-
 # R Code {#appendix-a}
-
-\setstretch{1}
-    <!-- Set Appendices to single spacing -->
 
 ## Implementations of Model Error Methods {#noisemaker-code}
 

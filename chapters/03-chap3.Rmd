@@ -36,7 +36,7 @@ To resolve this issue, I developed a method to find a value of $v$ such that the
 <!-- [***COME BACK TO THIS; Wu and Browne p. 580***] -->
 
 ```{r make-wb-mod-plot, fig.align = "center", warning = FALSE, message = FALSE, out.width='70%'}
-#| fig.cap = "The relationship between $\\sqrt{\\tilde{v}}$ and $\\epsilon$. Each point indicates the observed median $\\varepsilon$ value for 50 simulated $\\bSigma$ matrices corresponding to an orthogonal, five-factor model with salient factor loadings sampled uniformly from 0.3 and 0.7. The solid gray line indicates where the target RMSEA and median RMSEA values (from 50 samples) would be equal. The dashed orange line indicates the predicted value of $\\sqrt{v}$ that will produce a given RMSEA value."
+#| fig.cap = "The relationship between $\\sqrt{v}$ and $\\varepsilon$. Each point indicates the observed median $\\varepsilon$ value for 50 simulated $\\bSigma$ matrices corresponding to an orthogonal, five-factor model with salient factor loadings sampled uniformly from 0.3 and 0.7. The solid gray line indicates where the target RMSEA and median RMSEA values (from 50 samples) would be equal. The dashed orange line indicates the predicted value of $\\sqrt{v}$ that will produce a given RMSEA value."
 
 if (make_plots) {
   set.seed(123)

@@ -11,7 +11,8 @@ rmd_files: [
 
   "chapters/90-references.Rmd",
   "chapters/91-appendix-a.Rmd",
-  "chapters/92-appendix-b.Rmd"
+  "chapters/92-appendix-b.Rmd",
+  "chapters/93-appendix-c.Rmd"
   ]
 download: [
   ["thesis.pdf", "PDF"]

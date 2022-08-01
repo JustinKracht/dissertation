@@ -185,14 +185,14 @@ Thus far, this section has focused on Wu and Browne's [-@wu2015] method for esti
 
 ## Population Model Fit Indices {#population-model-fit}
 
-In addition to being able to generate error-perturbed covariance matrices, it is important to be able to quantify the lack-of-fit between an error-perturbed population covariance matrix and a model-implied covariance matrix. Before describing the various model-fit indices that have been used to quantify model error, it will be helpful to first describe two different perspectives of model fit as it relates to model error. In the first, model error is quantified as the lack-of-fit between $\bm{\Sigma}$ and $\bm{\Omega}$. In the second, model error is quantified as the lack-of-fit between $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$, the implied covariance matrix from fitting a particular model to $\bm{\Sigma}$. These two perspectives are equivalent in the special case when $\hat{\bm{\Omega}} = \bm{\Omega}$, which occurs when the CB method is used (because $\bm{\gamma}_0$ is required to be a minimizer of the chosen discrepancy function). For the purposes of this dissertation, I will focus primarily on the first model fit perspective. Unless specified, all model fit indices reflect the first perspective, indicating the lack-of-fit between between $\bm{\Sigma}$ and $\bm{\Omega}$. Where I discuss a model fit index indicating the lack-of-fit between $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$, a "$\hat{\bm{\Omega}}$" subscript is used to make it clear that model fit is being considered from the second perspective. I.e., I use "RMSEA" to indicate the root mean square error of approximation between $\bm{\Sigma}$ and $\bm{\Omega}$, and "$\textrm{RMSEA}_{\hat{\bm{\Omega}}}$" to indicate the root mean square error of approximation between $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$.
+In addition to being able to generate error-perturbed covariance matrices, it is important to be able to quantify the lack-of-fit between an error-perturbed population covariance matrix and a model-implied covariance matrix. Before describing the various model-fit indices that have been used to quantify model error, it will be helpful to first describe two different perspectives of model fit as it relates to model error. In the first, model error is quantified as the lack-of-fit between $\bm{\Sigma}$ and $\bm{\Omega}$. In the second, model error is quantified as the lack-of-fit between $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$, the implied covariance matrix from fitting a particular model to $\bm{\Sigma}$. These two perspectives are equivalent in the special case when $\hat{\bm{\Omega}} = \bm{\Omega}$, which occurs when the CB method is used (because $\bm{\gamma}_0$ is required to be a minimizer of the chosen discrepancy function). For the purposes of this dissertation, I will focus primarily on the first model fit perspective. Unless specified, all model fit indices reflect the first perspective, indicating the lack-of-fit between between $\bm{\Sigma}$ and $\bm{\Omega}$. Where I discuss a model fit index indicating the lack-of-fit between $\bm{\Sigma}$ and $\bm{\Omega}$, a "$\bm{\Omega}$" subscript is used to make it clear that model fit is being considered from the first perspective. Where I discuss a model fit index indicating the lack-of-fit between $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$, a "$\hat{\bm{\Omega}}$" subscript is used instead. I.e., I use $\rmseaOmega$ to indicate the root mean square error of approximation between $\bm{\Sigma}$ and $\bm{\Omega}$, and $\rmseaOmegaHat$ to indicate the root mean square error of approximation between $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$.
 
 As described in the previous section, the population RMSEA value is often used to describe the lack-of-fit between population covariance matrices due to model error. Other fit indices such as the Tucker-Lewis Index [TLI\; @tucker1973], the Comparative Fit Index [CFI\; @bentler1990], and the Standardized Root Mean Square Residual [SRMR\; @hu1999] have also be used for this purpose. Although far from an exhaustive list, these fit indices are among the most popular in the psychometric literature and can be divided into two general categories [@hu1999]. First, RMSEA and SRMR are absolute fit indices that report model fit in terms of the difference between a particular covariance matrix and a model-implied covariance matrix, without using a reference or baseline model for comparison. In the population context, absolute fit indices answer the question, "How different is $\bm{\Sigma}$ to $\bm{\Omega}$?" On the other hand, the TLI and CFI are incremental fit indices, which reflect the improvement of fit of a particular model compared to a (restricted, nested) baseline model. The null or independence model is often used as the baseline model, answering the question, "How well is my model doing, compared with the worst model that there is?" [@miles2007, p. 870]. 
 
 RMSEA, CFI, TLI, and SRMR are generally defined in terms of the sample covariance matrix, but can be expressed in their population form (i.e., with reference to $\bm{\Sigma}$) as follows. Let $F_h$ and $F_b$ be the minimized discrepancy function values for the hypothesized and baseline models (respectively) at the population level. Furthermore, let $df_h$ and $df_b$ be the degrees of freedom for the hypothesized and baseline models. Then the population RMSEA value is given by
 
 \begin{equation}
-\textrm{RMSEA} = \varepsilon = \sqrt{\frac{F_h}{df_h}},
+\RMSEA = \varepsilon = \sqrt{\frac{F_h}{df_h}},
 (\#eq:rmsea)
 \end{equation}
 
@@ -210,19 +210,23 @@ RMSEA, CFI, TLI, and SRMR are generally defined in terms of the sample covarianc
 (\#eq:tli)
 \end{equation}
 
-\noindent Unlike RMSEA, CFI, and TLI, the population SRMR does not depend on discrepancy function values and is given by
+\noindent Note that for $\rmseaOmega$, $\cfiOmega$, and $\tliOmega$, $F_h$ is the minimized discrepancy function value when the discrepancy function is applied to $\bSigma$ and $\bOmega$ (i.e., the population covariance matrix with model error and the population covariance matrix implied by the major-factors model). For $\rmseaOmegaHat$, $\cfiOmegaHat$, and $\tliOmegaHat$, $F_h$ is the minimized discrepancy function value when the discrepancy function is applied to $\bSigma$ and $\bOmegaHat$ (the model-implied covariance matrix obtained by analyzing $\bSigma$).
+
+Unlike RMSEA, CFI, and TLI, the population SRMR does not depend on discrepancy function values and is given by
 
 \begin{equation}
-\textrm{SRMR} = \sqrt{ \frac{1}{p (p + 1) / 2} \sum_{i \leq j} \left(  \frac{\sigma_{ij} - \omega_{ij}}{\sqrt{\sigma_{ii} \sigma_{jj}}} \ \right) ^2 },
+\textrm{SRMR}_{\bOmega} = \sqrt{ \frac{1}{p (p + 1) / 2} \sum_{i \leq j} \left(  \frac{\sigma_{ij} - \omega_{ij}}{\sqrt{\sigma_{ii} \sigma_{jj}}} \ \right) ^2 },
 (\#eq:srmr)
 \end{equation}
 
 \noindent where $p$ is the number of observed variables, and $\sigma_{ij}$ and $\omega_{ij}$ are the $i,j$th elements of $\bm{\Sigma}$ and $\bm{\Omega}$, respectively [@maydeu-olivares2017; @xia2019; @pavlov2021]. Note that when $\bm{\Sigma}$ and $\bm{\Omega}$ are constrained to be correlation matrices with unit diagonals, the correlation root mean residual [CRMR\; @bollen1989a; @ogasawara2001] is appropriate:
 
 \begin{equation}
-\textrm{CRMR} = \sqrt{ \frac{1}{p (p - 1) / 2} \sum_{i < j} \left( \sigma_{ij} - \omega_{ij} \ \right) ^2 }.
+\crmrOmega = \sqrt{ \frac{1}{p (p - 1) / 2} \sum_{i < j} \left( \sigma_{ij} - \omega_{ij} \ \right) ^2 }.
 (\#eq:crmr)
 \end{equation}
+
+\noindent Substituting the elements of $\bOmegaHat$ for the elements of $\bOmega$ in \autoref{eq:crmr} and \autoref{eq:srmr} give the equations for $\crmrOmegaHat$ and $\textrm{SRMR}_{\bOmegaHat}$.
 
 Although all of the fit indices discussed here have been used to quantify model error in simulation studies [e.g., @lai2020b; @lai2020c; @lai2017; @xia2016a; @nguyen2022], the population RMSEA is perhaps the most widely-used. Indeed, many simulation studies using the TKL, CB, or WB model-error methods have grouped simulated covariance matrices into model fit categories based on highly-cited "rule-of-thumb" RMSEA cutoff values. For instance, Lorenzo-Seva and Ferrando [-@lorenzo-seva2020] used RMSEA values of 0.065 to represent models with fair fit, citing Browne and Cudeck [-@browne1992]. @myers2015a used RMSEA values of 0.025, 0.065, and 0.090 to categorize models as having very good fit, fair fit, and poor fit (respectively), citing Browne and Cudeck [-@browne1992], Steiger [-@steiger1989ezpath], and @jackson2009. According to Lai and Green [-@lai2016, p. 220]: 
 

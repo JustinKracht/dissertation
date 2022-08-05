@@ -14,7 +14,7 @@ read_files <- function(files) {
 }
 ```
 
-\small
+\footnotesize
 
 ```{r write-noisemaker-code, eval = FALSE, code = read_files(code_files), echo = TRUE}
 
@@ -28,7 +28,7 @@ simulation_code_files <- list.files(here::here("code/model-error-simulation"),
 simulation_code_files <- simulation_code_files[stringr::str_ends(simulation_code_files, ".R")]
 ```
 
-\small
+\footnotesize
 
 ```{r write-simulation-code, eval = FALSE, code = read_files(simulation_code_files), echo = TRUE}
 
@@ -36,7 +36,7 @@ simulation_code_files <- simulation_code_files[stringr::str_ends(simulation_code
 
 ## Secondary Simulation: Check Effect of $\lambda$ Values {#effect-of-lambda}
 
-\small
+\footnotesize
 
 ```{r check-lambda-values, eval = FALSE, echo = TRUE}
 # Set the number of reps
@@ -145,7 +145,7 @@ ggsave(filename = here("img/penalty_values.png"),
 
 ## Secondary Simulation: Check Whether $\textrm{TKL}_{\textrm{CFI}}$ Requires A Penalty {#tkl-cfi-penalty}
 
-\small
+\footnotesize
 
 ```{r check-whether-tkl-cfi-needs-penalty, eval = FALSE, echo=TRUE}
 # Check whether the TKL (CFI) method leads to solutions that violate the W 
@@ -193,7 +193,7 @@ secondary_simulation_code_files <- list.files(here::here("code/misc"),
 secondary_simulation_code_files <- secondary_simulation_code_files[stringr::str_ends(secondary_simulation_code_files, ".R")]
 ```
 
-\small
+\footnotesize
 
 ```{r write-secondary-simulation-code, eval = FALSE, code = read_files(secondary_simulation_code_files), echo = TRUE}
 

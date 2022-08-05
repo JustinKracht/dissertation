@@ -49,7 +49,7 @@ fix_apa_coef_names <- function(names) {
 
 ### Logistic Regression on $\mathbf{W}$ Constraint Violations {#w-constraints-regression-table}
 
-\@ref(tab:mmf-mod-summary) gives a summary of the logistic regression of each of the independent simulation study variables and their interactions on a variable indicating whether a solution violated the constraints imposed on $\mathbf{W}$ (i.e., whether the solution had major minor factors). Note that some standard errors were quite large because the data were linearly separable due to there being some combinations of conditions that did not produce solutions with violated $\mathbf{W}$ constraints. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable. The "Model Fit (Very Good)" and "Error Method ($\TKLrmsea$)" terms were used as baseline levels and were subsumed within the "Constant" term.
+\@ref(tab:mmf-mod-summary) gives a summary of the logistic regression of each of the independent simulation study variables and their interactions on a variable indicating whether a solution violated the constraints imposed on $\mathbf{W}$ (i.e., whether the solution had major minor factors). Note that some standard errors were quite large because some combinations of conditions produced few (or no) solutions with violated $\mathbf{W}$ constraints. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable. The "Model Fit (Very Good)" and "Error Method ($\TKLrmsea$)" terms were used as baseline levels and were subsumed within the "Constant" term.
 
 ```{r mmf-coef-tab, results='asis'}
 if (fit_mods) {
@@ -77,7 +77,7 @@ if (fit_mods) {
     use.packages = FALSE,
     caption.above = FALSE,
     fontsize = "small",
-    caption = 'Coefficient estimates and standard errors for the logistic regression model predicting the probability of producing a solution with violated $\\mathbf{W}$ constraints (i.e., at least one minor factor with more than two absolute factor loadings greater than 0.3).',
+    caption = 'Coefficient estimates and standard errors (in parentheses) for the logistic regression model predicting the probability of producing a solution with violated $\\mathbf{W}$ constraints (i.e., at least one minor factor with more than two absolute factor loadings greater than 0.3).',
     label = "tab:mmf-mod-summary"
   )
   
@@ -92,7 +92,7 @@ cat(readLines(here("tab/mmf-coef-tab.txt")),
 
 ### $|\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}|$ Analysis of Variance {#rmsea-anova-summary}
 
-\@ref(tab:d1-coef-tab) gives a summary of the analysis of variance for the absolute difference between the observed and target RMSEA values ($|\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}|$). Small values of $|\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}|$ indicated that a model-error method recovered the target RMSEA value well, whereas large values indicated that a model-error method recovered the target RMSEA value poorly. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
+\@ref(tab:d1-coef-tab) gives a summary of the analysis of variance for the absolute difference between the observed and target $\rmseaOmega$ values ($|\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}|$). Small values of $|\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}|$ indicated that a model-error method recovered the target $\rmseaOmega$ value well, whereas large values indicated that a model-error method recovered the target $\rmseaOmega$ value poorly. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
 
 ```{r d1-coef-tab, results='asis'}
 d1_mod <- aov(abs(d1) ~(factors + items_per_factor + factor_cor + 
@@ -102,7 +102,7 @@ d1_mod <- aov(abs(d1) ~(factors + items_per_factor + factor_cor +
 d1_apa <- apa_print(d1_mod)
 d1_apa$table$term <- fix_apa_coef_names(d1_apa$table$term)
 apa_table(d1_apa$table,
-          caption = "Analysis of Variance for the absolute difference between the observed and target RMSEA values ($|\\textrm{RMSEA}_{\\textrm{obs}} - \\textrm{RMSEA}_{\\textrm{T}}|$).",
+          caption = "Analysis of Variance for the absolute difference between the observed and target $\\rmseaOmega$ values ($|\\textrm{RMSEA}_{\\textrm{obs}} - \\textrm{RMSEA}_{\\textrm{T}}|$).",
           note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
           placement = "hb",
           font_size = "small",
@@ -113,7 +113,7 @@ apa_table(d1_apa$table,
 
 ### $|\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$ Analysis of Variance {#cfi-anova-summary}
 
-\@ref(tab:d2-coef-tab) gives a summary of the analysis of variance for the absolute difference between the observed and target CFI values ($|\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$). Small values of $|\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$ indicated that a model-error method recovered the target CFI value well, whereas large values indicated that a model-error method recovered the target CFI value poorly. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
+\@ref(tab:d2-coef-tab) gives a summary of the analysis of variance for the absolute difference between the observed and target $\cfiOmega$ values ($|\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$). Small values of $|\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$ indicated that a model-error method recovered the target $\cfiOmega$ value well, whereas large values indicated that a model-error method recovered the target $\cfiOmega$ value poorly. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
 
 ```{r d2-coef-tab, results='asis'}
 d2_mod <- aov(abs(d2) ~(factors + items_per_factor + factor_cor + 
@@ -123,7 +123,7 @@ d2_mod <- aov(abs(d2) ~(factors + items_per_factor + factor_cor +
 d2_apa <- apa_print(d2_mod)
 d2_apa$table$term <- fix_apa_coef_names(d2_apa$table$term)
 apa_table(d2_apa$table,
-          caption = "Analysis of Variance for the absolute difference between the observed and target CFI values ($|\\textrm{CFI}_{\\textrm{obs}} - \\textrm{CFI}_{\\textrm{T}}|$).",
+          caption = "Analysis of Variance for the absolute difference between the observed and target $\\cfiOmega$ values ($|\\textrm{CFI}_{\\textrm{obs}} - \\textrm{CFI}_{\\textrm{T}}|$).",
           note = "$\\hat{\\eta}^2_{G}$ denotes the estimate of the generalized eta-squared effect size.",
           placement = "hb",
           font_size = "small",
@@ -134,7 +134,7 @@ apa_table(d2_apa$table,
 
 ### $D$ Analysis of Variance {#d-anova-summary}
 
-\@ref(tab:d3-coef-tab) gives a summary of the analysis of variance for the sum of the absolute differences between the observed and target CFI values and the observed and target RMSEA values, $D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$. Small $D$ values indicated that a model-error method recovered both the target CFI and target RMSEA values well, whereas large $D$ values indicated that a model-error method recovered one (or both) of the target RMSEA or CFI values poorly. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
+\@ref(tab:d3-coef-tab) gives a summary of the analysis of variance for the sum of the absolute differences between the observed and target $\cfiOmega$ values and the observed and target $\rmseaOmega$ values, $D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|$. Small $D$ values indicated that a model-error method recovered both the target $\cfiOmega$ and target $\rmseaOmega$ values well, whereas large $D$ values indicated that a model-error method recovered one (or both) of the target $\rmseaOmega$ or $\cfiOmega$ values poorly. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
 
 ```{r d3-coef-tab, results='asis'}
 d3_mod <- aov(abs(d3) ~(factors + items_per_factor + factor_cor + 
@@ -155,7 +155,7 @@ apa_table(d3_apa$table,
 
 ### Logistic Regression on Qualitative Model Fit Index Agreement {#qual-fit-regression-summary}
 
-\@ref(tab:mmf-mod-summary) gives a summary of the logistic regression of each of the independent simulation study variables and their interactions on a variable indicating whether a solution produced RMSEA and CFI values that indicated the same qualitative degree of model fit. Note that some standard errors were quite large because the data were linearly separable due to there being some combinations of conditions with either 100% or 0% rates of qualitative fit agreement. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable. The "Model Fit (Very Good)" and "Error Method ($\TKLrmsea$)" terms were used as baseline levels and were subsumed within the "Constant" term.
+\@ref(tab:mmf-mod-summary) gives a summary of the logistic regression of each of the independent simulation study variables and their interactions on a variable indicating whether a solution produced $\rmseaOmega$ and $\cfiOmega$ values that indicated the same qualitative degree of model fit. Note that some standard errors were quite large because the data were linearly separable due to there being some combinations of conditions with either 100% or 0% rates of qualitative fit agreement. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable. The "Model Fit (Very Good)" and "Error Method ($\TKLrmsea$)" terms were used as baseline levels and were subsumed within the "Constant" term.
 
 ```{r qualitative-fit-coef-tab, results='asis'}
 if (fit_mods) {
@@ -198,7 +198,7 @@ if (fit_mods) {
     use.packages = FALSE,
     caption.above = FALSE,
     fontsize = "small",
-    caption = 'Coefficient estimates and standard errors for the logistic regression model predicting the probability of producing a solution with qualitative fit index agreement.',
+    caption = 'Coefficient estimates and standard errors (in parentheses) for the logistic regression model predicting the probability of producing a solution with qualitative fit index agreement.',
     label = "tab:qualitative-fit-mod-summary"
   )
   
@@ -213,7 +213,7 @@ cat(readLines(here("tab/fit-agreement-coef-tab.txt")),
 
 ### $\textrm{RMSEA}_{\Delta}$ Analysis of Variance {#rmsea-delta-anova}
 
-\@ref(tab:rmsea-delta-coef-tab) gives a summary of the analysis of variance for the difference between RMSEA and $\textrm{RMSEA}_{\bOmegaHat}$, $\textrm{RMSEA}_{\Delta} = \textrm{RMSEA} - \textrm{RMSEA}_{\bOmegaHat}$. Small values of $\textrm{RMSEA}_{\Delta}$ indicated that a model-error method led to similar values of RMSEA and $\textrm{RMSEA}_{\bOmegaHat}$ whereas large values indicated that the two fit indices were quite different. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
+\@ref(tab:rmsea-delta-coef-tab) gives a summary of the analysis of variance for the difference between $\rmseaOmega$ and $\textrm{RMSEA}_{\bOmegaHat}$, $\textrm{RMSEA}_{\Delta} = \rmseaOmega - \textrm{RMSEA}_{\bOmegaHat}$. Small values of $\textrm{RMSEA}_{\Delta}$ indicated that a model-error method led to similar values of $\rmseaOmega$ and $\textrm{RMSEA}_{\bOmegaHat}$ whereas large values indicated that the two fit indices were quite different. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
 
 ```{r rmsea-delta-coef-tab, results='asis'}
 results_matrix_scaled <- results_matrix_scaled %>% 
@@ -238,7 +238,7 @@ apa_table(rmsea_delta_apa$table,
 
 ### $\textrm{CFI}_{\Delta}$ Analysis of Variance {#cfi-delta-anova}
 
-\@ref(tab:cfi-delta-coef-tab) gives a summary of the analysis of variance for the difference between CFI and $\textrm{CFI}_{\bOmegaHat}$, $\textrm{CFI}_{\Delta} = \textrm{CFI} - \textrm{CFI}_{\bOmegaHat}$. Small values of $\textrm{CFI}_{\Delta}$ indicated that a model-error method led to similar values of CFI and $\textrm{CFI}_{\bOmegaHat}$ whereas large values indicated that the two fit indices were quite different. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
+\@ref(tab:cfi-delta-coef-tab) gives a summary of the analysis of variance for the difference between $\cfiOmega$ and $\textrm{CFI}_{\bOmegaHat}$, $\textrm{CFI}_{\Delta} = \cfiOmega - \textrm{CFI}_{\bOmegaHat}$. Small values of $\textrm{CFI}_{\Delta}$ indicated that a model-error method led to similar values of $\cfiOmega$ and $\textrm{CFI}_{\bOmegaHat}$ whereas large values indicated that the two fit indices were quite different. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable.
 
 ```{r cfi-delta-coef-tab, results='asis'}
 cfi_delta_mod <- aov(cfi_delta ~(factors + items_per_factor + factor_cor + 
@@ -387,9 +387,9 @@ if (make_plots) {
 knitr::include_graphics(here("img/eps_and_nu_w_violations_full.png"))
 ```
 
-### Observed RMSEA Values
+### Observed $\rmseaOmega$ Values
 
-```{r rmsea-distributions-full, fig.cap = "Distributions of the RMSEA values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target RMSEA value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width='70%'}
+```{r rmsea-distributions-full, fig.cap = "Distributions of the $\\rmseaOmega$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target $\\rmseaOmega$ value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width='70%'}
 if (make_plots) {
   rmsea_distributions <- 
     results_matrix %>%
@@ -404,7 +404,7 @@ if (make_plots) {
     facet_grid(model_fit_rec * loading_rec ~ 
                  factors_rec) +
     labs(x = "",
-         y = "RMSEA") +
+         y = TeX("$RMSEA_\\Omega$")) +
     theme_bw() +
     theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
   
@@ -420,9 +420,9 @@ if (make_plots) {
 knitr::include_graphics(here("img/rmsea_distributions_full.png"))
 ```
 
-### Observed CFI Values
+### Observed $\cfiOmega$ Values
 
-```{r cfi-distributions-full, fig.cap = "Distributions of the CFI values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target CFI value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width='70%'}
+```{r cfi-distributions-full, fig.cap = "Distributions of the $\\cfiOmega$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target $\\cfiOmega$ value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width='70%'}
 if (make_plots) {
   cfi_distributions <- 
     results_matrix %>%
@@ -437,7 +437,7 @@ if (make_plots) {
     facet_grid(model_fit_rec * loading_rec ~ 
                  factors_rec) +
     labs(x = "",
-         y = "CFI") +
+         y = TeX("$CFI_\\Omega$")) +
     theme_bw() +
     theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
   
@@ -452,10 +452,11 @@ if (make_plots) {
 
 knitr::include_graphics(here("img/cfi_distributions_full.png"))
 ```
-### Observed TLI Values
+
+### Observed $\tliOmega$ Values
 
 ```{r tli-distributions-full, out.width="70%"}
-#| fig.cap="Distributions of the TLI values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the threshold values of TLI that correspond to the targeted levels of model fit, according to Hu and Bentler (1999). TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap="Distributions of the $\tliOmega$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the threshold values of TLI that correspond to the targeted levels of model fit, according to Hu and Bentler (1999). TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 
 if (make_plots) {
   tli_distributions <- 
@@ -472,7 +473,7 @@ if (make_plots) {
     facet_grid(model_fit_rec * loading_rec ~ 
                  factors_rec) +
     labs(x = "",
-         y = "TLI") +
+         y = TeX("$TLI_\\Omega$")) +
     theme_bw() +
     theme(panel.spacing.x = unit(10, units = "pt"),
           plot.margin = margin(0, 0, 0, -14, unit = "pt"))
@@ -489,9 +490,9 @@ if (make_plots) {
 knitr::include_graphics(here("img/tli_distributions_full.png"))
 ```
 
-### Observed CRMR Values
+### Observed $\crmrOmega$ Values
 
-```{r crmr-distributions-full, fig.cap="Distributions of the CRMR values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values; the dashed lines indicate these two threshold values. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width="65%"}
+```{r crmr-distributions-full, fig.cap="Distributions of the $\\crmrOmega$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values; the dashed lines indicate these two threshold values. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width="65%"}
 if (make_plots) {
   crmr_distributions <- 
     results_matrix %>%
@@ -508,7 +509,7 @@ if (make_plots) {
     facet_grid(model_fit_rec * loading_rec ~ 
                  factors_rec) +
     labs(x = "",
-         y = "CRMR") +
+         y = TeX("$CRMR_\\Omega$")) +
     theme_bw() +
     theme(plot.margin = margin(0, 0, 0, -14, unit = "pt"))
   
@@ -529,7 +530,7 @@ knitr::include_graphics(here("img/crmr_distributions_full.png"))
 #### $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$
 
 ```{r rmsea-thetahat-distributions, out.width="85%"}
-#| fig.cap = "Distributions of the $\\textrm{RMSEA}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target RMSEA value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Distributions of the $\\textrm{RMSEA}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target $\\rmseaOmega$ value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 if (make_plots) {
   rmsea_thetahat_distributions <- 
     results_matrix %>%
@@ -563,7 +564,7 @@ knitr::include_graphics(here("img/rmsea_thetahat_distributions.png"))
 #### $\textrm{CFI}_{\hat{\bm{\Omega}}}$
 
 ```{r cfi-thetahat-distributions, out.width="90%"}
-#| fig.cap = "Distributions of the $\\textrm{CFI}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target CFI value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Distributions of the $\\textrm{CFI}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target $\\cfiOmega$ value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 if (make_plots) {
   cfi_thetahat_distributions <- 
     results_matrix %>%
@@ -667,7 +668,7 @@ knitr::include_graphics(here("img/crmr_thetahat_distributions.png"))
 ### Fit Index Agreement ($D$) {#full-d3-plot}
 
 ```{r full-d3-plot, out.width="90%"}
-#| fig.cap = "The sum of the absolute differences between the observed and target RMSEA and CFI values ($D$), conditioned on number of factors, model fit, and factor loading strength. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "The sum of the absolute differences between the observed and target $\\rmseaOmega$ and $\\cfiOmega$ values ($D$), conditioned on number of factors, model fit, and factor loading strength. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
 if (make_plots) {
   d_plot <- 
     results_matrix %>%
@@ -696,10 +697,10 @@ if (make_plots) {
 knitr::include_graphics(here("img/d_plot_full.png"))
 ```
 
-### Conditional Distributions of CFI at Fixed RMSEA Values {#conditional-cfi-with-factor-cor}
+### Conditional Distributions of $\cfiOmega$ at Fixed $\rmseaOmega$ Values {#conditional-cfi-with-factor-cor}
 
 ```{r conditional-cfi-with-factor-cor-plot, out.width='90%'}
-#| fig.cap = "Observed CFI and RMSEA values for solutions generated using the $\\textrm{TKL}_{\\textrm{RMSEA}}$ method. For each combination of number of factors, number of items per factor, factor loading strength, and factor correlation, 50 solutions were generated for each of 16 target RMSEA values equally-spaced between 0.025 and 0.100. The solid black line indicates where RMSEA and $1 - \\textrm{CFI}$ were equal."
+#| fig.cap = "Observed $\\cfiOmega$ and $\\rmseaOmega$ values for solutions generated using the $\\textrm{TKL}_{\\textrm{RMSEA}}$ method. For each combination of number of factors, number of items per factor, factor loading strength, and factor correlation, 50 solutions were generated for each of 16 target $\\rmseaOmega$ values equally-spaced between 0.025 and 0.100. The solid black line indicates where $\\rmseaOmega$ and $1 - \\cfiOmega$ were equal."
 
 if (make_plots) {
   reps <- 50
@@ -773,7 +774,7 @@ if (make_plots) {
     geom_abline(aes(slope = -1, intercept = 1), size = .5, alpha = .5) +
     facet_grid(factors_rec * items_per_factor_rec ~ loading_rec * factor_cor_rec) +
     guides(color = guide_legend(override.aes = list(alpha = 1, size = 1.5))) +
-    labs(x = "RMSEA", y = "CFI") +
+    labs(x = TeX("$RMSEA_\\Omega$"), y = TeX("$CFI_\\Omega$")) +
     theme_bw() +
     theme(legend.position = "bottom",
           panel.spacing.x = unit(14, units = "points"))
@@ -787,10 +788,10 @@ if (make_plots) {
 knitr::include_graphics(here("img/rmsea_conditional_cfi_with_factor_cor.png"))
 ```
 
-### Conditional Distributions of RMSEA at Fixed CFI Values {#conditional-rmsea-with-factor-cor}
+### Conditional Distributions of $\rmseaOmega$ at Fixed $\cfiOmega$ Values {#conditional-rmsea-with-factor-cor}
 
 ```{r conditional-rmsea-with-factor-cor-plot, out.width='90%'}
-#| fig.cap = "Observed RMSEA and CFI values for solutions generated using the $\\textrm{TKL}_{\\textrm{CFI}}$ method. For each combination of number of factors, number of items per factor, factor loading strength, and factor correlation, 50 solutions were generated for each of 19 target CFI values equally-spaced between 0.90 and 0.99. The solid black line indicates where RMSEA and $1 - \\textrm{CFI}$ were equal."
+#| fig.cap = "Observed $\\rmseaOmega$ and $\\cfiOmega$ values for solutions generated using the $\\textrm{TKL}_{\\textrm{CFI}}$ method. For each combination of number of factors, number of items per factor, factor loading strength, and factor correlation, 50 solutions were generated for each of 19 target $\\cfiOmega$ values equally-spaced between 0.90 and 0.99. The solid black line indicates where $\\rmseaOmega$ and $1 - \\cfiOmega$ were equal."
 
 if (make_plots) {
   reps <- 50
@@ -867,7 +868,7 @@ if (make_plots) {
     facet_grid(factors_rec * items_per_factor_rec ~ loading_rec * factor_cor_rec) +
     guides(color = guide_legend(override.aes = list(alpha = 1, size = 1.5))) +
     scale_x_continuous(breaks = c(0.90, 0.94, 0.98, 1.00)) +
-    labs(y = "RMSEA", x = "CFI") +
+    labs(y = TeX("$RMSEA_\\Omega$"), x = TeX("$CFI_\\Omega$")) +
     theme_bw() +
     theme(legend.position = "bottom",
           panel.spacing.x = unit(14, units = "points"))
@@ -903,7 +904,7 @@ knitr::include_graphics(here("img/c156_R_plots_with_annotation.png"))
 ### Model Fit Index Recovery for the TKL-based Methods {#fit-index-recovery-full}
 
 ```{r fit-index-recovery-full, out.width='95%'}
-#| fig.cap = "Observed RMSEA and CFI values for the $\\textrm{TKL}_{\\textrm{RMSEA/CFI}}$ model-error method and the corresponding known-to-be-possible target RMSEA and CFI values (indicated by the black lines), conditioned on number of factors, number of items per factor, factor loading strength, and factor correlation."
+#| fig.cap = "Observed $\\rmseaOmega$ and $\\cfiOmega$ values for the $\\textrm{TKL}_{\\textrm{RMSEA/CFI}}$ model-error method and the corresponding known-to-be-possible target $\\rmseaOmega$ and $\\cfiOmega$ values (indicated by the black lines), conditioned on number of factors, number of items per factor, factor loading strength, and factor correlation."
 if (make_plots) {
   noisy_data <- readRDS(here("data/noisy_data.RDS"))
   
@@ -920,7 +921,7 @@ if (make_plots) {
     geom_vline(aes(xintercept = target_rmsea), data = target_values,
                size = .25) +
     facet_grid(factors * factor_loading ~ items_per_factor * factor_corr) +
-    labs(x = "RMSEA", y = "CFI") +
+    labs(x = TeX("$RMSEA_\\Omega$"), y = TeX("$CFI_\\Omega$")) +
     theme_bw()
   
   ggsave(filename = "rmsea_cfi_recovery_full.png",

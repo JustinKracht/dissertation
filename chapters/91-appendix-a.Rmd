@@ -58,7 +58,7 @@
 | $F_b$, $df_b$ | The minimized discrepancy function value and degrees of freedom for the baseline model. Used for computing population RMSEA, Comparative Fit Index (CFI; Bentler, 1990), and Tucker-Lewis Index (TLI; Tucker & Lewis, 1973) values. |
 | $\sigma_{ij}$ | The $i, j$th element of $\bSigma$. |
 | $\omega_{ij}$ | The $i, j$th element of $\bOmega$. |
-| $\varepsilon_T$ or $\textrm{RMSEA}_{T}$ | A target RMSEA value. |
+| $\varepsilon_{\textrm{T}}$ or $\textrm{RMSEA}_{\textrm{T}}$ | A target RMSEA value. |
 | $\textrm{CFI}_T$ | A target CFI value. |
 | $G(\nu_{\textrm{e}}, \epsilon)$ | The objective function for the multiple-target TKL method. |
 | $b_1$, $b_2$ | Weights used to determine how much influence the target RMSEA and CFI values were given in the multiple-target TKL method objective function. |

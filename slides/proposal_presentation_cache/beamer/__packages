@@ -1,0 +1,15 @@
+bookdown
+tidyverse
+ggplot2
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+latex2exp
+noisemaker
+tinylabels
+papaja
+here

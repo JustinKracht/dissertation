@@ -391,3 +391,15 @@ A second purpose of the study was to evaluate the effectiveness of the multiple-
 ---
 
 Through this simulation study, I hoped to answer two primary questions about the model-error methods I investigated. First, I wanted to know whether the five model-error methods included in the study (the $\textrm{TKL}_{\textrm{RMSEA}}$, $\textrm{TKL}_{\textrm{CFI}}$, $\textrm{TKL}_{\textrm{RMSEA/CFI}}$, CB, and WB methods) led to different $\cfiOmega$, $\tliOmega$, and $\crmrOmega$ values when used with the same error-free population correlation matrices and target $\rmseaOmega$ values. If all of the model-error methods led to the same (or similar) fit index values, it would have suggested that the choice of which model-error method to use should be based primarily on which method researchers find most convincing from a theoretical point of view. The second question I wanted to answer was related to the efficacy of the modified TKL method with the proposed optimization procedure (referred to as the multiple-target TKL method). That is, I was interested in determining how well the multiple-target TKL method was able to generate correlation matrices with model error that had $\rmseaOmega$ and $\cfiOmega$ values that were close to the specified values. Note that in the following discussion of the simulation results I focus on the $\rmseaOmega$ and $\cfiOmega$ fit indices for two reasons. First, $\rmseaOmega$ and $\cfiOmega$ target values were used in the simulation study and are often used as indications of model fit when generating population correlation matrices with model error [@tucker1969; @cudeck1992; @kracht2022; @trichtinger2020]. Second, the $\crmrOmega$ and $\tliOmega$ indices led to results that were similar to the results for $\rmseaOmega$ and $\cfiOmega$, respectively.
+
+----
+
+
+
+
+
+
+
+
+
+

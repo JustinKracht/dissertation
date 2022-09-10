@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="test-quarto_files/libs/clipboard/clipboard.min.js"></script>
+<script src="test-quarto_files/libs/quarto-html/tabby.min.js"></script>
+<script src="test-quarto_files/libs/quarto-html/popper.min.js"></script>
+<script src="test-quarto_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="test-quarto_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="test-quarto_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="test-quarto_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.1.189">
+
+  <meta name="author" content="Justin Kracht">
+  <title>Make Some Noise: Generating Data From Imperfect Models</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="test-quarto_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="test-quarto_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="test-quarto_files/libs/revealjs/dist/theme/quarto.css" id="theme">
+  <link href="test-quarto_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="test-quarto_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="test-quarto_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="test-quarto_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-captioned.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-captioned) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-captioned.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-captioned .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-captioned .callout-caption  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-captioned.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-captioned.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-caption {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-caption {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-caption {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-captioned .callout-body > .callout-content > :last-child {
+    margin-bottom: 0.5rem;
+  }
+
+  .callout.callout-captioned .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-captioned) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-caption {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-caption {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-caption {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-caption {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-caption {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="center">
+  <h1 class="title">Make Some Noise: Generating Data From Imperfect Models</h1>
+  <p class="author">Justin Kracht</p>
+  <p class="institute">University of Minnesota</p>
+  <p class="date">September 2022</p>
+</section>
+
+<section id="presentation-overview" class="slide level2">
+<h2>Presentation Overview</h2>
+<p><span class="math display">\[
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\dg}{\textrm{dg}}
+\DeclareMathOperator{\vech}{vec}
+\DeclareMathOperator{\RMSEA}{\textrm{RMSEA}}
+\newcommand{\TKLrmseacfi}{\textrm{TKL}_{\textrm{RMSEA} / \textrm{CFI}}}
+\newcommand{\TKLrmsea}{\textrm{TKL}_{\textrm{RMSEA}}}
+\newcommand{\TKLcfi}{\textrm{TKL}_{\textrm{CFI}}}
+\newcommand{\rmseaOmega}{\textrm{RMSEA}_{\boldsymbol{\Omega}}}
+\newcommand{\cfiOmega}{\textrm{CFI}_{\boldsymbol{\Omega}}}
+\newcommand{\tliOmega}{\textrm{TLI}_{\boldsymbol{\Omega}}}
+\newcommand{\crmrOmega}{\textrm{CRMR}_{\boldsymbol{\Omega}}}
+\newcommand{\rmseaOmegaHat}{\textrm{RMSEA}_{\hat{\boldsymbol{\Omega}}}}
+\newcommand{\cfiOmegaHat}{\textrm{CFI}_{\hat{\boldsymbol{\Omega}}}}
+\newcommand{\tliOmegaHat}{\textrm{TLI}_{\hat{\boldsymbol{\Omega}}}}
+\newcommand{\crmrOmegaHat}{\textrm{CRMR}_{\hat{\boldsymbol{\Omega}}}}
+\newcommand{\bgamma}{\boldsymbol{\gamma}}
+\newcommand{\bSigma}{\boldsymbol{\Sigma}}
+\newcommand{\bOmega}{\boldsymbol{\Omega}}
+\newcommand{\bOmegaHat}{\hat{\boldsymbol{\Omega}}}
+\newcommand{\rmseaDelta}{\textrm{RMSEA}_{\Delta}}
+\newcommand{\cfiDelta}{\textrm{CFI}_{\Delta}}
+\]</span></p>
+<ol type="1">
+<li>Background<br>
+</li>
+<li>Methods for Simulating Model Error<br>
+</li>
+<li>Quantifying Model Error<br>
+</li>
+<li>Study Aims<br>
+</li>
+<li>Methods<br>
+</li>
+<li>Results</li>
+</ol>
+<aside class="notes">
+<ol type="1">
+<li>Background: What is model error, and why does it matter?<br>
+</li>
+<li>Simulating Model Error: What methods are available to simulate model error?<br>
+</li>
+<li>Quantifying Model Error: What model fit indices are used to quantify model error, and how do they differ?<br>
+</li>
+<li>Study Aims<br>
+</li>
+<li>Methods<br>
+</li>
+<li>Results</li>
+</ol>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section>
+<section id="background" class="title-slide slide level1 center">
+<h1>Background</h1>
+
+</section>
+<section id="model-error-and-covariance-structure-models" class="slide level2">
+<h2>Model Error and Covariance Structure Models</h2>
+<p>Covariance structure models allow a structured covariance matrix to be represented as a function of a vector of parameters,</p>
+<p><span class="math display">\[\begin{equation}
+\boldsymbol{\Omega} = \boldsymbol{\Omega}(\boldsymbol{\gamma}),
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(\boldsymbol{\Omega}\)</span> is a <span class="math inline">\(p \times p\)</span> model-implied covariance matrix and <span class="math inline">\(\gamma\)</span> is a vector of free parameters.</p>
+<blockquote>
+<p>“All models are wrong, but some are useful”<br>
+— Box (1987, p.&nbsp;424)</p>
+</blockquote>
+</section>
+<section id="what-is-model-error" class="slide level2">
+<h2>What is Model Error?</h2>
+<p>Psychological phenomena are complex; no population covariance matrix will be perfectly represented by <span class="math inline">\(\boldsymbol{\Omega}(\boldsymbol{\gamma})\)</span> in practice.</p>
+<p>Model error can be grouped into two basic categories (Meehl, 1990).</p>
+<ul>
+<li>: The model is too simple to adequately reflect reality (e.g., there are more common factors than are modeled).</li>
+<li>: There are contradictions between the model and the world (e.g., non-linear relationships are modeled as linear).</li>
+</ul>
+</section>
+<section id="representing-model-error" class="slide level2">
+<h2>Representing Model Error</h2>
+<p>An population covariance matrix with model error can be represented by</p>
+<p><span class="math display">\[\begin{equation}
+\boldsymbol{\Sigma} = \boldsymbol{\Omega} + \mathbf{E},
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(\mathbf{E}\)</span> is a symmetric error matrix representing the effects of model error.</p>
+</section>
+<section id="why-should-we-care-about-model-error" class="slide level2">
+<h2>Why Should We Care About Model Error?</h2>
+<p>Monte Carlo simulation studies that sample from <span class="math inline">\(\boldsymbol{\Omega}\)</span> (rather than <span class="math inline">\(\boldsymbol{\Sigma}\)</span>) are likely to produce overly-optimistic results.</p>
+<p>Simulation work has shown that model error can affect:</p>
+<ul>
+<li>Parameter estimation for exploratory factor analysis (Briggs, 2003).</li>
+<li>Dimensionality identification with parallel analysis (Kracht, 2020).</li>
+<li>Behavior of confidence regions and fungible parameter estimates for structural equation models (Pek, 2012).</li>
+<li>…And other statistical procedures (Beauducel, 2016; de Winter, 2016, Gnambs, 2016; Hsu, 2015; Trichtinger, 2020).</li>
+</ul>
+<p>: How can we simulate <span class="math inline">\(\boldsymbol{\Sigma}\)</span> with “realistic” model error?</p>
+</section></section>
+<section>
+<section id="simulating-model-error" class="title-slide slide level1 center">
+<h1>Simulating Model Error</h1>
+
+</section>
+<section id="existing-model-error-methods" class="slide level2">
+<h2>Existing Model Error Methods</h2>
+<p>Three of the most prominent model error methods are:</p>
+<ol type="1">
+<li>Tucker, Koopman, and Linn (TKL; 1969)</li>
+<li>Cudeck and Browne (CB; 1992)</li>
+<li>Wu and Browne (WB; 2015)</li>
+</ol>
+<!-- The *ad hoc* methods of misspecifying the number of common factors by one or two factors, or misspecifying the relationships between observed and latent variables are not of interest here. -->
+</section>
+<section id="the-tucker-koopman-and-linn-method" class="slide level2">
+<h2>The Tucker, Koopman, and Linn Method</h2>
+<p>The TKL method is based on the common factor analysis model for <span class="math inline">\(k\)</span> common factors:</p>
+<p><span class="math display">\[\begin{equation}
+\boldsymbol{\Omega} = \boldsymbol{\Lambda} \boldsymbol{\Phi} \boldsymbol{\Lambda}^\prime + \boldsymbol{\Psi},
+\end{equation}\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(\boldsymbol{\Omega}_{p \times p}\)</span>: model-implied covariance matrix.</li>
+<li><span class="math inline">\(\boldsymbol{\Lambda}_{p \times k}\)</span>: factor-pattern matrix.</li>
+<li><span class="math inline">\(\boldsymbol{\Phi}_{k \times k}\)</span>: common factor covariance matrix.</li>
+<li><span class="math inline">\(\boldsymbol{\Psi}_{p \times p}\)</span>: diagonal matrix containing the unique variances.</li>
+</ul>
+<p>Let all common factors be standardized in the population so that <span class="math inline">\(\boldsymbol{\Omega}\)</span> has a unit diagonal (i.e., is a correlation matrix).</p>
+</section>
+<section id="the-tucker-koopman-and-linn-method-1" class="slide level2">
+<h2>The Tucker, Koopman, and Linn Method</h2>
+<p>Model error is represented as the effect of numerous minor common factors such that <span class="math inline">\(\mathbf{W}_{p \times q}\)</span> is the matrix of minor factor loadings for the <span class="math inline">\(q \succeq k\)</span> minor common factors,</p>
+<p><span class="math display">\[\begin{equation}
+\boldsymbol{\Sigma} = \boldsymbol{\Lambda} \boldsymbol{\Phi} \boldsymbol{\Lambda}^\prime + \boldsymbol{\Psi} + \mathbf{WW}^\prime
+\end{equation}\]</span></p>
+<p>Minor common factors are (MacCallum, 2003, p.&nbsp;135).</p>
+</section>
+<section id="the-tucker-koopman-and-linn-method-user-parameters" class="slide level2">
+<h2>The Tucker, Koopman, and Linn Method: User Parameters</h2>
+<p>Two user-specified parameters affect the characteristics of <span class="math inline">\(\mathbf{W}\)</span>:</p>
+<ul>
+<li><p><span class="math inline">\(\nu_{\textrm{e}} \in [0, 1]\)</span>: Proportion of unique variance allocated to the minor common factors.</p></li>
+<li><p><span class="math inline">\(\epsilon \in [0, 1]\)</span>: Controls how variance is distributed among the minor common factors. Values close to zero result in relatively equipotent minor factors whereas values of close to one result in error variance primarily being distributed to the first minor factor.</p></li>
+</ul>
+</section>
+<section id="the-tucker-koopman-and-linn-method-2" class="slide level2">
+<h2>The Tucker, Koopman, and Linn Method</h2>
+<h3 id="advantages">Advantages</h3>
+<ul>
+<li>Straightforward interpretation of model error arising from un-modeled minor common factors.</li>
+<li>Quite flexible; two parameters (<span class="math inline">\(\nu_{\textrm{e}}\)</span> and <span class="math inline">\(\epsilon\)</span>) to manipulate.</li>
+<li>Relatively easy to implement.</li>
+</ul>
+<h3 id="disadvantages">Disadvantages</h3>
+<ul>
+<li>Cannot be used for all types of covariance structure models (factor analysis models only).</li>
+<li>No clear guidelines for reasonable/realistic values of <span class="math inline">\(\nu_{\textrm{e}}\)</span> and <span class="math inline">\(\epsilon\)</span>.</li>
+<li>No direct control of degree of model fit (in terms of e.g., RMSEA) as traditionally implemented.</li>
+</ul>
+</section>
+<section id="the-cudeck-and-browne-method" class="slide level2">
+<h2>The Cudeck and Browne Method</h2>
+<p>Cudeck and Browne developed a model error method for any covariance structure model, <span class="math inline">\(\boldsymbol{\Omega} = \boldsymbol{\Omega}(\boldsymbol{\gamma})\)</span>.</p>
+<p>For a particular vector of model parameters <span class="math inline">\(\boldsymbol{\gamma}_0\)</span>, let <span class="math inline">\(\boldsymbol{\Sigma}_0 = \boldsymbol{\Omega}(\boldsymbol{\gamma}_0) + \mathbf{E}\)</span></p>
+<p>Their method seeks to find an <span class="math inline">\(\mathbf{E}\)</span> matrix such that</p>
+<ol type="1">
+<li><span class="math inline">\(F(\boldsymbol{\Sigma}_0, \boldsymbol{\Omega}(\boldsymbol{\gamma}))\)</span> is minimized when <span class="math inline">\(\boldsymbol{\gamma} = \boldsymbol{\gamma}_0\)</span>.</li>
+<li><span class="math inline">\(F(\boldsymbol{\Sigma}_0, \boldsymbol{\Omega}(\boldsymbol{\gamma})) = \delta\)</span> when <span class="math inline">\(\boldsymbol{\gamma} = \boldsymbol{\gamma}_0\)</span> for some user-specified <span class="math inline">\(\delta\)</span>.</li>
+</ol>
+<p>Here, <span class="math inline">\(F(\boldsymbol{\Sigma}_0, \boldsymbol{\Omega}(\boldsymbol{\gamma}))\)</span> is a discrepancy function (ML or OLS).</p>
+</section>
+<section id="the-cudeck-and-browne-method-1" class="slide level2">
+<h2>The Cudeck and Browne Method</h2>
+<h3 id="advantages-1">Advantages</h3>
+<ul>
+<li>Adaptable to any covariance structure model.</li>
+<li>Allows a target RMSEA value to be directly specified (because <span class="math inline">\(\delta\)</span> is related to RMSEA; more on that later).</li>
+<li>No structural assumptions about <span class="math inline">\(\mathbf{E}\)</span>; any suitable <span class="math inline">\(\mathbf{E}\)</span> matrix will do.</li>
+</ul>
+<h3 id="disadvantages-1">Disadvantages</h3>
+<ul>
+<li>Can result in indefinite <span class="math inline">\(\boldsymbol{\Sigma}\)</span> matrices if <span class="math inline">\(\delta\)</span> is too large.</li>
+<li>Relatively difficult to implement.</li>
+<li>Inflexible; only one parameter to control.</li>
+<li>Implies that <span class="math inline">\(\boldsymbol{\gamma}_0\)</span> will be perfectly recovered from a sample covariance matrix as sample size goes to <span class="math inline">\(\infty\)</span> (is this reasonable?).</li>
+</ul>
+</section>
+<section id="the-wu-and-browne-method" class="slide level2">
+<h2>The Wu and Browne Method</h2>
+<p>Model error is considered to be a random effect due to differences between the operational population and some ideal population for which the theory is hypothesized.</p>
+<p>Specifically, <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is considered to be a random sample from an inverse-Wishart distribution such that</p>
+<p><span class="math display">\[\begin{equation}
+(\boldsymbol{\Sigma} | \boldsymbol{\Omega}) \sim W^{-1}_p(m \boldsymbol{\Omega}, m),
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(m = 1/v\)</span> is a continuous precision parameter such that <span class="math inline">\(m &gt; p - 1\)</span>.</p>
+<blockquote>
+<p>“[The ideal] population need not have an explicit empirical description. In this sense, the general population is defined by the model rather than by its empirical nature.”<br>
+— MacCallum and O’Hagan (2015, p.&nbsp;605)</p>
+</blockquote>
+</section>
+<section id="the-wu-and-browne-method-1" class="slide level2">
+<h2>The Wu and Browne Method</h2>
+<h3 id="advantages-2">Advantages</h3>
+<ul>
+<li>Adaptable to any covariance structure model.</li>
+<li>Fast and relatively easy to implement.</li>
+<li>Allows a target RMSEA value to be specified.</li>
+</ul>
+<h3 id="disadvantages-2">Disadvantages</h3>
+<ul>
+<li>Inflexible; only one parameter to control.</li>
+<li>Resulting RMSEA values are often not close to target values when target values are (relatively) large.</li>
+<li>Possible RMSEA values limited by <span class="math inline">\(m &gt; p - 1\)</span>.</li>
+<li>Based on a specific theory of model error; assumes that error-perturbed covariance matrices are distributed according to an inverse Wishart distribution.</li>
+</ul>
+</section>
+<section id="evaluating-model-error-fit-indices" class="slide level2">
+<h2>Evaluating Model Error: Fit Indices</h2>
+<p>Many population model fit indices have been used to quantify the discrepancy between:</p>
+<ul>
+<li><span class="math inline">\(\boldsymbol{\Sigma}\)</span> and <span class="math inline">\(\boldsymbol{\Omega}\)</span><br>
+</li>
+<li><span class="math inline">\(\boldsymbol{\Sigma}\)</span> and <span class="math inline">\(\hat{\boldsymbol{\Omega}}\)</span> (the implied covariance matrix from an analysis of <span class="math inline">\(\boldsymbol{\Sigma}\)</span>)</li>
+</ul>
+<h3 id="absolute-fit-indices">Absolute Fit Indices</h3>
+<ul>
+<li>Root Mean Square Error of Approximation (RMSEA; Steiger, 1990)<br>
+</li>
+<li>Standardized Root Mean Square Residual (SRMR; Hu &amp; Bentler, 1999)<br>
+</li>
+<li>Correlation Root Mean Square Residual (CRMR; Bollen, 1989; Ogasawara, 2001)</li>
+</ul>
+<h3 id="incremental-fit-indices">Incremental Fit Indices</h3>
+<ul>
+<li>Comparative Fit Index (CFI; Bentler, 1990)<br>
+</li>
+<li>Tucker-Lewis Index (TLI; Tucker &amp; Lewis, 1973)</li>
+</ul>
+</section>
+<section id="evaluating-model-error-disagreement-among-indices" class="slide level2">
+<h2>Evaluating Model Error: Disagreement Among Indices</h2>
+<p>Different model fit indices can lead to different qualitative interpretations of model fit when cut-off values are used to categorize model fit.</p>
+<p>: RMSEA(<span class="math inline">\(\boldsymbol{\Sigma}\)</span>, <span class="math inline">\(\boldsymbol{\Omega}\)</span>) <span class="math inline">\(= 0.04\)</span>; CFI(<span class="math inline">\(\boldsymbol{\Sigma}\)</span>, <span class="math inline">\(\boldsymbol{\Omega}\)</span>) = <span class="math inline">\(0.78\)</span>.</p>
+<ul>
+<li>RMSEA values less than 0.05 generally represent good model fit.<br>
+</li>
+<li>CFI values less than 0.90 generally represent unacceptably poor model fit.</li>
+</ul>
+<blockquote>
+<p>“[T]here is no such thing as a magical, single-number summary that says everything worth knowing about model fit.”<br>
+—Kline (2011, p.&nbsp;193)</p>
+</blockquote>
+</section>
+<section id="controlling-the-amount-of-model-error" class="slide level2">
+<h2>Controlling the Amount of Model Error</h2>
+<p>Given that fit indices can lead to different qualitative interpretations of model fit, researchers should use and report multiple model fit indices in Monte Carlo simulation studies.</p>
+<ul>
+<li>Can model error methods be used as-is or modified to produce <span class="math inline">\(\boldsymbol{\Sigma}\)</span> matrices with model-fit statistic values close to the target values? How effective are they in this task?</li>
+<li>How do the model fit methods differ in terms of CFI, TLI, and SRMR/CRMR for error-perturbed covariance matrices, when holding RMSEA values approximately equal?</li>
+</ul>
+</section>
+<section id="tkl-specifying-the-amount-of-model-error" class="slide level2">
+<h2>TKL: Specifying the Amount of Model Error</h2>
+<h3 id="problems">Problems</h3>
+<ul>
+<li>There are no empirically-supported guidelines for appropriate values of <span class="math inline">\(\nu_{\textrm{e}}\)</span> and <span class="math inline">\(\epsilon\)</span>.</li>
+<li>Choosing values of <span class="math inline">\(\nu_{\textrm{e}}\)</span> and <span class="math inline">\(\epsilon\)</span> that result in a specific model fit index value is difficult.</li>
+<li>Choosing values of <span class="math inline">\(\nu_{\textrm{e}}\)</span> and <span class="math inline">\(\epsilon\)</span> that result in multiple specific model fit index values (e.g., RMSEA and CFI) can be <em>very</em> difficult (sometimes impossible).</li>
+</ul>
+<h3 id="solution">Solution</h3>
+<ul>
+<li>Create an optimization procedure to find values of <span class="math inline">\(\nu_{\textrm{e}}\)</span> and <span class="math inline">\(\epsilon\)</span> that give RMSEA and/or CFI values that are as close as possible to target values.</li>
+</ul>
+</section>
+<section id="tkl-optimization-procedure-rmsea-cfi" class="slide level2">
+<h2>TKL: Optimization Procedure (RMSEA &amp; CFI)</h2>
+<p>Use the L-BFGS-B (Zhu et al., 1997) algorithm to minimize the function:</p>
+<p><span class="math display">\[\begin{equation}
+G(\nu_{\textrm{e}}, \epsilon) = b_1 \left[ \varepsilon - \varepsilon_\textrm{T} \right]^2 + b_2 \left[ CFI - \textrm{CFI}_{\textrm{T}} \right]^2 + \mathbf{1}_{\boldsymbol{W}} \lambda
+\end{equation}\]</span></p>
+<ul>
+<li><span class="math inline">\(b_1\)</span> and <span class="math inline">\(b_2\)</span>: User-specified weights that sum to one.<br>
+</li>
+<li><span class="math inline">\(\varepsilon_\textrm{T}\)</span>: User-specified target RMSEA value.<br>
+</li>
+<li><span class="math inline">\(\textrm{CFI}_{\textrm{T}}\)</span>: User-specified target CFI value.<br>
+</li>
+<li><span class="math inline">\(\mathbf{1}_{\boldsymbol{W}}\)</span>: Indicator function that equals one if any minor factor has more than two factor loadings <span class="math inline">\(\geq .3\)</span> in absolute value.<br>
+</li>
+<li><span class="math inline">\(\lambda\)</span>: User-specified penalty.</li>
+</ul>
+</section>
+<section id="cb-specifying-the-amount-of-model-error-rmsea" class="slide level2">
+<h2>CB: Specifying the Amount of Model Error (RMSEA)</h2>
+<p>The CB method allows a user to generate an error-perturbed covariance matrix with a specified RMSEA value.</p>
+<p><span class="math display">\[\begin{equation}
+\delta = \varepsilon_\textrm{T} df,
+\end{equation}\]</span> where <span class="math inline">\(df\)</span> denotes the model degrees of freedom.</p>
+<ul>
+<li><span class="math inline">\(\boldsymbol{\Sigma}\)</span> can be indefinite if <span class="math inline">\(\delta\)</span> is too large.</li>
+<li>If <span class="math inline">\(\delta\)</span> is large, <span class="math inline">\(\theta_0\)</span> might correspond to a saddle point.</li>
+</ul>
+</section>
+<section id="wb-specifying-the-amount-of-model-error-rmsea" class="slide level2">
+<h2>WB: Specifying the Amount of Model Error (RMSEA)</h2>
+<p>The error-perturbed covariance matrix <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is sampled from:</p>
+<p><span class="math display">\[\begin{equation}
+(\boldsymbol{\Sigma} | \boldsymbol{\Omega}) \sim W^{-1}_p(m \boldsymbol{\Omega}, m),
+\end{equation}\]</span></p>
+<p>The precision parameter, <span class="math inline">\(m = 1/v\)</span>, is related to RMSEA such that <span class="math inline">\(v \approx \varepsilon^2\)</span>.</p>
+<p>The approximation gets worse as <span class="math inline">\(\varepsilon^2\)</span> increases; simply using <span class="math inline">\(m = 1 / \tilde{v}\)</span> is unlikely to lead to RMSEA values close to <span class="math inline">\(\varepsilon_\textrm{T}\)</span> when <span class="math inline">\(\varepsilon_\textrm{T}\)</span> is not very small.</p>
+</section>
+<section id="wb-fit-a-regression-model-for-v" class="slide level2">
+<h2>WB: Fit a Regression Model for <span class="math inline">\(v\)</span></h2>
+<p>Find an appropriate value of <span class="math inline">\(v\)</span> such that RMSEA(<span class="math inline">\(\boldsymbol{\Sigma}, \boldsymbol{\Omega}\)</span>) <span class="math inline">\(\approx \varepsilon_\textrm{T}\)</span>:</p>
+</section>
+<section id="wb-example" class="slide level2">
+<h2>WB: Example</h2>
+
+<img data-src="wb-plot.png" width="282" class="r-stretch quarto-figure-center"></section>
+<section id="aims-of-the-proposed-study" class="slide level2">
+<h2>Aims of the Proposed Study</h2>
+<p>Two main aims:</p>
+<ol type="1">
+<li>Determine how error-perturbed covariance matrices produced by the TKL, CB, and WB model error methods differ in terms of CFI, TLI, and SRMR when matched (approximately) on RMSEA.<br>
+</li>
+<li>Determine how well (a) the proposed optimization procedure for controlling RMSEA and CFI with the TKL method and (b) the regression procedure for controlling RMSEA with the WB method work.</li>
+</ol>
+</section></section>
+<section>
+<section id="method" class="title-slide slide level1 center">
+<h1>Method</h1>
+
+</section>
+<section id="design-variables-population-models" class="slide level2">
+<h2>Design Variables: Population Models</h2>
+<ul>
+<li>Population models with 1, 3, 5 or 10 major common factors.</li>
+<li>Data sets with either 5 or 15 items per factor (<span class="math inline">\(p \in [5, 15, 25, 45, 50, 75, 150]\)</span>).</li>
+<li>Common factor correlations either 0.0 (orthogonal), 0.3, or 0.6.</li>
+<li>Three factor loading structure types (simple structure): “Strong”, “Moderate”, and “Weak”, corresponding to factor loadings of 0.8, 0.6, and 0.4 (Hair et al., 2018).</li>
+</ul>
+</section>
+<section id="design-variables-model-error" class="slide level2">
+<h2>Design Variables: Model Error</h2>
+<ul>
+<li>Model error methods
+<ul>
+<li>TKL (using target RMSEA, target CFI, and target RMSEA/CFI values; with and without constraints)</li>
+<li>CB</li>
+<li>WB</li>
+</ul></li>
+<li>Model fit targets
+<ul>
+<li><span class="math inline">\(\varepsilon_\textrm{T} \in [0.025, 0.065, 0.090]\)</span>.</li>
+<li><span class="math inline">\(\textrm{CFI}_{\textrm{T}} \in [0.99, 0.95, 0.90]\)</span>.</li>
+<li><span class="math inline">\(\varepsilon_\textrm{T}\)</span> and <span class="math inline">\(\textrm{CFI}_{\textrm{T}}\)</span> pairs correspond to very good, fair, and poor model fit (MacCallum et al., 2001; Myers et al., 2015).</li>
+</ul></li>
+</ul>
+<p>Note that target CFI only affects the TKL (RMSEA/CFI) procedure.</p>
+</section>
+<section id="design-variables-summary" class="slide level2">
+<h2>Design Variables: Summary</h2>
+<div class="cell" data-hash="test-quarto_cache/revealjs/count-conditions_5b140d34cc185b9f5cf860016781d257">
+
+</div>
+<div class="cell" data-hash="test-quarto_cache/revealjs/study1-tab_39cf4d23afe90241259208673253a01b">
+<div class="cell-output-display">
+<table>
+<caption>Design Variables and Levels.</caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 74%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: left;">Levels</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Factors</td>
+<td style="text-align: left;">1, 3, 5, 10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Items/Factor</td>
+<td style="text-align: left;">5, 15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Factor Correlation (<span class="math inline">\(\phi\)</span>)</td>
+<td style="text-align: left;">0.0, 0.3, 0.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Loadings</td>
+<td style="text-align: left;">0.4, 0.6, 0.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Target Model Fit</td>
+<td style="text-align: left;">Very Good (<span class="math inline">\(\varepsilon_\textrm{T} = 0.025\)</span>, <span class="math inline">\(\textrm{CFI}_{\textrm{T}} = 0.99\)</span>),</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Fair (<span class="math inline">\(\varepsilon_\textrm{T} = 0.065\)</span>, <span class="math inline">\(\textrm{CFI}_{\textrm{T}} = 0.95\)</span>),</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Poor (<span class="math inline">\(\varepsilon_\textrm{T} = 0.090\)</span>, <span class="math inline">\(\textrm{CFI}_{\textrm{T}} = 0.90\)</span>)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Error Method</td>
+<td style="text-align: left;">TKL (six variants), CB, WB</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="study-design-variables-summary" class="slide level2">
+<h2>Study Design Variables: Summary</h2>
+<ul>
+<li>42 (error-free) population models.</li>
+<li>1,440 crossed conditions.</li>
+<li>500 reps for all model-error methods.</li>
+<li><span class="math inline">\(500 \times 1,440 = 720,000\)</span> simulated <span class="math inline">\(\boldsymbol{\Sigma}\)</span> matrices.</li>
+</ul>
+</section>
+<section id="study-design-simulation-procedure" class="slide level2">
+<h2>Study Design: Simulation Procedure</h2>
+<h3 id="data-generation">Data generation</h3>
+<ul>
+<li>For each (error-free) population model, generate the model-implied correlation matrix (<span class="math inline">\(\boldsymbol{\Omega}\)</span>).</li>
+<li>For each model-implied correlation matrix:
+<ul>
+<li>Generate 500 error-perturbed covariance matrices (<span class="math inline">\(\bSigma\)</span>) for each of the TKL, CB, and WB model-error methods at each <span class="math inline">\(\varepsilon_\textrm{T}\)</span> and <span class="math inline">\(\textrm{CFI}_{\textrm{T}}\)</span> value pair.</li>
+</ul></li>
+</ul>
+<h3 id="evaluation">Evaluation</h3>
+<p>For each error-perturbed correlation (<span class="math inline">\(\bSigma\)</span>) matrix:</p>
+<ul>
+<li>Compute RMSEA, CFI, TLI, and CRMR for <span class="math inline">\(\boldsymbol{\Sigma}\)</span> and <span class="math inline">\(\boldsymbol{\Omega}\)</span> (and for <span class="math inline">\(\boldsymbol{\Sigma}\)</span> and <span class="math inline">\(\hat{\boldsymbol{\Omega}}\)</span>).</li>
+<li>Compute:</li>
+</ul>
+<p><span class="math display">\[\begin{equation}
+D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|
+\end{equation}\]</span></p>
+</section></section>
+<section>
+<section id="results" class="title-slide slide level1 center">
+<h1>Results</h1>
+
+</section>
+<section id="section-overview" class="slide level2">
+<h2>Section Overview</h2>
+<ul>
+<li>First topic</li>
+<li>Second topic</li>
+<li>Third topic</li>
+</ul>
+</section>
+<section id="distribution-of-rmseaomega" class="slide level2">
+<h2>Distribution of <span class="math inline">\(\rmseaOmega\)</span></h2>
+
+<img data-src="/home/justin/Documents/dissertation/img/rmsea_distributions.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section>
+<section id="distribution-of-cfiomega" class="slide level2">
+<h2>Distribution of <span class="math inline">\(\cfiOmega\)</span></h2>
+
+<img data-src="/home/justin/Documents/dissertation/img/cfi_distributions.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section>
+<section id="fit-index-agreement-d" class="slide level2">
+<h2>Fit Index Agreement: <span class="math inline">\(D\)</span></h2>
+
+<img data-src="/home/justin/Documents/dissertation/img/d_plot.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section>
+<section id="qualitative-fit-index-agreement" class="slide level2">
+<h2>Qualitative Fit Index Agreement</h2>
+
+<img data-src="/home/justin/Documents/dissertation/img/fit_index_agreement.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section></section>
+<section>
+<section id="backup-slides" class="title-slide slide level1 center">
+<h1>Backup Slides</h1>
+
+</section>
+<section id="population-model-fit-indices" class="slide level2">
+<h2>Population Model Fit Indices</h2>
+<p><span class="math display">\[\begin{equation}
+\textrm{RMSEA} = \varepsilon = \sqrt{\frac{F_h}{df_h}},
+\end{equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+\textrm{CFI} = 1 - \frac{F_h}{F_b},
+\end{equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+\textrm{TLI} = 1 - \frac{F_h / df_h}{F_b / df_b}
+\end{equation}\]</span></p>
+<ul>
+<li><span class="math inline">\(F_h\)</span> and <span class="math inline">\(df_h\)</span> denote the discrepancy function value and degrees of freedom for the full model.</li>
+<li><span class="math inline">\(F_b\)</span> and <span class="math inline">\(df_b\)</span> denote the discrepancy function value and degrees of freedom for the baseline (independence) model.</li>
+</ul>
+</section>
+<section id="population-model-fit-indices-1" class="slide level2">
+<h2>Population Model Fit Indices</h2>
+<p><span class="math display">\[\begin{equation}
+\textrm{SRMR} = \sqrt{ \frac{1}{p (p + 1) / 2} \sum_{i \leq j} \left(  \frac{\sigma_{ij} - \omega_{ij}}{\sqrt{\sigma_{ii} \sigma_{jj}}} \ \right) ^2 }
+\end{equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}
+\textrm{CRMR} = \sqrt{ \frac{1}{p (p - 1) / 2} \sum_{i &lt; j} \left( \sigma_{ij} - \omega_{ij} \ \right) ^2 }
+\end{equation}\]</span></p>
+<ul>
+<li><span class="math inline">\(p\)</span> is the number of observed variables.<br>
+</li>
+<li><span class="math inline">\(\sigma_{ij}\)</span> and <span class="math inline">\(\omega_{ij}\)</span> are the <span class="math inline">\(i,j\)</span>th elements of <span class="math inline">\(\boldsymbol{\Sigma}\)</span> and <span class="math inline">\(\boldsymbol{\Omega}\)</span>, respectively.</li>
+</ul>
+</section>
+<section id="local-optima" class="slide level2">
+<h2>Local Optima</h2>
+
+<img data-src="local_optima.png" width="396" class="r-stretch quarto-figure-center"></section>
+<section id="indefinite-matrices" class="slide level2">
+<h2>Indefinite Matrices</h2>
+
+<img data-src="/home/justin/Documents/dissertation/img/cb_percent_indefinite.png" style="width:85.0%" class="r-stretch quarto-figure-center"></section>
+<section id="l-bfgs-b-non-convergence" class="slide level2">
+<h2>L-BFGS-B Non-convergence</h2>
+<ul>
+<li>Non-convergence only occurred when the <span class="math inline">\(\TKLrmseacfi\)</span> method was used.<br>
+</li>
+<li>Only 14 of 90,000 (&lt;1%) of <span class="math inline">\(\TKLrmseacfi\)</span> cases failed to converge using L-BFGS-B.</li>
+</ul>
+
+<img data-src="/home/justin/Documents/dissertation/img/nonconverged_rmsea_cfi.png" style="width:55.0%" class="r-stretch quarto-figure-center"></section>
+<section id="major-minor-factors" class="slide level2">
+<h2>Major Minor Factors</h2>
+<div class="cell" data-layout-align="center" data-hash="test-quarto_cache/revealjs/unnamed-chunk-16_0c118a9973643b5728ed084d76d0e5e6">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="/home/justin/Documents/dissertation/img/major_minor_factors.png" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><img src="Msol-maroon.png" class="slide-logo"></p>
+<div class="footer footer-default">
+
+</div>
+</section></section>
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="test-quarto_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="test-quarto_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="test-quarto_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="test-quarto_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="test-quarto_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="test-quarto_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="test-quarto_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="test-quarto_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="test-quarto_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="test-quarto_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'smaller': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          // dispatch for htmlwidgets
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for reveal
+        if (window.Reveal) {
+          window.Reveal.addEventListener("slidechanged", function(event) {
+            fireSlideChanged(event.previousSlide, event.currentSlide);
+          });
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        target: function(trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        setTimeout(function() {
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      });
+      function tippyHover(el, contentFn) {
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'quarto-reveal',
+          placement: 'bottom-start'
+        };
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          return note.innerHTML;
+        });
+      }
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+        tippyHover(ref, function() {
+          var popup = window.document.createElement('div');
+          cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    });
+    </script>
+    
+
+</body></html>

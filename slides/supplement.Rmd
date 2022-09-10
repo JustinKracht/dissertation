@@ -1,0 +1,63 @@
+---
+title: "Presentation Supplement"
+author: "Justin Kracht"
+output: pdf_document
+bibliography: "../dissertation.bib"
+csl: "apa7.csl"
+nocite: |
+  @tucker1969
+  @cudeck1992
+  @wu2015
+  @box1987
+  @meehl1990
+  @trichtinger
+  @briggs2003
+  @kracht2020
+  @beauducel2016
+  @dewinter2016
+  @gnambs2016
+  @trichtinger2020
+  @hsu2015
+  @pek2012
+  @bollen1989
+  @ogasawara2001
+  @bentler1990
+  @tucker1973
+  @hair2018
+  @kline2011
+  @zhu1997
+  @maccallum2001
+  @maccallum2003
+  @myers2015
+  @maccallum2015
+header-includes:
+  - \DeclareMathOperator{\diag}{diag}
+  - \DeclareMathOperator{\tr}{tr}
+  - \DeclareMathOperator{\dg}{\textrm{dg}}
+  - \DeclareMathOperator{\vech}{vec}
+  - \DeclareMathOperator{\RMSEA}{\textrm{RMSEA}}
+  - \usepackage{siunitx}
+  - \usepackage{setspace}
+  - \usepackage{bm}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Symbol Glossary
+
+- $\bm{\Omega}_{p \times p}$: Population covariance matrix for $p$ items
+- $\bm{\Omega}(\bm{\gamma})$: Matrix-valued function of a vector of free parameters, $\bm{\gamma}$
+- $\bm{\Sigma}_{p \times p}$: The population covariance matrix with model error.
+- $\mathbf{E}_{p \times p}$: Error (perturbation) matrix
+- $\bm{\Lambda}_{p \times k}$: Matrix of factor loadings for $p$ items on $k$ factors
+- $\bm{\Phi}_{k \times k}$: Correlation matrix for the $k$ factors
+- $\bm{\Psi}_{p \times p}$: Diagonal matrix of item unique variances
+- $\varepsilon$: Root mean square error of approximation (RMSEA)
+- $\varepsilon_T$: Target RMSEA
+- $\textrm{CFI}$: Comparative Fit Index (CFI)
+- $\textrm{CFI}_T$: Target CFI
+- $m = 1/v$: Precision parameter for the inverse-Wishart distribution
+
+## References

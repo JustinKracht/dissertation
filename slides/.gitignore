@@ -1,2 +1,4 @@
 *.aux
 *.out
+/slides/*_cache
+/slides/*_files

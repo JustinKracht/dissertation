@@ -72,9 +72,9 @@ $$
 
 Covariance structure models allow a structured covariance matrix to be represented as a function of a vector of parameters,
 
-\begin{equation}
+$$
 \boldsymbol{\Omega} = \boldsymbol{\Omega}(\boldsymbol{\gamma}),
-\end{equation}
+$$ {#eq-csm}
 
 \noindent where $\boldsymbol{\Omega}$ is a $p \times p$ model-implied covariance matrix and $\gamma$ is a vector of free parameters.  
 
@@ -87,16 +87,16 @@ Psychological phenomena are complex; no population covariance matrix will be per
 
 Model error can be grouped into two basic categories (Meehl, 1990).
 
-+ \alert{Incompleteness}: The model is too simple to adequately reflect reality (e.g., there are more common factors than are modeled). 
-+ \alert{Falsity}: There are contradictions between the model and the world (e.g., non-linear relationships are modeled as linear).
++ [Incompleteness]{style="color:#7a0019"}: The model is too simple to adequately reflect reality (e.g., there are more common factors than are modeled). 
++ [Falsity]{style="color:#7a0019"}: There are contradictions between the model and the world (e.g., non-linear relationships are modeled as linear).
 
 ## Representing Model Error
 
 An population covariance matrix with model error can be represented by
 
-\begin{equation}
+$$
 \boldsymbol{\Sigma} = \boldsymbol{\Omega} + \mathbf{E},
-\end{equation}
+$$ {#eq-model-error}
 
 where $\mathbf{E}$ is a symmetric error matrix representing the effects of model error.
 
@@ -111,7 +111,7 @@ Simulation work has shown that model error can affect:
 + Behavior of confidence regions and fungible parameter estimates for structural equation models (Pek, 2012).
 + ...And other statistical procedures (Beauducel, 2016; de Winter, 2016, Gnambs, 2016; Hsu, 2015; Trichtinger, 2020).
 
-\alert{Problem}: How can we simulate $\boldsymbol{\Sigma}$ with "realistic" model error?
+[Problem]{style="color:#7a0019"}: How can we simulate $\boldsymbol{\Sigma}$ with "realistic" model error?
 
 # Simulating Model Error
 
@@ -129,9 +129,9 @@ Three of the most prominent model error methods are:
 
 The TKL method is based on the common factor analysis model for $k$ common factors:
 
-\begin{equation}
+$$
 \boldsymbol{\Omega} = \boldsymbol{\Lambda} \boldsymbol{\Phi} \boldsymbol{\Lambda}^\prime + \boldsymbol{\Psi},
-\end{equation}
+$$ {#eq-cfa}
 
 where  
 
@@ -140,18 +140,18 @@ where
 + $\boldsymbol{\Phi}_{k \times k}$: common factor covariance matrix.
 + $\boldsymbol{\Psi}_{p \times p}$: diagonal matrix containing the unique variances.
 
-Let all common factors be standardized in the population so that $\boldsymbol{\Omega}$ has a unit diagonal (i.e., is a correlation matrix).  
+Let all observed variables and common factors be standardized in the population so that $\boldsymbol{\Omega}$ has a unit diagonal (i.e., is a correlation matrix).  
 
 ## The Tucker, Koopman, and Linn Method
 
 Model error is represented as the effect of numerous minor common factors such that $\mathbf{W}_{p \times q}$ is the matrix of minor factor loadings for the $q \succeq k$ minor common factors,
 
-\begin{equation}
+$$
 \boldsymbol{\Sigma} = \boldsymbol{\Lambda} \boldsymbol{\Phi} \boldsymbol{\Lambda}^\prime + \boldsymbol{\Psi} + \mathbf{WW}^\prime
-\end{equation}
+$$ {#eq-tkl}
 
 
-Minor common factors are \alert{"...far too many and far too minor to be retained in a factor analysis of empirical data"} (MacCallum, 2003, p. 135).
+Minor common factors are ["...far too many and far too minor to be retained in a factor analysis of empirical data"]{style="color:#7a0019; font-weight: bold"} (MacCallum, 2003, p. 135).
 
 ## The Tucker, Koopman, and Linn Method: User Parameters
 
@@ -211,9 +211,9 @@ Model error is considered to be a random effect due to differences between the o
 
 Specifically, $\boldsymbol{\Sigma}$ is considered to be a random sample from an inverse-Wishart distribution such that
 
-\begin{equation}
+$$
 (\boldsymbol{\Sigma} | \boldsymbol{\Omega}) \sim W^{-1}_p(m \boldsymbol{\Omega}, m),
-\end{equation}
+$$ {#eq-wb}
 
 where $m = 1/v$ is a continuous precision parameter such that $m > p - 1$.
 
@@ -259,7 +259,7 @@ Many population model fit indices have been used to quantify the discrepancy bet
 
 Different model fit indices can lead to different qualitative interpretations of model fit when cut-off values are used to categorize model fit.
 
-\alert{Example}: RMSEA($\boldsymbol{\Sigma}$, $\boldsymbol{\Omega}$) $= 0.04$; CFI($\boldsymbol{\Sigma}$, $\boldsymbol{\Omega}$) = $0.78$.  
+[Example}: RMSEA($\boldsymbol{\Sigma}$, $\boldsymbol{\Omega}$) $= 0.04$; CFI($\boldsymbol{\Sigma}$, $\boldsymbol{\Omega]{style="color:#7a0019; font-weight: bold"}$) = $0.78$.  
 
 - RMSEA values less than 0.05 generally represent good model fit.  
 - CFI values less than 0.90 generally represent unacceptably poor model fit.  
@@ -292,9 +292,9 @@ Given that fit indices can lead to different qualitative interpretations of mode
 
 Use the L-BFGS-B (Zhu et al., 1997) algorithm to minimize the function:
 
-\begin{equation}
+$$
 G(\nu_{\textrm{e}}, \epsilon) = b_1 \left[ \varepsilon - \varepsilon_\textrm{T} \right]^2 + b_2 \left[ CFI - \textrm{CFI}_{\textrm{T}} \right]^2 + \mathbf{1}_{\boldsymbol{W}} \lambda
-\end{equation}
+$$ {#eq-obj-func}
 
 - $b_1$ and $b_2$: User-specified weights that sum to one.  
 - $\varepsilon_\textrm{T}$: User-specified target RMSEA value.  
@@ -306,9 +306,9 @@ G(\nu_{\textrm{e}}, \epsilon) = b_1 \left[ \varepsilon - \varepsilon_\textrm{T} 
 
 The CB method allows a user to generate an error-perturbed covariance matrix with a specified RMSEA value.
 
-\begin{equation}
+$$
 \delta = \varepsilon_\textrm{T} df,
-\end{equation}
+$$ {#eq-rmsea-to-delta}
 \noindent where $df$ denotes the model degrees of freedom.  
 
 + $\boldsymbol{\Sigma}$ can be indefinite if $\delta$ is too large.
@@ -318,9 +318,9 @@ The CB method allows a user to generate an error-perturbed covariance matrix wit
 
 The error-perturbed covariance matrix $\boldsymbol{\Sigma}$ is sampled from:  
 
-\begin{equation}
+$$
 (\boldsymbol{\Sigma} | \boldsymbol{\Omega}) \sim W^{-1}_p(m \boldsymbol{\Omega}, m),
-\end{equation}
+$$ {#eq-wb2}
 
 The precision parameter, $m = 1/v$, is related to RMSEA such that $v \approx \varepsilon^2$.  
 
@@ -498,9 +498,9 @@ For each error-perturbed correlation ($\bSigma$) matrix:
 + Compute RMSEA, CFI, TLI, and CRMR for $\boldsymbol{\Sigma}$ and $\boldsymbol{\Omega}$ (and for $\boldsymbol{\Sigma}$ and $\hat{\boldsymbol{\Omega}}$).
 + Compute:
 
-\begin{equation}
+$$
 D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|
-\end{equation}
+$$ {#eq-D}
 
 # Results
 
@@ -538,30 +538,30 @@ knitr::include_graphics(here("img/fit_index_agreement.png"))
 
 ## Population Model Fit Indices
 
-\begin{equation}
+$$
 \textrm{RMSEA} = \varepsilon = \sqrt{\frac{F_h}{df_h}},
-\end{equation}
+$$ {#eq-rmsea}
 
-\begin{equation}
+$$
 \textrm{CFI} = 1 - \frac{F_h}{F_b},
-\end{equation}
+$$ {#eq-cfi}
 
-\begin{equation}
+$$
 \textrm{TLI} = 1 - \frac{F_h / df_h}{F_b / df_b}
-\end{equation}
+$$ {#eq-tli}
 
 + $F_h$ and $df_h$ denote the discrepancy function value and degrees of freedom for the full model.
 + $F_b$ and $df_b$ denote the discrepancy function value and degrees of freedom for the baseline (independence) model.
 
 ## Population Model Fit Indices
 
-\begin{equation}
+$$
 \textrm{SRMR} = \sqrt{ \frac{1}{p (p + 1) / 2} \sum_{i \leq j} \left(  \frac{\sigma_{ij} - \omega_{ij}}{\sqrt{\sigma_{ii} \sigma_{jj}}} \ \right) ^2 }
-\end{equation}
+$$ {#eq-srmr}
 
-\begin{equation}
+$$
 \textrm{CRMR} = \sqrt{ \frac{1}{p (p - 1) / 2} \sum_{i < j} \left( \sigma_{ij} - \omega_{ij} \ \right) ^2 }
-\end{equation}
+$$ {#eq-crmr}
 
 + $p$ is the number of observed variables.   
 + $\sigma_{ij}$ and $\omega_{ij}$ are the $i,j$th elements of $\boldsymbol{\Sigma}$ and $\boldsymbol{\Omega}$, respectively.  

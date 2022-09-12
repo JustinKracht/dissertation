@@ -7,7 +7,7 @@
 <link href="test-quarto_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="test-quarto_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="test-quarto_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.1.189">
+  <meta name="generator" content="quarto-1.0.38">
 
   <meta name="author" content="Justin Kracht">
   <title>Make Some Noise: Generating Data From Imperfect Models</title>
@@ -19,15 +19,10 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
-    ul.task-list li input[type="checkbox"] {
-      width: 0.8em;
-      margin: 0 0.8em 0.2em -1.6em;
-      vertical-align: middle;
-    }
   </style>
   <link rel="stylesheet" href="test-quarto_files/libs/revealjs/dist/theme/quarto.css" id="theme">
   <link href="test-quarto_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -403,9 +398,9 @@
 <section id="model-error-and-covariance-structure-models" class="slide level2">
 <h2>Model Error and Covariance Structure Models</h2>
 <p>Covariance structure models allow a structured covariance matrix to be represented as a function of a vector of parameters,</p>
-<p><span class="math display">\[\begin{equation}
+<p><span id="eq-csm"><span class="math display">\[
 \boldsymbol{\Omega} = \boldsymbol{\Omega}(\boldsymbol{\gamma}),
-\end{equation}\]</span></p>
+\qquad(1)\]</span></span></p>
 <p>where <span class="math inline">\(\boldsymbol{\Omega}\)</span> is a <span class="math inline">\(p \times p\)</span> model-implied covariance matrix and <span class="math inline">\(\gamma\)</span> is a vector of free parameters.</p>
 <blockquote>
 <p>“All models are wrong, but some are useful”<br>
@@ -417,16 +412,16 @@
 <p>Psychological phenomena are complex; no population covariance matrix will be perfectly represented by <span class="math inline">\(\boldsymbol{\Omega}(\boldsymbol{\gamma})\)</span> in practice.</p>
 <p>Model error can be grouped into two basic categories (Meehl, 1990).</p>
 <ul>
-<li>: The model is too simple to adequately reflect reality (e.g., there are more common factors than are modeled).</li>
-<li>: There are contradictions between the model and the world (e.g., non-linear relationships are modeled as linear).</li>
+<li><span style="color:#7a0019">Incompleteness</span>: The model is too simple to adequately reflect reality (e.g., there are more common factors than are modeled).</li>
+<li><span style="color:#7a0019">Falsity</span>: There are contradictions between the model and the world (e.g., non-linear relationships are modeled as linear).</li>
 </ul>
 </section>
 <section id="representing-model-error" class="slide level2">
 <h2>Representing Model Error</h2>
 <p>An population covariance matrix with model error can be represented by</p>
-<p><span class="math display">\[\begin{equation}
+<p><span id="eq-model-error"><span class="math display">\[
 \boldsymbol{\Sigma} = \boldsymbol{\Omega} + \mathbf{E},
-\end{equation}\]</span></p>
+\qquad(2)\]</span></span></p>
 <p>where <span class="math inline">\(\mathbf{E}\)</span> is a symmetric error matrix representing the effects of model error.</p>
 </section>
 <section id="why-should-we-care-about-model-error" class="slide level2">
@@ -439,7 +434,7 @@
 <li>Behavior of confidence regions and fungible parameter estimates for structural equation models (Pek, 2012).</li>
 <li>…And other statistical procedures (Beauducel, 2016; de Winter, 2016, Gnambs, 2016; Hsu, 2015; Trichtinger, 2020).</li>
 </ul>
-<p>: How can we simulate <span class="math inline">\(\boldsymbol{\Sigma}\)</span> with “realistic” model error?</p>
+<p><span style="color:#7a0019">Problem</span>: How can we simulate <span class="math inline">\(\boldsymbol{\Sigma}\)</span> with “realistic” model error?</p>
 </section></section>
 <section>
 <section id="simulating-model-error" class="title-slide slide level1 center">
@@ -459,9 +454,9 @@
 <section id="the-tucker-koopman-and-linn-method" class="slide level2">
 <h2>The Tucker, Koopman, and Linn Method</h2>
 <p>The TKL method is based on the common factor analysis model for <span class="math inline">\(k\)</span> common factors:</p>
-<p><span class="math display">\[\begin{equation}
+<p><span id="eq-cfa"><span class="math display">\[
 \boldsymbol{\Omega} = \boldsymbol{\Lambda} \boldsymbol{\Phi} \boldsymbol{\Lambda}^\prime + \boldsymbol{\Psi},
-\end{equation}\]</span></p>
+\qquad(3)\]</span></span></p>
 <p>where</p>
 <ul>
 <li><span class="math inline">\(\boldsymbol{\Omega}_{p \times p}\)</span>: model-implied covariance matrix.</li>
@@ -469,15 +464,15 @@
 <li><span class="math inline">\(\boldsymbol{\Phi}_{k \times k}\)</span>: common factor covariance matrix.</li>
 <li><span class="math inline">\(\boldsymbol{\Psi}_{p \times p}\)</span>: diagonal matrix containing the unique variances.</li>
 </ul>
-<p>Let all common factors be standardized in the population so that <span class="math inline">\(\boldsymbol{\Omega}\)</span> has a unit diagonal (i.e., is a correlation matrix).</p>
+<p>Let all observed variables and common factors be standardized in the population so that <span class="math inline">\(\boldsymbol{\Omega}\)</span> has a unit diagonal (i.e., is a correlation matrix).</p>
 </section>
 <section id="the-tucker-koopman-and-linn-method-1" class="slide level2">
 <h2>The Tucker, Koopman, and Linn Method</h2>
 <p>Model error is represented as the effect of numerous minor common factors such that <span class="math inline">\(\mathbf{W}_{p \times q}\)</span> is the matrix of minor factor loadings for the <span class="math inline">\(q \succeq k\)</span> minor common factors,</p>
-<p><span class="math display">\[\begin{equation}
+<p><span id="eq-tkl"><span class="math display">\[
 \boldsymbol{\Sigma} = \boldsymbol{\Lambda} \boldsymbol{\Phi} \boldsymbol{\Lambda}^\prime + \boldsymbol{\Psi} + \mathbf{WW}^\prime
-\end{equation}\]</span></p>
-<p>Minor common factors are (MacCallum, 2003, p.&nbsp;135).</p>
+\qquad(4)\]</span></span></p>
+<p>Minor common factors are <span style="color:#7a0019; font-weight: bold">“…far too many and far too minor to be retained in a factor analysis of empirical data”</span> (MacCallum, 2003, p.&nbsp;135).</p>
 </section>
 <section id="the-tucker-koopman-and-linn-method-user-parameters" class="slide level2">
 <h2>The Tucker, Koopman, and Linn Method: User Parameters</h2>
@@ -533,9 +528,9 @@
 <h2>The Wu and Browne Method</h2>
 <p>Model error is considered to be a random effect due to differences between the operational population and some ideal population for which the theory is hypothesized.</p>
 <p>Specifically, <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is considered to be a random sample from an inverse-Wishart distribution such that</p>
-<p><span class="math display">\[\begin{equation}
+<p><span id="eq-wb"><span class="math display">\[
 (\boldsymbol{\Sigma} | \boldsymbol{\Omega}) \sim W^{-1}_p(m \boldsymbol{\Omega}, m),
-\end{equation}\]</span></p>
+\qquad(5)\]</span></span></p>
 <p>where <span class="math inline">\(m = 1/v\)</span> is a continuous precision parameter such that <span class="math inline">\(m &gt; p - 1\)</span>.</p>
 <blockquote>
 <p>“[The ideal] population need not have an explicit empirical description. In this sense, the general population is defined by the model rather than by its empirical nature.”<br>
@@ -570,8 +565,6 @@
 <ul>
 <li>Root Mean Square Error of Approximation (RMSEA; Steiger, 1990)<br>
 </li>
-<li>Standardized Root Mean Square Residual (SRMR; Hu &amp; Bentler, 1999)<br>
-</li>
 <li>Correlation Root Mean Square Residual (CRMR; Bollen, 1989; Ogasawara, 2001)</li>
 </ul>
 <h3 id="incremental-fit-indices">Incremental Fit Indices</h3>
@@ -584,7 +577,7 @@
 <section id="evaluating-model-error-disagreement-among-indices" class="slide level2">
 <h2>Evaluating Model Error: Disagreement Among Indices</h2>
 <p>Different model fit indices can lead to different qualitative interpretations of model fit when cut-off values are used to categorize model fit.</p>
-<p>: RMSEA(<span class="math inline">\(\boldsymbol{\Sigma}\)</span>, <span class="math inline">\(\boldsymbol{\Omega}\)</span>) <span class="math inline">\(= 0.04\)</span>; CFI(<span class="math inline">\(\boldsymbol{\Sigma}\)</span>, <span class="math inline">\(\boldsymbol{\Omega}\)</span>) = <span class="math inline">\(0.78\)</span>.</p>
+<p>[Example}: RMSEA(<span class="math inline">\(\boldsymbol{\Sigma}\)</span>, <span class="math inline">\(\boldsymbol{\Omega}\)</span>) <span class="math inline">\(= 0.04\)</span>; CFI(<span class="math inline">\(\boldsymbol{\Sigma}\)</span>, <span class="math inline">\(\boldsymbol{\Omega]{style="color:#7a0019; font-weight: bold"}\)</span>) = <span class="math inline">\(0.78\)</span>.</p>
 <ul>
 <li>RMSEA values less than 0.05 generally represent good model fit.<br>
 </li>
@@ -619,9 +612,9 @@
 <section id="tkl-optimization-procedure-rmsea-cfi" class="slide level2">
 <h2>TKL: Optimization Procedure (RMSEA &amp; CFI)</h2>
 <p>Use the L-BFGS-B (Zhu et al., 1997) algorithm to minimize the function:</p>
-<p><span class="math display">\[\begin{equation}
+<p><span id="eq-obj-func"><span class="math display">\[
 G(\nu_{\textrm{e}}, \epsilon) = b_1 \left[ \varepsilon - \varepsilon_\textrm{T} \right]^2 + b_2 \left[ CFI - \textrm{CFI}_{\textrm{T}} \right]^2 + \mathbf{1}_{\boldsymbol{W}} \lambda
-\end{equation}\]</span></p>
+\qquad(6)\]</span></span></p>
 <ul>
 <li><span class="math inline">\(b_1\)</span> and <span class="math inline">\(b_2\)</span>: User-specified weights that sum to one.<br>
 </li>
@@ -637,9 +630,10 @@ G(\nu_{\textrm{e}}, \epsilon) = b_1 \left[ \varepsilon - \varepsilon_\textrm{T} 
 <section id="cb-specifying-the-amount-of-model-error-rmsea" class="slide level2">
 <h2>CB: Specifying the Amount of Model Error (RMSEA)</h2>
 <p>The CB method allows a user to generate an error-perturbed covariance matrix with a specified RMSEA value.</p>
-<p><span class="math display">\[\begin{equation}
+<p><span id="eq-rmsea-to-delta"><span class="math display">\[
 \delta = \varepsilon_\textrm{T} df,
-\end{equation}\]</span> where <span class="math inline">\(df\)</span> denotes the model degrees of freedom.</p>
+\qquad(7)\]</span></span></p>
+<p>where <span class="math inline">\(df\)</span> denotes the model degrees of freedom.</p>
 <ul>
 <li><span class="math inline">\(\boldsymbol{\Sigma}\)</span> can be indefinite if <span class="math inline">\(\delta\)</span> is too large.</li>
 <li>If <span class="math inline">\(\delta\)</span> is large, <span class="math inline">\(\theta_0\)</span> might correspond to a saddle point.</li>
@@ -648,9 +642,9 @@ G(\nu_{\textrm{e}}, \epsilon) = b_1 \left[ \varepsilon - \varepsilon_\textrm{T} 
 <section id="wb-specifying-the-amount-of-model-error-rmsea" class="slide level2">
 <h2>WB: Specifying the Amount of Model Error (RMSEA)</h2>
 <p>The error-perturbed covariance matrix <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is sampled from:</p>
-<p><span class="math display">\[\begin{equation}
+<p><span id="eq-wb2"><span class="math display">\[
 (\boldsymbol{\Sigma} | \boldsymbol{\Omega}) \sim W^{-1}_p(m \boldsymbol{\Omega}, m),
-\end{equation}\]</span></p>
+\qquad(8)\]</span></span></p>
 <p>The precision parameter, <span class="math inline">\(m = 1/v\)</span>, is related to RMSEA such that <span class="math inline">\(v \approx \varepsilon^2\)</span>.</p>
 <p>The approximation gets worse as <span class="math inline">\(\varepsilon^2\)</span> increases; simply using <span class="math inline">\(m = 1 / \tilde{v}\)</span> is unlikely to lead to RMSEA values close to <span class="math inline">\(\varepsilon_\textrm{T}\)</span> when <span class="math inline">\(\varepsilon_\textrm{T}\)</span> is not very small.</p>
 </section>
@@ -785,9 +779,9 @@ G(\nu_{\textrm{e}}, \epsilon) = b_1 \left[ \varepsilon - \varepsilon_\textrm{T} 
 <li>Compute RMSEA, CFI, TLI, and CRMR for <span class="math inline">\(\boldsymbol{\Sigma}\)</span> and <span class="math inline">\(\boldsymbol{\Omega}\)</span> (and for <span class="math inline">\(\boldsymbol{\Sigma}\)</span> and <span class="math inline">\(\hat{\boldsymbol{\Omega}}\)</span>).</li>
 <li>Compute:</li>
 </ul>
-<p><span class="math display">\[\begin{equation}
+<p><span id="eq-D"><span class="math display">\[
 D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|
-\end{equation}\]</span></p>
+\qquad(9)\]</span></span></p>
 </section></section>
 <section>
 <section id="results" class="title-slide slide level1 center">
@@ -805,19 +799,19 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 <section id="distribution-of-rmseaomega" class="slide level2">
 <h2>Distribution of <span class="math inline">\(\rmseaOmega\)</span></h2>
 
-<img data-src="/home/justin/Documents/dissertation/img/rmsea_distributions.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="../img/rmsea_distributions.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section>
 <section id="distribution-of-cfiomega" class="slide level2">
 <h2>Distribution of <span class="math inline">\(\cfiOmega\)</span></h2>
 
-<img data-src="/home/justin/Documents/dissertation/img/cfi_distributions.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="../img/cfi_distributions.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section>
 <section id="fit-index-agreement-d" class="slide level2">
 <h2>Fit Index Agreement: <span class="math inline">\(D\)</span></h2>
 
-<img data-src="/home/justin/Documents/dissertation/img/d_plot.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="../img/d_plot.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section>
 <section id="qualitative-fit-index-agreement" class="slide level2">
 <h2>Qualitative Fit Index Agreement</h2>
 
-<img data-src="/home/justin/Documents/dissertation/img/fit_index_agreement.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section></section>
+<img data-src="../img/fit_index_agreement.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section></section>
 <section>
 <section id="backup-slides" class="title-slide slide level1 center">
 <h1>Backup Slides</h1>
@@ -825,15 +819,15 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 </section>
 <section id="population-model-fit-indices" class="slide level2">
 <h2>Population Model Fit Indices</h2>
-<p><span class="math display">\[\begin{equation}
+<p><span id="eq-rmsea"><span class="math display">\[
 \textrm{RMSEA} = \varepsilon = \sqrt{\frac{F_h}{df_h}},
-\end{equation}\]</span></p>
-<p><span class="math display">\[\begin{equation}
+\qquad(10)\]</span></span></p>
+<p><span id="eq-cfi"><span class="math display">\[
 \textrm{CFI} = 1 - \frac{F_h}{F_b},
-\end{equation}\]</span></p>
-<p><span class="math display">\[\begin{equation}
+\qquad(11)\]</span></span></p>
+<p><span id="eq-tli"><span class="math display">\[
 \textrm{TLI} = 1 - \frac{F_h / df_h}{F_b / df_b}
-\end{equation}\]</span></p>
+\qquad(12)\]</span></span></p>
 <ul>
 <li><span class="math inline">\(F_h\)</span> and <span class="math inline">\(df_h\)</span> denote the discrepancy function value and degrees of freedom for the full model.</li>
 <li><span class="math inline">\(F_b\)</span> and <span class="math inline">\(df_b\)</span> denote the discrepancy function value and degrees of freedom for the baseline (independence) model.</li>
@@ -841,12 +835,12 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 </section>
 <section id="population-model-fit-indices-1" class="slide level2">
 <h2>Population Model Fit Indices</h2>
-<p><span class="math display">\[\begin{equation}
+<p><span id="eq-srmr"><span class="math display">\[
 \textrm{SRMR} = \sqrt{ \frac{1}{p (p + 1) / 2} \sum_{i \leq j} \left(  \frac{\sigma_{ij} - \omega_{ij}}{\sqrt{\sigma_{ii} \sigma_{jj}}} \ \right) ^2 }
-\end{equation}\]</span></p>
-<p><span class="math display">\[\begin{equation}
+\qquad(13)\]</span></span></p>
+<p><span id="eq-crmr"><span class="math display">\[
 \textrm{CRMR} = \sqrt{ \frac{1}{p (p - 1) / 2} \sum_{i &lt; j} \left( \sigma_{ij} - \omega_{ij} \ \right) ^2 }
-\end{equation}\]</span></p>
+\qquad(14)\]</span></span></p>
 <ul>
 <li><span class="math inline">\(p\)</span> is the number of observed variables.<br>
 </li>
@@ -856,11 +850,11 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 <section id="local-optima" class="slide level2">
 <h2>Local Optima</h2>
 
-<img data-src="local_optima.png" width="396" class="r-stretch quarto-figure-center"></section>
+<img data-src="local_optima.png" class="r-stretch quarto-figure-center"></section>
 <section id="indefinite-matrices" class="slide level2">
 <h2>Indefinite Matrices</h2>
 
-<img data-src="/home/justin/Documents/dissertation/img/cb_percent_indefinite.png" style="width:85.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="../img/cb_percent_indefinite.png" style="width:85.0%" class="r-stretch quarto-figure-center"></section>
 <section id="l-bfgs-b-non-convergence" class="slide level2">
 <h2>L-BFGS-B Non-convergence</h2>
 <ul>
@@ -869,14 +863,14 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 <li>Only 14 of 90,000 (&lt;1%) of <span class="math inline">\(\TKLrmseacfi\)</span> cases failed to converge using L-BFGS-B.</li>
 </ul>
 
-<img data-src="/home/justin/Documents/dissertation/img/nonconverged_rmsea_cfi.png" style="width:55.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="../img/nonconverged_rmsea_cfi.png" style="width:55.0%" class="r-stretch quarto-figure-center"></section>
 <section id="major-minor-factors" class="slide level2">
 <h2>Major Minor Factors</h2>
-<div class="cell" data-layout-align="center" data-hash="test-quarto_cache/revealjs/unnamed-chunk-16_0c118a9973643b5728ed084d76d0e5e6">
+<div class="cell" data-layout-align="center" data-hash="test-quarto_cache/revealjs/unnamed-chunk-8_4197e8fcab6876abcb72317544e9e67c">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="/home/justin/Documents/dissertation/img/major_minor_factors.png" style="width:90.0%"></p>
+<p><img data-src="../img/major_minor_factors.png" style="width:90.0%"></p>
 </figure>
 </div>
 </div>
@@ -1207,8 +1201,7 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
       for (var i=0; i<noterefs.length; i++) {
         const ref = noterefs[i];
         tippyHover(ref, function() {
-          // use id or data attribute instead here
-          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          let href = ref.getAttribute('href');
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);

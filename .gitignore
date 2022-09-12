@@ -8,3 +8,5 @@ _book/*
 data/*
 *.log
 *.tex
+slides/*_cache
+slides/*_files

@@ -1,4 +1,6 @@
 *.aux
 *.out
-/slides/*_cache
-/slides/*_files
+test-quarto_files
+test-quarto_cache
+*.rdx
+*.RData

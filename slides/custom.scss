@@ -6,30 +6,32 @@
 /*--- CHANGE UP FONTS ---*/
 /*-----------------------*/
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Fira+Code&family=Fira+Sans:ital,wght@0,300;1,300&family=IBM+Plex+Sans:wght@300&display=swap');
+@import url(https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i,500,500i,700,700i);
+@import url(https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i);
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
 
 /*------------------*/
 /*--- USE FONTS! ---*/
 /*------------------*/
 
 // fonts
-$font-family-sans-serif: "Fira Sans", "IBM Plex Sans", sans-serif !default;
-$font-family-monospace: "Fira Code", "IBM Plex Mono", "Courier New", monospace !default;
+$font-family-sans-serif: "Inter", "IBM Plex Sans", sans-serif !default;
+$font-family-monospace: "IBM Plex Mono", "Courier New", monospace !default;
 $presentation-font-size-root: 28px !default;
 $presentation-font-smaller: 0.7 !default;
-$presentation-line-height: 1.5 !default;
+$presentation-line-height: 1.7 !default;
 
 /*----------------------*/
 /*--- CHANGE COLOURS ---*/
 /*----------------------*/
 
 // main colors
-$body-bg: #fafafa !default;
+$body-bg: #ffffff !default;
 $body-color: #262626 !default;
-$text-muted: #ffcc33 !default;
+$text-muted: #404040 !default;
 
 // link colors
-$link-color: #171515 !default;
+$link-color: #7a0019 !default;
 $link-color-hover: lighten($link-color, 10%) !default;
 
 // selection colors
@@ -54,7 +56,7 @@ $presentation-heading-text-transform: none !default;
 $presentation-heading-text-shadow: none !default;
 $presentation-h1-text-shadow: none !default;
 $presentation-heading-font-weight: 600 !default;
-$presentation-h1-font-size: 2.5em !default;
+$presentation-h1-font-size: 2.0em !default;
 $presentation-h2-font-size: 1.6em !default;
 $presentation-h3-font-size: 1.3em !default;
 $presentation-h4-font-size: 1em !default;
@@ -64,7 +66,7 @@ $presentation-block-margin: 12px !default;
 
 // text alignment
 $presentation-slide-text-align: left !default;
-$presentation-title-slide-text-align: center !default;
+$presentation-title-slide-text-align: left !default;
 $reveal-slide-text-align: $presentation-slide-text-align  !default;
 $reveal-title-slide-text-align: $presentation-title-slide-text-align  !default;
 
@@ -548,4 +550,14 @@ $panel-sidebar-padding: 0.5em;
 
 @else {
   /*! light */
+}
+
+#title-slide p.author::before {
+  content: "";
+  display: block;
+  border: none;
+  background-color: $body-color;
+  color: $body-color;
+  height: 3px;
+  margin-bottom: 1em;
 }

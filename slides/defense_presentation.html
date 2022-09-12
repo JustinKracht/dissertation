@@ -1,34 +1,103 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="test-quarto_files/libs/clipboard/clipboard.min.js"></script>
-<script src="test-quarto_files/libs/quarto-html/tabby.min.js"></script>
-<script src="test-quarto_files/libs/quarto-html/popper.min.js"></script>
-<script src="test-quarto_files/libs/quarto-html/tippy.umd.min.js"></script>
-<link href="test-quarto_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="test-quarto_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="test-quarto_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.0.38">
+<script src="defense_presentation_files/libs/clipboard/clipboard.min.js"></script>
+<script src="defense_presentation_files/libs/quarto-html/tabby.min.js"></script>
+<script src="defense_presentation_files/libs/quarto-html/popper.min.js"></script>
+<script src="defense_presentation_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="defense_presentation_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="defense_presentation_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="defense_presentation_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.1.189">
 
   <meta name="author" content="Justin Kracht">
   <title>Make Some Noise: Generating Data From Imperfect Models</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-  <link rel="stylesheet" href="test-quarto_files/libs/revealjs/dist/reset.css">
-  <link rel="stylesheet" href="test-quarto_files/libs/revealjs/dist/reveal.css">
+  <link rel="stylesheet" href="defense_presentation_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="defense_presentation_files/libs/revealjs/dist/reveal.css">
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="test-quarto_files/libs/revealjs/dist/theme/quarto.css" id="theme">
-  <link href="test-quarto_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
-  <link href="test-quarto_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
-  <link href="test-quarto_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="test-quarto_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <link rel="stylesheet" href="defense_presentation_files/libs/revealjs/dist/theme/quarto.css" id="theme">
+  <link href="defense_presentation_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="defense_presentation_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="defense_presentation_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="defense_presentation_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
 
   .callout {
@@ -333,6 +402,7 @@
 \DeclareMathOperator{\dg}{\textrm{dg}}
 \DeclareMathOperator{\vech}{vec}
 \DeclareMathOperator{\RMSEA}{\textrm{RMSEA}}
+\DeclareMathOperator{\CFI}{\textrm{CFI}}
 \newcommand{\TKLrmseacfi}{\textrm{TKL}_{\textrm{RMSEA} / \textrm{CFI}}}
 \newcommand{\TKLrmsea}{\textrm{TKL}_{\textrm{RMSEA}}}
 \newcommand{\TKLcfi}{\textrm{TKL}_{\textrm{CFI}}}
@@ -362,22 +432,16 @@
 </li>
 <li>Methods<br>
 </li>
-<li>Results</li>
+<li>Results &amp; Discussion</li>
 </ol>
 <aside class="notes">
-<ol type="1">
-<li>Background: What is model error, and why does it matter?<br>
-</li>
-<li>Simulating Model Error: What methods are available to simulate model error?<br>
-</li>
-<li>Quantifying Model Error: What model fit indices are used to quantify model error, and how do they differ?<br>
-</li>
-<li>Study Aims<br>
-</li>
-<li>Methods<br>
-</li>
-<li>Results</li>
-</ol>
+<ul>
+<li>First, I’ll provide some background on model error in covariance structure models and why it’s important.</li>
+<li>In the second section, I’ll discuss existing methods for simulating model error; that is, methods used to simulate covariance or correlation matrices from imperfect factor models.</li>
+<li>In the third section, I’ll discuss commonly-used metrics for quantifying model error in terms of model fit.</li>
+<li>Next, I’ll discuss the aims of my simulation study and describe the study design.</li>
+<li>Finally, I’ll present my results and discuss their implications.</li>
+</ul>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -402,19 +466,37 @@
 \boldsymbol{\Omega} = \boldsymbol{\Omega}(\boldsymbol{\gamma}),
 \qquad(1)\]</span></span></p>
 <p>where <span class="math inline">\(\boldsymbol{\Omega}\)</span> is a <span class="math inline">\(p \times p\)</span> model-implied covariance matrix and <span class="math inline">\(\gamma\)</span> is a vector of free parameters.</p>
+<div class="fragment">
 <blockquote>
 <p>“All models are wrong, but some are useful”<br>
 — Box (1987, p.&nbsp;424)</p>
 </blockquote>
+</div>
 </section>
 <section id="what-is-model-error" class="slide level2">
 <h2>What is Model Error?</h2>
 <p>Psychological phenomena are complex; no population covariance matrix will be perfectly represented by <span class="math inline">\(\boldsymbol{\Omega}(\boldsymbol{\gamma})\)</span> in practice.</p>
-<p>Model error can be grouped into two basic categories (Meehl, 1990).</p>
+<p>Model error can be grouped into two basic categories (Meehl, 1990):</p>
 <ul>
-<li><span style="color:#7a0019">Incompleteness</span>: The model is too simple to adequately reflect reality (e.g., there are more common factors than are modeled).</li>
-<li><span style="color:#7a0019">Falsity</span>: There are contradictions between the model and the world (e.g., non-linear relationships are modeled as linear).</li>
+<li><p><span style="color:#7a0019"><strong>Incompleteness</strong></span></p></li>
+<li><p><span style="color:#7a0019"><strong>Falsity</strong></span></p></li>
 </ul>
+<aside class="notes">
+<ul>
+<li><span style="color:#7a0019"><strong>Incompleteness</strong></span>: The model is too simple to adequately reflect reality (e.g., there are more common factors than are modeled).</li>
+<li><span style="color:#7a0019"><strong>Falsity</strong></span>: There are contradictions between the model and the world (e.g., non-linear relationships are modeled as linear).</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="representing-model-error" class="slide level2">
 <h2>Representing Model Error</h2>
@@ -427,14 +509,35 @@
 <section id="why-should-we-care-about-model-error" class="slide level2">
 <h2>Why Should We Care About Model Error?</h2>
 <p>Monte Carlo simulation studies that sample from <span class="math inline">\(\boldsymbol{\Omega}\)</span> (rather than <span class="math inline">\(\boldsymbol{\Sigma}\)</span>) are likely to produce overly-optimistic results.</p>
+<div class="fragment">
 <p>Simulation work has shown that model error can affect:</p>
+<ul>
+<li><p>EFA parameter estimates (Briggs, 2003)</p></li>
+<li><p>Dimensionality estimates (Kracht and Waller, 2020)</p></li>
+<li><p>…And other statistical procedures (Pek, 2012; Beauducel, 2016; de Winter, 2016, Gnambs, 2016; Hsu, 2015; Trichtinger, 2020).</p></li>
+</ul>
+<aside class="notes">
 <ul>
 <li>Parameter estimation for exploratory factor analysis (Briggs, 2003).</li>
 <li>Dimensionality identification with parallel analysis (Kracht, 2020).</li>
 <li>Behavior of confidence regions and fungible parameter estimates for structural equation models (Pek, 2012).</li>
 <li>…And other statistical procedures (Beauducel, 2016; de Winter, 2016, Gnambs, 2016; Hsu, 2015; Trichtinger, 2020).</li>
 </ul>
-<p><span style="color:#7a0019">Problem</span>: How can we simulate <span class="math inline">\(\boldsymbol{\Sigma}\)</span> with “realistic” model error?</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+<div class="fragment">
+<p><span style="color:#7a0019"><strong>Problem</strong></span>: How can we simulate <span class="math inline">\(\boldsymbol{\Sigma}\)</span> with “realistic” model error?</p>
+</div>
 </section></section>
 <section>
 <section id="simulating-model-error" class="title-slide slide level1 center">
@@ -449,7 +552,20 @@
 <li>Cudeck and Browne (CB; 1992)</li>
 <li>Wu and Browne (WB; 2015)</li>
 </ol>
-<!-- The *ad hoc* methods of misspecifying the number of common factors by one or two factors, or misspecifying the relationships between observed and latent variables are not of interest here. -->
+<aside class="notes">
+<p>The <em>ad hoc</em> methods of misspecifying the number of common factors by one or two factors, or misspecifying the relationships between observed and latent variables are not of interest here.</p>
+<p>I’ll give a brief description of each of these methods and outline their benefits and drawbacks.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="the-tucker-koopman-and-linn-method" class="slide level2">
 <h2>The Tucker, Koopman, and Linn Method</h2>
@@ -464,7 +580,19 @@
 <li><span class="math inline">\(\boldsymbol{\Phi}_{k \times k}\)</span>: common factor covariance matrix.</li>
 <li><span class="math inline">\(\boldsymbol{\Psi}_{p \times p}\)</span>: diagonal matrix containing the unique variances.</li>
 </ul>
+<aside class="notes">
 <p>Let all observed variables and common factors be standardized in the population so that <span class="math inline">\(\boldsymbol{\Omega}\)</span> has a unit diagonal (i.e., is a correlation matrix).</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="the-tucker-koopman-and-linn-method-1" class="slide level2">
 <h2>The Tucker, Koopman, and Linn Method</h2>
@@ -472,18 +600,22 @@
 <p><span id="eq-tkl"><span class="math display">\[
 \boldsymbol{\Sigma} = \boldsymbol{\Lambda} \boldsymbol{\Phi} \boldsymbol{\Lambda}^\prime + \boldsymbol{\Psi} + \mathbf{WW}^\prime
 \qquad(4)\]</span></span></p>
+<div class="fragment">
 <p>Minor common factors are <span style="color:#7a0019; font-weight: bold">“…far too many and far too minor to be retained in a factor analysis of empirical data”</span> (MacCallum, 2003, p.&nbsp;135).</p>
+</div>
 </section>
-<section id="the-tucker-koopman-and-linn-method-user-parameters" class="slide level2">
-<h2>The Tucker, Koopman, and Linn Method: User Parameters</h2>
+<section id="tucker-koopman-and-linn-method-parameters" class="slide level2">
+<h2>Tucker, Koopman, and Linn Method Parameters</h2>
 <p>Two user-specified parameters affect the characteristics of <span class="math inline">\(\mathbf{W}\)</span>:</p>
 <ul>
-<li><p><span class="math inline">\(\nu_{\textrm{e}} \in [0, 1]\)</span>: Proportion of unique variance allocated to the minor common factors.</p></li>
-<li><p><span class="math inline">\(\epsilon \in [0, 1]\)</span>: Controls how variance is distributed among the minor common factors. Values close to zero result in relatively equipotent minor factors whereas values of close to one result in error variance primarily being distributed to the first minor factor.</p></li>
+<li><p><span class="math inline">\(\nu_{\textrm{e}} \in [0, 1]\)</span>: The proportion of unique variance allocated to the minor common factors.</p></li>
+<li><p><span class="math inline">\(\epsilon \in [0, 1]\)</span>: Controls how variance is distributed among the minor common factors.</p></li>
 </ul>
-</section>
-<section id="the-tucker-koopman-and-linn-method-2" class="slide level2">
-<h2>The Tucker, Koopman, and Linn Method</h2>
+<aside class="notes">
+<ul>
+<li><p>Values of <span class="math inline">\(\epsilon\)</span> close to zero result in relatively equipotent minor factors</p></li>
+<li><p>Values of <span class="math inline">\(\epsilon\)</span> close to one result in error variance primarily being distributed to the first minor factor.</p></li>
+</ul>
 <h3 id="advantages">Advantages</h3>
 <ul>
 <li>Straightforward interpretation of model error arising from un-modeled minor common factors.</li>
@@ -496,20 +628,31 @@
 <li>No clear guidelines for reasonable/realistic values of <span class="math inline">\(\nu_{\textrm{e}}\)</span> and <span class="math inline">\(\epsilon\)</span>.</li>
 <li>No direct control of degree of model fit (in terms of e.g., RMSEA) as traditionally implemented.</li>
 </ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<h3 id="section"></h3>
 </section>
 <section id="the-cudeck-and-browne-method" class="slide level2">
 <h2>The Cudeck and Browne Method</h2>
 <p>Cudeck and Browne developed a model error method for any covariance structure model, <span class="math inline">\(\boldsymbol{\Omega} = \boldsymbol{\Omega}(\boldsymbol{\gamma})\)</span>.</p>
-<p>For a particular vector of model parameters <span class="math inline">\(\boldsymbol{\gamma}_0\)</span>, let <span class="math inline">\(\boldsymbol{\Sigma}_0 = \boldsymbol{\Omega}(\boldsymbol{\gamma}_0) + \mathbf{E}\)</span></p>
-<p>Their method seeks to find an <span class="math inline">\(\mathbf{E}\)</span> matrix such that</p>
+<p>For a particular vector of model parameters <span class="math inline">\(\boldsymbol{\gamma}_0\)</span>, let <span class="math inline">\(\boldsymbol{\Sigma}_0 = \boldsymbol{\Omega}(\boldsymbol{\gamma}_0) + \mathbf{E}\)</span>.</p>
+<p>The CB method seeks to find an <span class="math inline">\(\mathbf{E}\)</span> matrix such that:</p>
 <ol type="1">
 <li><span class="math inline">\(F(\boldsymbol{\Sigma}_0, \boldsymbol{\Omega}(\boldsymbol{\gamma}))\)</span> is minimized when <span class="math inline">\(\boldsymbol{\gamma} = \boldsymbol{\gamma}_0\)</span>.</li>
 <li><span class="math inline">\(F(\boldsymbol{\Sigma}_0, \boldsymbol{\Omega}(\boldsymbol{\gamma})) = \delta\)</span> when <span class="math inline">\(\boldsymbol{\gamma} = \boldsymbol{\gamma}_0\)</span> for some user-specified <span class="math inline">\(\delta\)</span>.</li>
 </ol>
-<p>Here, <span class="math inline">\(F(\boldsymbol{\Sigma}_0, \boldsymbol{\Omega}(\boldsymbol{\gamma}))\)</span> is a discrepancy function (ML or OLS).</p>
-</section>
-<section id="the-cudeck-and-browne-method-1" class="slide level2">
-<h2>The Cudeck and Browne Method</h2>
+<p>Here, <span class="math inline">\(F(\boldsymbol{\Sigma}_0, \boldsymbol{\Omega}(\boldsymbol{\gamma}))\)</span> represents a discrepancy function (ML or OLS).</p>
+<aside class="notes">
+<p>In plain English: The vector of “true” model parameters for the ideal model minimize the discrepancy function and the discrepancy function value is some pre-specified value.</p>
 <h3 id="advantages-1">Advantages</h3>
 <ul>
 <li>Adaptable to any covariance structure model.</li>
@@ -523,22 +666,33 @@
 <li>Inflexible; only one parameter to control.</li>
 <li>Implies that <span class="math inline">\(\boldsymbol{\gamma}_0\)</span> will be perfectly recovered from a sample covariance matrix as sample size goes to <span class="math inline">\(\infty\)</span> (is this reasonable?).</li>
 </ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="the-wu-and-browne-method" class="slide level2">
 <h2>The Wu and Browne Method</h2>
-<p>Model error is considered to be a random effect due to differences between the operational population and some ideal population for which the theory is hypothesized.</p>
-<p>Specifically, <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is considered to be a random sample from an inverse-Wishart distribution such that</p>
+<p>Model error is considered to be a random effect due to differences between the <span style="color:#7a0019; font-weight: bold"><strong>operational</strong> population</span> and some <span style="color:#7a0019; font-weight: bold"><strong>ideal population</strong></span>.</p>
+<p><span class="math inline">\(\boldsymbol{\Sigma}\)</span> is considered to be a random sample from an inverse-Wishart distribution such that</p>
 <p><span id="eq-wb"><span class="math display">\[
 (\boldsymbol{\Sigma} | \boldsymbol{\Omega}) \sim W^{-1}_p(m \boldsymbol{\Omega}, m),
 \qquad(5)\]</span></span></p>
 <p>where <span class="math inline">\(m = 1/v\)</span> is a continuous precision parameter such that <span class="math inline">\(m &gt; p - 1\)</span>.</p>
+<div class="fragment">
 <blockquote>
 <p>“[The ideal] population need not have an explicit empirical description. In this sense, the general population is defined by the model rather than by its empirical nature.”<br>
 — MacCallum and O’Hagan (2015, p.&nbsp;605)</p>
 </blockquote>
-</section>
-<section id="the-wu-and-browne-method-1" class="slide level2">
-<h2>The Wu and Browne Method</h2>
+<aside class="notes">
+<p>The inverse-Wishart distribution is a probability distribution defined on real-valued positive-definite matrices.</p>
 <h3 id="advantages-2">Advantages</h3>
 <ul>
 <li>Adaptable to any covariance structure model.</li>
@@ -552,118 +706,140 @@
 <li>Possible RMSEA values limited by <span class="math inline">\(m &gt; p - 1\)</span>.</li>
 <li>Based on a specific theory of model error; assumes that error-perturbed covariance matrices are distributed according to an inverse Wishart distribution.</li>
 </ul>
+<p>“Although we believe that the theoretical population is an ideal in nature, we are not critical of it. Instead, we maintain that, just like statistical models, it is a construction by the human mind in order to understand the world and is necessarily a simplified description of the reality. The usefulness of the concept of a general population lies in its explanatory power but not in its tangible existence as a group of people or a set of measurement outcomes.”</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
 </section>
-<section id="evaluating-model-error-fit-indices" class="slide level2">
-<h2>Evaluating Model Error: Fit Indices</h2>
-<p>Many population model fit indices have been used to quantify the discrepancy between:</p>
-<ul>
-<li><span class="math inline">\(\boldsymbol{\Sigma}\)</span> and <span class="math inline">\(\boldsymbol{\Omega}\)</span><br>
-</li>
-<li><span class="math inline">\(\boldsymbol{\Sigma}\)</span> and <span class="math inline">\(\hat{\boldsymbol{\Omega}}\)</span> (the implied covariance matrix from an analysis of <span class="math inline">\(\boldsymbol{\Sigma}\)</span>)</li>
-</ul>
+<section id="evaluating-model-error" class="slide level2">
+<h2>Evaluating Model Error</h2>
+<p>Model fit indices are often used to indicate the level of misfit between <span class="math inline">\(\boldsymbol{\Sigma}\)</span> and <span class="math inline">\(\boldsymbol{\Omega}\)</span> or between <span class="math inline">\(\boldsymbol{\Sigma}\)</span> and <span class="math inline">\(\hat{\boldsymbol{\Omega}}\)</span>.</p>
+<div class="fragment">
 <h3 id="absolute-fit-indices">Absolute Fit Indices</h3>
 <ul>
-<li>Root Mean Square Error of Approximation (RMSEA; Steiger, 1990)<br>
-</li>
+<li>Root Mean Square Error of Approximation (RMSEA; Steiger, 1990)</li>
 <li>Correlation Root Mean Square Residual (CRMR; Bollen, 1989; Ogasawara, 2001)</li>
 </ul>
 <h3 id="incremental-fit-indices">Incremental Fit Indices</h3>
 <ul>
-<li>Comparative Fit Index (CFI; Bentler, 1990)<br>
-</li>
+<li>Comparative Fit Index (CFI; Bentler, 1990)</li>
 <li>Tucker-Lewis Index (TLI; Tucker &amp; Lewis, 1973)</li>
 </ul>
+<aside class="notes">
+<p>Where <span class="math inline">\(\hat{\boldsymbol{\Omega}}\)</span> is the implied covariance matrix from an analysis of <span class="math inline">\(\boldsymbol{\Sigma}\)</span>. I’ll focus mainly on fit indices representing the lack-of-fit between Sigma and Omega, which I denote by sub-scripting each of the fit indices with an “Omega”. When a fit index represents the lack-of-fit between Sigma and Omega-hat, I subscript the fit index with an “Omega-hat”.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
 </section>
-<section id="evaluating-model-error-disagreement-among-indices" class="slide level2">
-<h2>Evaluating Model Error: Disagreement Among Indices</h2>
+<section id="disagreement-among-fit-indices" class="slide level2">
+<h2>Disagreement Among Fit Indices</h2>
 <p>Different model fit indices can lead to different qualitative interpretations of model fit when cut-off values are used to categorize model fit.</p>
-<p>[Example}: RMSEA(<span class="math inline">\(\boldsymbol{\Sigma}\)</span>, <span class="math inline">\(\boldsymbol{\Omega}\)</span>) <span class="math inline">\(= 0.04\)</span>; CFI(<span class="math inline">\(\boldsymbol{\Sigma}\)</span>, <span class="math inline">\(\boldsymbol{\Omega]{style="color:#7a0019; font-weight: bold"}\)</span>) = <span class="math inline">\(0.78\)</span>.</p>
+<p><span style="color:#7a0019; font-weight: bold"><strong>Example</strong></span>:</p>
 <ul>
-<li>RMSEA values less than 0.05 generally represent good model fit.<br>
-</li>
-<li>CFI values less than 0.90 generally represent unacceptably poor model fit.</li>
+<li><p><span class="math inline">\(\rmseaOmega = 0.04\)</span></p></li>
+<li><p><span class="math inline">\(\cfiOmega = 0.78\)</span></p></li>
 </ul>
+<div class="fragment">
 <blockquote>
 <p>“[T]here is no such thing as a magical, single-number summary that says everything worth knowing about model fit.”<br>
 —Kline (2011, p.&nbsp;193)</p>
 </blockquote>
+<aside class="notes">
+<ul>
+<li>RMSEA values less than 0.05 generally represent good model fit.</li>
+<li>CFI values less than 0.90 generally represent unacceptably poor model fit.</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
 </section>
 <section id="controlling-the-amount-of-model-error" class="slide level2">
 <h2>Controlling the Amount of Model Error</h2>
 <p>Given that fit indices can lead to different qualitative interpretations of model fit, researchers should use and report multiple model fit indices in Monte Carlo simulation studies.</p>
-<ul>
-<li>Can model error methods be used as-is or modified to produce <span class="math inline">\(\boldsymbol{\Sigma}\)</span> matrices with model-fit statistic values close to the target values? How effective are they in this task?</li>
-<li>How do the model fit methods differ in terms of CFI, TLI, and SRMR/CRMR for error-perturbed covariance matrices, when holding RMSEA values approximately equal?</li>
-</ul>
+<div class="fragment">
+<p><span style="color:#7a0019; font-weight: bold">Problem</span>: Current model-error methods take only target <span class="math inline">\(\rmseaOmega\)</span> values (CB, WB) or no explicit target fit index (TKL).</p>
+<p><span style="color:#7a0019; font-weight: bold">Solution</span>: Create an optimization procedure based on the TKL method to find values of <span class="math inline">\(\nu_{\textrm{e}}\)</span> and <span class="math inline">\(\epsilon\)</span> that give RMSEA and/or CFI values that are as close as possible to target values.</p>
+<aside class="notes">
+<p>Problems: - There are no empirically-supported guidelines for appropriate values of <span class="math inline">\(\nu_{\textrm{e}}\)</span> and <span class="math inline">\(\epsilon\)</span>. - Choosing values of <span class="math inline">\(\nu_{\textrm{e}}\)</span> and <span class="math inline">\(\epsilon\)</span> that result in a specific model fit index value is difficult. - Choosing values of <span class="math inline">\(\nu_{\textrm{e}}\)</span> and <span class="math inline">\(\epsilon\)</span> that result in multiple specific model fit index values (e.g., RMSEA and CFI) can be <em>very</em> difficult.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
 </section>
-<section id="tkl-specifying-the-amount-of-model-error" class="slide level2">
-<h2>TKL: Specifying the Amount of Model Error</h2>
-<h3 id="problems">Problems</h3>
-<ul>
-<li>There are no empirically-supported guidelines for appropriate values of <span class="math inline">\(\nu_{\textrm{e}}\)</span> and <span class="math inline">\(\epsilon\)</span>.</li>
-<li>Choosing values of <span class="math inline">\(\nu_{\textrm{e}}\)</span> and <span class="math inline">\(\epsilon\)</span> that result in a specific model fit index value is difficult.</li>
-<li>Choosing values of <span class="math inline">\(\nu_{\textrm{e}}\)</span> and <span class="math inline">\(\epsilon\)</span> that result in multiple specific model fit index values (e.g., RMSEA and CFI) can be <em>very</em> difficult (sometimes impossible).</li>
-</ul>
-<h3 id="solution">Solution</h3>
-<ul>
-<li>Create an optimization procedure to find values of <span class="math inline">\(\nu_{\textrm{e}}\)</span> and <span class="math inline">\(\epsilon\)</span> that give RMSEA and/or CFI values that are as close as possible to target values.</li>
-</ul>
-</section>
-<section id="tkl-optimization-procedure-rmsea-cfi" class="slide level2">
-<h2>TKL: Optimization Procedure (RMSEA &amp; CFI)</h2>
+<section id="the-multiple-objective-tkl-method" class="slide level2">
+<h2>The Multiple-Objective TKL Method</h2>
 <p>Use the L-BFGS-B (Zhu et al., 1997) algorithm to minimize the function:</p>
-<p><span id="eq-obj-func"><span class="math display">\[
-G(\nu_{\textrm{e}}, \epsilon) = b_1 \left[ \varepsilon - \varepsilon_\textrm{T} \right]^2 + b_2 \left[ CFI - \textrm{CFI}_{\textrm{T}} \right]^2 + \mathbf{1}_{\boldsymbol{W}} \lambda
+<p><span id="eq-rmsea-cfi-obj-function"><span class="math display">\[
+G(\nu_\textrm{e}, \epsilon) = b_1 \frac{\left( \rmseaOmega - \textrm{RMSEA}_{\textrm{T}} \right)^2}{\textrm{RMSEA}_{\textrm{T}}^2} + b_2 \frac{\left( \cfiOmega - \textrm{CFI}_{\textrm{T}} \right)^2}{\left( 1 - \textrm{CFI}_{\textrm{T}} \right)^2} + 1_{\mathbf{W}} \lambda,
 \qquad(6)\]</span></span></p>
 <ul>
 <li><span class="math inline">\(b_1\)</span> and <span class="math inline">\(b_2\)</span>: User-specified weights that sum to one.<br>
 </li>
-<li><span class="math inline">\(\varepsilon_\textrm{T}\)</span>: User-specified target RMSEA value.<br>
+<li><span class="math inline">\(\RMSEA_\textrm{T}\)</span>: User-specified target RMSEA value.<br>
 </li>
-<li><span class="math inline">\(\textrm{CFI}_{\textrm{T}}\)</span>: User-specified target CFI value.<br>
+<li><span class="math inline">\(\CFI_\textrm{T}\)</span>: User-specified target CFI value.<br>
 </li>
-<li><span class="math inline">\(\mathbf{1}_{\boldsymbol{W}}\)</span>: Indicator function that equals one if any minor factor has more than two factor loadings <span class="math inline">\(\geq .3\)</span> in absolute value.<br>
+<li><span class="math inline">\(1_{\mathbf{W}}\)</span>: Indicator function that equals one if any minor factor has more than two factor loadings <span class="math inline">\(\geq .3\)</span> in absolute value.<br>
 </li>
 <li><span class="math inline">\(\lambda\)</span>: User-specified penalty.</li>
 </ul>
 </section>
-<section id="cb-specifying-the-amount-of-model-error-rmsea" class="slide level2">
-<h2>CB: Specifying the Amount of Model Error (RMSEA)</h2>
-<p>The CB method allows a user to generate an error-perturbed covariance matrix with a specified RMSEA value.</p>
-<p><span id="eq-rmsea-to-delta"><span class="math display">\[
-\delta = \varepsilon_\textrm{T} df,
-\qquad(7)\]</span></span></p>
-<p>where <span class="math inline">\(df\)</span> denotes the model degrees of freedom.</p>
-<ul>
-<li><span class="math inline">\(\boldsymbol{\Sigma}\)</span> can be indefinite if <span class="math inline">\(\delta\)</span> is too large.</li>
-<li>If <span class="math inline">\(\delta\)</span> is large, <span class="math inline">\(\theta_0\)</span> might correspond to a saddle point.</li>
-</ul>
-</section>
-<section id="wb-specifying-the-amount-of-model-error-rmsea" class="slide level2">
-<h2>WB: Specifying the Amount of Model Error (RMSEA)</h2>
-<p>The error-perturbed covariance matrix <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is sampled from:</p>
-<p><span id="eq-wb2"><span class="math display">\[
-(\boldsymbol{\Sigma} | \boldsymbol{\Omega}) \sim W^{-1}_p(m \boldsymbol{\Omega}, m),
-\qquad(8)\]</span></span></p>
-<p>The precision parameter, <span class="math inline">\(m = 1/v\)</span>, is related to RMSEA such that <span class="math inline">\(v \approx \varepsilon^2\)</span>.</p>
-<p>The approximation gets worse as <span class="math inline">\(\varepsilon^2\)</span> increases; simply using <span class="math inline">\(m = 1 / \tilde{v}\)</span> is unlikely to lead to RMSEA values close to <span class="math inline">\(\varepsilon_\textrm{T}\)</span> when <span class="math inline">\(\varepsilon_\textrm{T}\)</span> is not very small.</p>
-</section>
-<section id="wb-fit-a-regression-model-for-v" class="slide level2">
-<h2>WB: Fit a Regression Model for <span class="math inline">\(v\)</span></h2>
-<p>Find an appropriate value of <span class="math inline">\(v\)</span> such that RMSEA(<span class="math inline">\(\boldsymbol{\Sigma}, \boldsymbol{\Omega}\)</span>) <span class="math inline">\(\approx \varepsilon_\textrm{T}\)</span>:</p>
-</section>
-<section id="wb-example" class="slide level2">
-<h2>WB: Example</h2>
-
-<img data-src="wb-plot.png" width="282" class="r-stretch quarto-figure-center"></section>
-<section id="aims-of-the-proposed-study" class="slide level2">
-<h2>Aims of the Proposed Study</h2>
-<p>Two main aims:</p>
+<section id="aims-of-the-simulation-study" class="slide level2">
+<h2>Aims of the Simulation Study</h2>
+<p>I wanted to answer the following questions:</p>
 <ol type="1">
-<li>Determine how error-perturbed covariance matrices produced by the TKL, CB, and WB model error methods differ in terms of CFI, TLI, and SRMR when matched (approximately) on RMSEA.<br>
-</li>
-<li>Determine how well (a) the proposed optimization procedure for controlling RMSEA and CFI with the TKL method and (b) the regression procedure for controlling RMSEA with the WB method work.</li>
+<li><p>How do the model-error methods compare in terms of the fit indices they produce?</p></li>
+<li><p>Does the proposed multiple-objective TKL method produce <span class="math inline">\(\bSigma\)</span> matrices with RMSEA and/or CFI values that are close to the target values?</p></li>
 </ol>
+<aside class="notes">
+<p>Basically, how do the model error methods compare in terms of the fit indices they produce when used with the same target RMSEA values? Do the fit indices agree in terms of qualitative model fit?</p>
+<p>Although these were the primary questions, I was also interested in the other advantages/disadvantages of the model fit methods. For instance, how often did the methods lead to non-converged or improper solutions?</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section></section>
 <section>
 <section id="method" class="title-slide slide level1 center">
@@ -684,31 +860,30 @@ G(\nu_{\textrm{e}}, \epsilon) = b_1 \left[ \varepsilon - \varepsilon_\textrm{T} 
 <ul>
 <li>Model error methods
 <ul>
-<li>TKL (using target RMSEA, target CFI, and target RMSEA/CFI values; with and without constraints)</li>
-<li>CB</li>
-<li>WB</li>
+<li>TKL (using target RMSEA, target CFI, and target RMSEA/CFI values).</li>
+<li>CB.</li>
+<li>WB.</li>
 </ul></li>
 <li>Model fit targets
 <ul>
-<li><span class="math inline">\(\varepsilon_\textrm{T} \in [0.025, 0.065, 0.090]\)</span>.</li>
-<li><span class="math inline">\(\textrm{CFI}_{\textrm{T}} \in [0.99, 0.95, 0.90]\)</span>.</li>
-<li><span class="math inline">\(\varepsilon_\textrm{T}\)</span> and <span class="math inline">\(\textrm{CFI}_{\textrm{T}}\)</span> pairs correspond to very good, fair, and poor model fit (MacCallum et al., 2001; Myers et al., 2015).</li>
+<li><span class="math inline">\(\RMSEA_\textrm{T} \in [0.025, 0.065, 0.090]\)</span>.</li>
+<li><span class="math inline">\(\CFI_\textrm{T} \in [0.99, 0.95, 0.90]\)</span>.<sup>1</sup></li>
+<li><span class="math inline">\(\RMSEA_\textrm{T}\)</span> and <span class="math inline">\(\textrm{CFI}_{\textrm{T}}\)</span> pairs correspond to very good, fair, and poor model fit (MacCallum et al., 2001; Myers et al., 2015).</li>
 </ul></li>
 </ul>
-<p>Note that target CFI only affects the TKL (RMSEA/CFI) procedure.</p>
-</section>
-<section id="design-variables-summary" class="slide level2">
+<aside><ol class="aside-footnotes"><li id="fn1"><p>Note that target CFI only affects the multiple-objective TKL procedure.</p></li></ol></aside></section>
+<section id="design-variables-summary" class="slide level2 smaller">
 <h2>Design Variables: Summary</h2>
-<div class="cell" data-hash="test-quarto_cache/revealjs/count-conditions_5b140d34cc185b9f5cf860016781d257">
+<div class="cell" data-hash="defense_presentation_cache/revealjs/count-conditions_2ca80246140ebe8e8f0f797b7bc31cce">
 
 </div>
-<div class="cell" data-hash="test-quarto_cache/revealjs/study1-tab_39cf4d23afe90241259208673253a01b">
+<div class="cell" data-hash="defense_presentation_cache/revealjs/study1-tab_2932539decc94a0566014222d6329b4d">
 <div class="cell-output-display">
 <table>
 <caption>Design Variables and Levels.</caption>
 <colgroup>
-<col style="width: 25%">
-<col style="width: 74%">
+<col style="width: 26%">
+<col style="width: 73%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -735,19 +910,19 @@ G(\nu_{\textrm{e}}, \epsilon) = b_1 \left[ \varepsilon - \varepsilon_\textrm{T} 
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Target Model Fit</td>
-<td style="text-align: left;">Very Good (<span class="math inline">\(\varepsilon_\textrm{T} = 0.025\)</span>, <span class="math inline">\(\textrm{CFI}_{\textrm{T}} = 0.99\)</span>),</td>
+<td style="text-align: left;">Very Good (<span class="math inline">\(\RMSEA_\textrm{T} = 0.025\)</span>, <span class="math inline">\(\textrm{CFI}_{\textrm{T}} = 0.99\)</span>),</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"></td>
-<td style="text-align: left;">Fair (<span class="math inline">\(\varepsilon_\textrm{T} = 0.065\)</span>, <span class="math inline">\(\textrm{CFI}_{\textrm{T}} = 0.95\)</span>),</td>
+<td style="text-align: left;">Fair (<span class="math inline">\(\RMSEA_\textrm{T} = 0.065\)</span>, <span class="math inline">\(\textrm{CFI}_{\textrm{T}} = 0.95\)</span>),</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"></td>
-<td style="text-align: left;">Poor (<span class="math inline">\(\varepsilon_\textrm{T} = 0.090\)</span>, <span class="math inline">\(\textrm{CFI}_{\textrm{T}} = 0.90\)</span>)</td>
+<td style="text-align: left;">Poor (<span class="math inline">\(\RMSEA_\textrm{T} = 0.090\)</span>, <span class="math inline">\(\textrm{CFI}_{\textrm{T}} = 0.90\)</span>)</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Error Method</td>
-<td style="text-align: left;">TKL (six variants), CB, WB</td>
+<td style="text-align: left;">TKL (three variants), CB, WB</td>
 </tr>
 </tbody>
 </table>
@@ -757,15 +932,27 @@ G(\nu_{\textrm{e}}, \epsilon) = b_1 \left[ \varepsilon - \varepsilon_\textrm{T} 
 <section id="study-design-variables-summary" class="slide level2">
 <h2>Study Design Variables: Summary</h2>
 <ul>
-<li>42 (error-free) population models.</li>
-<li>1,440 crossed conditions.</li>
+<li>60 (error-free) population models.</li>
+<li>873 crossed conditions.</li>
 <li>500 reps for all model-error methods.</li>
-<li><span class="math inline">\(500 \times 1,440 = 720,000\)</span> simulated <span class="math inline">\(\boldsymbol{\Sigma}\)</span> matrices.</li>
+<li><span class="math inline">\(500 \times 873 = 436,500\)</span> simulated <span class="math inline">\(\boldsymbol{\Sigma}\)</span> matrices.</li>
 </ul>
+<aside class="notes">
+<p>27 of the original 900 fully-crossed conditions had to be dropped because the CB method took an impractically-long time when used with 150x150 input correlation matrices. More on that later!</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
-<section id="study-design-simulation-procedure" class="slide level2">
-<h2>Study Design: Simulation Procedure</h2>
-<h3 id="data-generation">Data generation</h3>
+<section id="study-design-data-generation" class="slide level2">
+<h2>Study Design: Data Generation</h2>
 <ul>
 <li>For each (error-free) population model, generate the model-implied correlation matrix (<span class="math inline">\(\boldsymbol{\Omega}\)</span>).</li>
 <li>For each model-implied correlation matrix:
@@ -773,7 +960,9 @@ G(\nu_{\textrm{e}}, \epsilon) = b_1 \left[ \varepsilon - \varepsilon_\textrm{T} 
 <li>Generate 500 error-perturbed covariance matrices (<span class="math inline">\(\bSigma\)</span>) for each of the TKL, CB, and WB model-error methods at each <span class="math inline">\(\varepsilon_\textrm{T}\)</span> and <span class="math inline">\(\textrm{CFI}_{\textrm{T}}\)</span> value pair.</li>
 </ul></li>
 </ul>
-<h3 id="evaluation">Evaluation</h3>
+</section>
+<section id="study-design-evaluation" class="slide level2">
+<h2>Study Design: Evaluation</h2>
 <p>For each error-perturbed correlation (<span class="math inline">\(\bSigma\)</span>) matrix:</p>
 <ul>
 <li>Compute RMSEA, CFI, TLI, and CRMR for <span class="math inline">\(\boldsymbol{\Sigma}\)</span> and <span class="math inline">\(\boldsymbol{\Omega}\)</span> (and for <span class="math inline">\(\boldsymbol{\Sigma}\)</span> and <span class="math inline">\(\hat{\boldsymbol{\Omega}}\)</span>).</li>
@@ -781,37 +970,84 @@ G(\nu_{\textrm{e}}, \epsilon) = b_1 \left[ \varepsilon - \varepsilon_\textrm{T} 
 </ul>
 <p><span id="eq-D"><span class="math display">\[
 D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|
-\qquad(9)\]</span></span></p>
+\qquad(7)\]</span></span></p>
 </section></section>
 <section>
 <section id="results" class="title-slide slide level1 center">
 <h1>Results</h1>
 
 </section>
-<section id="section-overview" class="slide level2">
-<h2>Section Overview</h2>
-<ul>
-<li>First topic</li>
-<li>Second topic</li>
-<li>Third topic</li>
+<section id="distributions-of-rmseaomega-values" class="slide level2">
+<h2>Distributions of <span class="math inline">\(\rmseaOmega\)</span> Values</h2>
+
+<img data-src="/home/justin/Documents/dissertation/img/rmsea_distributions.png" style="width:90.0%" class="r-stretch quarto-figure-center"><ul>
+<li>The <span class="math inline">\(\TKLrmsea\)</span> and CB methods often led to <span class="math inline">\(\rmseaOmega\)</span> values closer to the target values compared to the other methods.</li>
+</ul>
+<aside class="notes">
+<p>Distributions of the RMSEAΩ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target RMSEAΩ value for each condition. Note that some levels of model fit and factor loading strength were omitted to conserve space.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="distributionsof-cfiomega-values" class="slide level2">
+<h2>Distributionsof <span class="math inline">\(\cfiOmega\)</span> Values</h2>
+
+<img data-src="/home/justin/Documents/dissertation/img/cfi_distributions.png" style="width:90.0%" class="r-stretch quarto-figure-center"><ul>
+<li>The <span class="math inline">\(\TKLcfi\)</span> and <span class="math inline">\(\TKLrmseacfi\)</span> methods often led to <span class="math inline">\(\cfiOmega\)</span> values that were closer to the target values compared to the other methods</li>
 </ul>
 </section>
-<section id="distribution-of-rmseaomega" class="slide level2">
-<h2>Distribution of <span class="math inline">\(\rmseaOmega\)</span></h2>
+<section id="distributions-of-d-values" class="slide level2">
+<h2>Distributions of <span class="math inline">\(D\)</span> Values</h2>
 
-<img data-src="../img/rmsea_distributions.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section>
-<section id="distribution-of-cfiomega" class="slide level2">
-<h2>Distribution of <span class="math inline">\(\cfiOmega\)</span></h2>
+<img data-src="/home/justin/Documents/dissertation/img/d_plot.png" style="width:90.0%" class="r-stretch quarto-figure-center"><ul>
+<li>The <span class="math inline">\(\TKLcfi\)</span> and <span class="math inline">\(\TKLrmseacfi\)</span> methods often led to the smallest <span class="math inline">\(D\)</span> values, particularly in conditions with many factors, weak factor loadings, and Poor model fit.</li>
+</ul>
+</section>
+<section id="section-1" class="slide level2">
+<h2></h2>
+</section>
+<section id="mathbfw-constraint-violations" class="slide level2">
+<h2><span class="math inline">\(\mathbf{W}\)</span> Constraint Violations</h2>
+<p>Despite the large penalty value (<span class="math inline">\(\lambda = 1,000,000\)</span>), the <span class="math inline">\(\TKLrmsea\)</span> method often led to solutions with violated <span class="math inline">\(\mathbf{W}\)</span> constraints.</p>
 
-<img data-src="../img/cfi_distributions.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section>
-<section id="fit-index-agreement-d" class="slide level2">
-<h2>Fit Index Agreement: <span class="math inline">\(D\)</span></h2>
+<img data-src="/home/justin/Documents/dissertation/img/major_minor_factors.png" style="width:60.0%" class="r-stretch quarto-figure-center"><ul>
+<li>Changing the value of <span class="math inline">\(\lambda\)</span> did not lead to much better results.</li>
+<li>However, the <span class="math inline">\(\TKLrmseacfi\)</span> and <span class="math inline">\(\TKLcfi\)</span> methods seldom produced solutions with violated constraints.</li>
+</ul>
+<aside class="notes">
+<p>I did a small follow-up simulation study to see whether the TKL (RMSEA/CFI) or TKL (CFI) methods were avoiding constraint violations because the penalty worked particularly well with those methods or whether it was the CFI target. I found that the inclusion of the CFI target value was almost completely responsible for the avoidance of W constraint violations.</p>
+<p>Conditions with low factor loadings, poor model fit, and many items and factors were most likely to be indefinite. The CFI target helped avoid violated W constraints in these conditions by pulling the RMSEA value down.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="indefinite-bsigma-matrices" class="slide level2">
+<h2>Indefinite <span class="math inline">\(\bSigma\)</span> Matrices</h2>
+<p>xxx</p>
+</section></section>
+<section id="conclusions-future-work" class="title-slide slide level1 center">
+<h1>Conclusions &amp; Future Work</h1>
+<ul>
+<li>The <span class="math inline">\(\TKLcfi\)</span> and <span class="math inline">\(\TKLrmseacfi\)</span> methods</li>
+</ul>
+</section>
 
-<img data-src="../img/d_plot.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section>
-<section id="qualitative-fit-index-agreement" class="slide level2">
-<h2>Qualitative Fit Index Agreement</h2>
-
-<img data-src="../img/fit_index_agreement.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section></section>
 <section>
 <section id="backup-slides" class="title-slide slide level1 center">
 <h1>Backup Slides</h1>
@@ -821,18 +1057,60 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 <h2>Population Model Fit Indices</h2>
 <p><span id="eq-rmsea"><span class="math display">\[
 \textrm{RMSEA} = \varepsilon = \sqrt{\frac{F_h}{df_h}},
-\qquad(10)\]</span></span></p>
+\qquad(8)\]</span></span></p>
 <p><span id="eq-cfi"><span class="math display">\[
 \textrm{CFI} = 1 - \frac{F_h}{F_b},
-\qquad(11)\]</span></span></p>
+\qquad(9)\]</span></span></p>
 <p><span id="eq-tli"><span class="math display">\[
 \textrm{TLI} = 1 - \frac{F_h / df_h}{F_b / df_b}
-\qquad(12)\]</span></span></p>
+\qquad(10)\]</span></span></p>
 <ul>
 <li><span class="math inline">\(F_h\)</span> and <span class="math inline">\(df_h\)</span> denote the discrepancy function value and degrees of freedom for the full model.</li>
 <li><span class="math inline">\(F_b\)</span> and <span class="math inline">\(df_b\)</span> denote the discrepancy function value and degrees of freedom for the baseline (independence) model.</li>
 </ul>
 </section>
+<section id="cb-specifying-the-amount-of-model-error-rmsea" class="slide level2">
+<h2>CB: Specifying the Amount of Model Error (RMSEA)</h2>
+<p>The CB method allows a user to generate an error-perturbed covariance matrix with a specified RMSEA value.</p>
+<p><span id="eq-rmsea-to-delta"><span class="math display">\[
+\delta = \varepsilon_\textrm{T} df,
+\qquad(11)\]</span></span> where <span class="math inline">\(df\)</span> denotes the model degrees of freedom.</p>
+<ul>
+<li><span class="math inline">\(\boldsymbol{\Sigma}\)</span> can be indefinite if <span class="math inline">\(\delta\)</span> is too large.</li>
+<li>If <span class="math inline">\(\delta\)</span> is large, <span class="math inline">\(\theta_0\)</span> might correspond to a saddle point.</li>
+</ul>
+</section>
+<section id="wb-specifying-the-amount-of-model-error-rmsea" class="slide level2">
+<h2>WB: Specifying the Amount of Model Error (RMSEA)</h2>
+<p>The error-perturbed covariance matrix <span class="math inline">\(\boldsymbol{\Sigma}\)</span> is sampled from:</p>
+<p><span id="eq-wb2"><span class="math display">\[
+(\boldsymbol{\Sigma} | \boldsymbol{\Omega}) \sim W^{-1}_p(m \boldsymbol{\Omega}, m),
+\qquad(12)\]</span></span></p>
+<p>The precision parameter, <span class="math inline">\(m = 1/v\)</span>, is related to RMSEA such that <span class="math inline">\(v \approx \varepsilon^2\)</span>.</p>
+<p>The approximation gets worse as <span class="math inline">\(\varepsilon^2\)</span> increases; simply using <span class="math inline">\(m = 1 / \tilde{v}\)</span> is unlikely to lead to RMSEA values close to <span class="math inline">\(\varepsilon_\textrm{T}\)</span> when <span class="math inline">\(\varepsilon_\textrm{T}\)</span> is not very small.</p>
+</section>
+<section id="wb-fit-a-regression-model-for-v" class="slide level2">
+<h2>WB: Fit a Regression Model for <span class="math inline">\(v\)</span></h2>
+<p>Find an appropriate value of <span class="math inline">\(v\)</span> such that RMSEA(<span class="math inline">\(\boldsymbol{\Sigma}, \boldsymbol{\Omega}\)</span>) <span class="math inline">\(\approx \varepsilon_\textrm{T}\)</span>:</p>
+<ol type="1">
+<li>Create a vector of <span class="math inline">\(\tilde{v}\)</span> values for <span class="math inline">\(\varepsilon_\textrm{T}\)</span> values in a reasonable range (e.g., 20 values between 0.01 and 0.095).<br>
+</li>
+<li>For each value of <span class="math inline">\(\tilde{v}\)</span>:
+<ol type="a">
+<li>Sample a number of covariance matrices (e.g., 50) from the corresponding inverse-Wishart distribution.<br>
+</li>
+<li>Calculate the median RMSEA value for the sampled covariance matrices.<br>
+</li>
+</ol></li>
+<li>Regress <span class="math inline">\(\tilde{v}\)</span> on the median RMSEA and squared median RMSE values.<br>
+</li>
+<li>Use the fitted model from Step 3 to find a value of <span class="math inline">\(v\)</span> that is likely to lead to error-perturbed covariance matrices with RMSEA values close to <span class="math inline">\(\varepsilon_\textrm{T}\)</span>.</li>
+</ol>
+</section>
+<section id="wb-example" class="slide level2">
+<h2>WB: Example</h2>
+
+<img data-src="wb-plot.png" width="282" class="r-stretch quarto-figure-center"></section>
 <section id="population-model-fit-indices-1" class="slide level2">
 <h2>Population Model Fit Indices</h2>
 <p><span id="eq-srmr"><span class="math display">\[
@@ -847,14 +1125,26 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 <li><span class="math inline">\(\sigma_{ij}\)</span> and <span class="math inline">\(\omega_{ij}\)</span> are the <span class="math inline">\(i,j\)</span>th elements of <span class="math inline">\(\boldsymbol{\Sigma}\)</span> and <span class="math inline">\(\boldsymbol{\Omega}\)</span>, respectively.</li>
 </ul>
 </section>
+<section id="qualitative-fit-index-agreement" class="slide level2">
+<h2>Qualitative Fit Index Agreement</h2>
+
+<img data-src="/home/justin/Documents/dissertation/img/fit_index_agreement.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section>
+<section id="rmsea-and-cfi-distributions" class="slide level2">
+<h2>RMSEA and CFI Distributions</h2>
+
+<img data-src="/home/justin/Documents/dissertation/img/rmsea-cfi-distributions.png" style="width:90.0%" class="r-stretch quarto-figure-center"></section>
 <section id="local-optima" class="slide level2">
 <h2>Local Optima</h2>
 
-<img data-src="local_optima.png" class="r-stretch quarto-figure-center"></section>
+<img data-src="local_optima.png" width="396" class="r-stretch quarto-figure-center"></section>
+<section id="cb-completion-time" class="slide level2">
+<h2>CB Completion Time</h2>
+
+<img data-src="/home/justin/Documents/dissertation/img/cb_time_plot.png" style="width:90.0%" class="r-stretch quarto-figure-center"></section>
 <section id="indefinite-matrices" class="slide level2">
 <h2>Indefinite Matrices</h2>
 
-<img data-src="../img/cb_percent_indefinite.png" style="width:85.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="/home/justin/Documents/dissertation/img/cb_percent_indefinite.png" style="width:85.0%" class="r-stretch quarto-figure-center"></section>
 <section id="l-bfgs-b-non-convergence" class="slide level2">
 <h2>L-BFGS-B Non-convergence</h2>
 <ul>
@@ -863,40 +1153,85 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 <li>Only 14 of 90,000 (&lt;1%) of <span class="math inline">\(\TKLrmseacfi\)</span> cases failed to converge using L-BFGS-B.</li>
 </ul>
 
-<img data-src="../img/nonconverged_rmsea_cfi.png" style="width:55.0%" class="r-stretch quarto-figure-center"></section>
-<section id="major-minor-factors" class="slide level2">
-<h2>Major Minor Factors</h2>
-<div class="cell" data-layout-align="center" data-hash="test-quarto_cache/revealjs/unnamed-chunk-8_4197e8fcab6876abcb72317544e9e67c">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="../img/major_minor_factors.png" style="width:90.0%"></p>
-</figure>
+<img data-src="/home/justin/Documents/dissertation/img/nonconverged_rmsea_cfi.png" style="width:55.0%" class="r-stretch quarto-figure-center"></section>
+<section id="mathbfw-constraint-violations-1" class="slide level2">
+<h2><span class="math inline">\(\mathbf{W}\)</span> Constraint Violations</h2>
+<ul>
+<li>Despite a large penalty (<span class="math inline">\(\lambda = 1,000,000\)</span>), violations of the <span class="math inline">\(\mathbf{W}\)</span> constraints were sometimes violated.</li>
+<li>Adjusting the value of <span class="math inline">\(\lambda\)</span> was not helpful, but including a CFI target value helped considerably.</li>
+</ul>
+
+<img data-src="/home/justin/Documents/dissertation/img/major_minor_factors.png" style="width:60.0%" class="r-stretch quarto-figure-center"><aside class="notes">
+<p>The percent of cases where the constraints on W were violated when the TKLRMSEA model-error method was used, conditioned on number of factors, number of items per factor, factor loading, and model fit.</p>
+<p>&lt;0.01% of solutions from the TKL (CFI) or TKL (RMSEA/CFI) methods led to solutions with violated W constraints. To ensure that the target CFI value was the cause of the reduction in violated W constraints, I</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="mathbfw-constraint-violations-2" class="slide level2">
+<h2><span class="math inline">\(\mathbf{W}\)</span> Constraint Violations</h2>
+
+<img data-src="/home/justin/Documents/dissertation/img/eps_and_nu_violation_example.png" style="width:75.0%" class="r-stretch quarto-figure-center"><aside class="notes">
+<p>The distribution of eps and nu (and whether or not W constraints were violated) for conditions with Poor model fit, 10 factors, 15 items per factor, and factor loadings of 0.8. TKL = Tucker, Koopman, and Linn.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="noisemaker" class="slide level2">
+<h2><em>noisemaker</em></h2>
+<div class="cell" data-hash="defense_presentation_cache/revealjs/unnamed-chunk-26_31d42c65afcc1871ed15fb7c957af44a">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>mod <span class="ot">&lt;-</span> fungible<span class="sc">::</span><span class="fu">simFA</span>(<span class="at">Model =</span> <span class="fu">list</span>(<span class="at">NFac =</span> <span class="dv">1</span>, <span class="at">NItemPerFac =</span> <span class="dv">10</span>))</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a>mod_tkl <span class="ot">&lt;-</span> <span class="fu">noisemaker</span>(mod, <span class="at">method =</span> <span class="st">"TKL"</span>, </span>
+<span id="cb1-5"><a href="#cb1-5"></a>                      <span class="at">target_rmsea =</span> <span class="fl">0.05</span>, </span>
+<span id="cb1-6"><a href="#cb1-6"></a>                      <span class="at">target_cfi =</span> <span class="fl">0.95</span>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a>mod_cb <span class="ot">&lt;-</span> <span class="fu">noisemaker</span>(mod, <span class="at">method =</span> <span class="st">"CB"</span>, </span>
+<span id="cb1-9"><a href="#cb1-9"></a>                      <span class="at">target_rmsea =</span> <span class="fl">0.05</span>)</span>
+<span id="cb1-10"><a href="#cb1-10"></a></span>
+<span id="cb1-11"><a href="#cb1-11"></a>mod_wb <span class="ot">&lt;-</span> <span class="fu">noisemaker</span>(mod, <span class="at">method =</span> <span class="st">"WB"</span>, </span>
+<span id="cb1-12"><a href="#cb1-12"></a>                     <span class="at">target_rmsea =</span> <span class="fl">0.05</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-</div>
-<p><img src="Msol-maroon.png" class="slide-logo"></p>
-<div class="footer footer-default">
+
+<img src="Msol-maroon.png" class="slide-logo r-stretch"><div class="footer footer-default">
 
 </div>
 </section></section>
+
     </div>
   </div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
-  <script src="test-quarto_files/libs/revealjs/dist/reveal.js"></script>
+  <script src="defense_presentation_files/libs/revealjs/dist/reveal.js"></script>
   <!-- reveal.js plugins -->
-  <script src="test-quarto_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
-  <script src="test-quarto_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
-  <script src="test-quarto_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
-  <script src="test-quarto_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="test-quarto_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  <script src="defense_presentation_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="defense_presentation_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="defense_presentation_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="defense_presentation_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="defense_presentation_files/libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
-  <script src="test-quarto_files/libs/revealjs/plugin/notes/notes.js"></script>
-  <script src="test-quarto_files/libs/revealjs/plugin/search/search.js"></script>
-  <script src="test-quarto_files/libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="test-quarto_files/libs/revealjs/plugin/math/math.js"></script>
+  <script src="defense_presentation_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="defense_presentation_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="defense_presentation_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="defense_presentation_files/libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>
@@ -932,7 +1267,7 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: false,
+        slideNumber: 'c/t',
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',
@@ -1201,7 +1536,8 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
       for (var i=0; i<noterefs.length; i++) {
         const ref = noterefs[i];
         tippyHover(ref, function() {
-          let href = ref.getAttribute('href');
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);

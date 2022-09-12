@@ -1,0 +1,718 @@
+---
+title: 'Make Some Noise: Generating Data From Imperfect Models'
+date: 'September 2022'
+author: 'Justin Kracht'
+institute: 'University of Minnesota'
+format: 
+  revealjs:
+    show-slide-number: all
+    slide-number: true
+    theme: [default, custom.scss]
+    logo: Msol-maroon.png
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache=TRUE, echo=FALSE)
+
+pacman::p_load(bookdown,
+               tidyverse,
+               latex2exp,
+               noisemaker,
+               bookdown,
+               papaja,
+               here)
+
+make_plots <- FALSE # regenerate plots?
+```
+
+## Presentation Overview
+
+$$
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\dg}{\textrm{dg}}
+\DeclareMathOperator{\vech}{vec}
+\DeclareMathOperator{\RMSEA}{\textrm{RMSEA}}
+\DeclareMathOperator{\CFI}{\textrm{CFI}}
+\newcommand{\TKLrmseacfi}{\textrm{TKL}_{\textrm{RMSEA} / \textrm{CFI}}}
+\newcommand{\TKLrmsea}{\textrm{TKL}_{\textrm{RMSEA}}}
+\newcommand{\TKLcfi}{\textrm{TKL}_{\textrm{CFI}}}
+\newcommand{\rmseaOmega}{\textrm{RMSEA}_{\boldsymbol{\Omega}}}
+\newcommand{\cfiOmega}{\textrm{CFI}_{\boldsymbol{\Omega}}}
+\newcommand{\tliOmega}{\textrm{TLI}_{\boldsymbol{\Omega}}}
+\newcommand{\crmrOmega}{\textrm{CRMR}_{\boldsymbol{\Omega}}}
+\newcommand{\rmseaOmegaHat}{\textrm{RMSEA}_{\hat{\boldsymbol{\Omega}}}}
+\newcommand{\cfiOmegaHat}{\textrm{CFI}_{\hat{\boldsymbol{\Omega}}}}
+\newcommand{\tliOmegaHat}{\textrm{TLI}_{\hat{\boldsymbol{\Omega}}}}
+\newcommand{\crmrOmegaHat}{\textrm{CRMR}_{\hat{\boldsymbol{\Omega}}}}
+\newcommand{\bgamma}{\boldsymbol{\gamma}}
+\newcommand{\bSigma}{\boldsymbol{\Sigma}}
+\newcommand{\bOmega}{\boldsymbol{\Omega}}
+\newcommand{\bOmegaHat}{\hat{\boldsymbol{\Omega}}}
+\newcommand{\rmseaDelta}{\textrm{RMSEA}_{\Delta}}
+\newcommand{\cfiDelta}{\textrm{CFI}_{\Delta}}
+$$
+
+1.  Background\
+2.  Methods for Simulating Model Error\
+3.  Quantifying Model Error\
+4.  Study Aims\
+5.  Methods\
+6.  Results & Discussion
+
+::: notes
+-   First, I'll provide some background on model error in covariance structure models and why it's important.
+-   In the second section, I'll discuss existing methods for simulating model error; that is, methods used to simulate covariance or correlation matrices from imperfect factor models.
+-   In the third section, I'll discuss commonly-used metrics for quantifying model error in terms of model fit.
+-   Next, I'll discuss the aims of my simulation study and describe the study design.
+-   Finally, I'll present my results and discuss their implications.
+:::
+
+# Background
+
+## Model Error and Covariance Structure Models
+
+Covariance structure models allow a structured covariance matrix to be represented as a function of a vector of parameters,
+
+$$
+\boldsymbol{\Omega} = \boldsymbol{\Omega}(\boldsymbol{\gamma}),
+$$ {#eq-csm}
+
+\noindent where $\boldsymbol{\Omega}$ is a $p \times p$ model-implied covariance matrix and $\gamma$ is a vector of free parameters.
+
+. . .
+
+> "All models are wrong, but some are useful"\
+> --- Box (1987, p. 424)
+
+## What is Model Error?
+
+Psychological phenomena are complex; no population covariance matrix will be perfectly represented by $\boldsymbol{\Omega}(\boldsymbol{\gamma})$ in practice.
+
+Model error can be grouped into two basic categories (Meehl, 1990):
+
+-   [**Incompleteness**]{style="color:#7a0019"}
+
+-   [**Falsity**]{style="color:#7a0019"}
+
+::: notes
+-   [**Incompleteness**]{style="color:#7a0019"}: The model is too simple to adequately reflect reality (e.g., there are more common factors than are modeled).
+-   [**Falsity**]{style="color:#7a0019"}: There are contradictions between the model and the world (e.g., non-linear relationships are modeled as linear).
+:::
+
+## Representing Model Error
+
+An population covariance matrix with model error can be represented by
+
+$$
+\boldsymbol{\Sigma} = \boldsymbol{\Omega} + \mathbf{E},
+$$ {#eq-model-error}
+
+where $\mathbf{E}$ is a symmetric error matrix representing the effects of model error.
+
+## Why Should We Care About Model Error?
+
+Monte Carlo simulation studies that sample from $\boldsymbol{\Omega}$ (rather than $\boldsymbol{\Sigma}$) are likely to produce overly-optimistic results.
+
+. . .
+
+Simulation work has shown that model error can affect:
+
+-   EFA parameter estimates (Briggs, 2003)
+
+-   Dimensionality estimates (Kracht and Waller, 2020)
+
+-   ...And other statistical procedures (Pek, 2012; Beauducel, 2016; de Winter, 2016, Gnambs, 2016; Hsu, 2015; Trichtinger, 2020).
+
+::: notes
+-   Parameter estimation for exploratory factor analysis (Briggs, 2003).
+-   Dimensionality identification with parallel analysis (Kracht, 2020).
+-   Behavior of confidence regions and fungible parameter estimates for structural equation models (Pek, 2012).
+-   ...And other statistical procedures (Beauducel, 2016; de Winter, 2016, Gnambs, 2016; Hsu, 2015; Trichtinger, 2020).
+:::
+
+. . .
+
+[**Problem**]{style="color:#7a0019"}: How can we simulate $\boldsymbol{\Sigma}$ with "realistic" model error?
+
+# Simulating Model Error
+
+## Existing Model Error Methods
+
+Three of the most prominent model error methods are:
+
+1.  Tucker, Koopman, and Linn (TKL; 1969)
+2.  Cudeck and Browne (CB; 1992)
+3.  Wu and Browne (WB; 2015)
+
+::: notes
+The *ad hoc* methods of misspecifying the number of common factors by one or two factors, or misspecifying the relationships between observed and latent variables are not of interest here.
+
+I'll give a brief description of each of these methods and outline their benefits and drawbacks.
+:::
+
+## The Tucker, Koopman, and Linn Method
+
+The TKL method is based on the common factor analysis model for $k$ common factors:
+
+$$
+\boldsymbol{\Omega} = \boldsymbol{\Lambda} \boldsymbol{\Phi} \boldsymbol{\Lambda}^\prime + \boldsymbol{\Psi},
+$$ {#eq-cfa}
+
+where
+
+-   $\boldsymbol{\Omega}_{p \times p}$: model-implied covariance matrix.
+-   $\boldsymbol{\Lambda}_{p \times k}$: factor-pattern matrix.
+-   $\boldsymbol{\Phi}_{k \times k}$: common factor covariance matrix.
+-   $\boldsymbol{\Psi}_{p \times p}$: diagonal matrix containing the unique variances.
+
+::: notes
+Let all observed variables and common factors be standardized in the population so that $\boldsymbol{\Omega}$ has a unit diagonal (i.e., is a correlation matrix).
+:::
+
+## The Tucker, Koopman, and Linn Method
+
+Model error is represented as the effect of numerous minor common factors such that $\mathbf{W}_{p \times q}$ is the matrix of minor factor loadings for the $q \succeq k$ minor common factors,
+
+$$
+\boldsymbol{\Sigma} = \boldsymbol{\Lambda} \boldsymbol{\Phi} \boldsymbol{\Lambda}^\prime + \boldsymbol{\Psi} + \mathbf{WW}^\prime
+$$ {#eq-tkl}
+
+. . .
+
+Minor common factors are ["...far too many and far too minor to be retained in a factor analysis of empirical data"]{style="color:#7a0019; font-weight: bold"} (MacCallum, 2003, p. 135).
+
+## Tucker, Koopman, and Linn Method Parameters
+
+Two user-specified parameters affect the characteristics of $\mathbf{W}$:
+
+-   $\nu_{\textrm{e}} \in [0, 1]$: The proportion of unique variance allocated to the minor common factors.
+
+-   $\epsilon \in [0, 1]$: Controls how variance is distributed among the minor common factors.
+
+::: notes
+-   Values of $\epsilon$ close to zero result in relatively equipotent minor factors
+
+-   Values of $\epsilon$ close to one result in error variance primarily being distributed to the first minor factor.
+
+### Advantages
+
+-   Straightforward interpretation of model error arising from un-modeled minor common factors.
+-   Quite flexible; two parameters ($\nu_{\textrm{e}}$ and $\epsilon$) to manipulate.
+-   Relatively easy to implement.
+
+### Disadvantages
+
+-   Cannot be used for all types of covariance structure models (factor analysis models only).
+-   No clear guidelines for reasonable/realistic values of $\nu_{\textrm{e}}$ and $\epsilon$.
+-   No direct control of degree of model fit (in terms of e.g., RMSEA) as traditionally implemented.
+:::
+
+### 
+
+## The Cudeck and Browne Method
+
+Cudeck and Browne developed a model error method for any covariance structure model, $\boldsymbol{\Omega} = \boldsymbol{\Omega}(\boldsymbol{\gamma})$.
+
+For a particular vector of model parameters $\boldsymbol{\gamma}_0$, let $\boldsymbol{\Sigma}_0 = \boldsymbol{\Omega}(\boldsymbol{\gamma}_0) + \mathbf{E}$.
+
+The CB method seeks to find an $\mathbf{E}$ matrix such that:
+
+1.  $F(\boldsymbol{\Sigma}_0, \boldsymbol{\Omega}(\boldsymbol{\gamma}))$ is minimized when $\boldsymbol{\gamma} = \boldsymbol{\gamma}_0$.
+2.  $F(\boldsymbol{\Sigma}_0, \boldsymbol{\Omega}(\boldsymbol{\gamma})) = \delta$ when $\boldsymbol{\gamma} = \boldsymbol{\gamma}_0$ for some user-specified $\delta$.
+
+Here, $F(\boldsymbol{\Sigma}_0, \boldsymbol{\Omega}(\boldsymbol{\gamma}))$ represents a discrepancy function (ML or OLS).
+
+::: notes
+In plain English: The vector of "true" model parameters for the ideal model minimize the discrepancy function and the discrepancy function value is some pre-specified value.
+
+### Advantages
+
+-   Adaptable to any covariance structure model.
+-   Allows a target RMSEA value to be directly specified (because $\delta$ is related to RMSEA; more on that later).
+-   No structural assumptions about $\mathbf{E}$; any suitable $\mathbf{E}$ matrix will do.
+
+### Disadvantages
+
+-   Can result in indefinite $\boldsymbol{\Sigma}$ matrices if $\delta$ is too large.
+-   Relatively difficult to implement.
+-   Inflexible; only one parameter to control.
+-   Implies that $\boldsymbol{\gamma}_0$ will be perfectly recovered from a sample covariance matrix as sample size goes to $\infty$ (is this reasonable?).
+:::
+
+## The Wu and Browne Method
+
+Model error is considered to be a random effect due to differences between the [**operational** population]{style="color:#7a0019; font-weight: bold"} and some [**ideal population**]{style="color:#7a0019; font-weight: bold"}.
+
+$\boldsymbol{\Sigma}$ is considered to be a random sample from an inverse-Wishart distribution such that
+
+$$
+(\boldsymbol{\Sigma} | \boldsymbol{\Omega}) \sim W^{-1}_p(m \boldsymbol{\Omega}, m),
+$$ {#eq-wb}
+
+where $m = 1/v$ is a continuous precision parameter such that $m > p - 1$.
+
+. . .
+
+> "\[The ideal\] population need not have an explicit empirical description. In this sense, the general population is defined by the model rather than by its empirical nature."\
+> --- MacCallum and O'Hagan (2015, p. 605)
+
+::: notes
+The inverse-Wishart distribution is a probability distribution defined on real-valued positive-definite matrices.
+
+### Advantages
+
+-   Adaptable to any covariance structure model.
+-   Fast and relatively easy to implement.
+-   Allows a target RMSEA value to be specified.
+
+### Disadvantages
+
+-   Inflexible; only one parameter to control.
+-   Resulting RMSEA values are often not close to target values when target values are (relatively) large.
+-   Possible RMSEA values limited by $m > p - 1$.
+-   Based on a specific theory of model error; assumes that error-perturbed covariance matrices are distributed according to an inverse Wishart distribution.
+
+"Although we believe that the theoretical population is an ideal in nature, we are not critical of it. Instead, we maintain that, just like statistical models, it is a construction by the human mind in order to understand the world and is necessarily a simplified description of the reality. The usefulness of the concept of a general population lies in its explanatory power but not in its tangible existence as a group of people or a set of measurement outcomes."
+:::
+
+## Evaluating Model Error
+
+Model fit indices are often used to indicate the level of misfit between $\boldsymbol{\Sigma}$ and $\boldsymbol{\Omega}$ or between $\boldsymbol{\Sigma}$ and $\hat{\boldsymbol{\Omega}}$.
+
+. . .
+
+### Absolute Fit Indices
+
+-   Root Mean Square Error of Approximation (RMSEA; Steiger, 1990)
+-   Correlation Root Mean Square Residual (CRMR; Bollen, 1989; Ogasawara, 2001)
+
+### Incremental Fit Indices
+
+-   Comparative Fit Index (CFI; Bentler, 1990)
+-   Tucker-Lewis Index (TLI; Tucker & Lewis, 1973)
+
+::: notes
+Where $\hat{\boldsymbol{\Omega}}$ is the implied covariance matrix from an analysis of $\boldsymbol{\Sigma}$. I'll focus mainly on fit indices representing the lack-of-fit between Sigma and Omega, which I denote by sub-scripting each of the fit indices with an "Omega". When a fit index represents the lack-of-fit between Sigma and Omega-hat, I subscript the fit index with an "Omega-hat".
+:::
+
+## Disagreement Among Fit Indices
+
+Different model fit indices can lead to different qualitative interpretations of model fit when cut-off values are used to categorize model fit.
+
+[**Example**]{style="color:#7a0019; font-weight: bold"}:
+
+-   $\rmseaOmega = 0.04$
+
+-   $\cfiOmega = 0.78$
+
+. . .
+
+> "\[T\]here is no such thing as a magical, single-number summary that says everything worth knowing about model fit."\
+> ---Kline (2011, p. 193)
+
+::: notes
+-   RMSEA values less than 0.05 generally represent good model fit.
+-   CFI values less than 0.90 generally represent unacceptably poor model fit.
+:::
+
+## Controlling the Amount of Model Error
+
+Given that fit indices can lead to different qualitative interpretations of model fit, researchers should use and report multiple model fit indices in Monte Carlo simulation studies.
+
+. . .
+
+[Problem]{style="color:#7a0019; font-weight: bold"}: Current model-error methods take only target $\rmseaOmega$ values (CB, WB) or no explicit target fit index (TKL).
+
+[Solution]{style="color:#7a0019; font-weight: bold"}: Create an optimization procedure based on the TKL method to find values of $\nu_{\textrm{e}}$ and $\epsilon$ that give RMSEA and/or CFI values that are as close as possible to target values.
+
+:::{.notes}
+Problems:
+-   There are no empirically-supported guidelines for appropriate values of $\nu_{\textrm{e}}$ and $\epsilon$.
+-   Choosing values of $\nu_{\textrm{e}}$ and $\epsilon$ that result in a specific model fit index value is difficult.
+-   Choosing values of $\nu_{\textrm{e}}$ and $\epsilon$ that result in multiple specific model fit index values (e.g., RMSEA and CFI) can be *very* difficult.
+:::
+
+## The Multiple-Objective TKL Method
+
+Use the L-BFGS-B (Zhu et al., 1997) algorithm to minimize the function:
+
+$$
+G(\nu_\textrm{e}, \epsilon) = b_1 \frac{\left( \rmseaOmega - \textrm{RMSEA}_{\textrm{T}} \right)^2}{\textrm{RMSEA}_{\textrm{T}}^2} + b_2 \frac{\left( \cfiOmega - \textrm{CFI}_{\textrm{T}} \right)^2}{\left( 1 - \textrm{CFI}_{\textrm{T}} \right)^2} + 1_{\mathbf{W}} \lambda,
+$$ {#eq-rmsea-cfi-obj-function}
+
+-   $b_1$ and $b_2$: User-specified weights that sum to one.\
+-   $\RMSEA_\textrm{T}$: User-specified target RMSEA value.\
+-   $\CFI_\textrm{T}$: User-specified target CFI value.\
+-   $1_{\mathbf{W}}$: Indicator function that equals one if any minor factor has more than two factor loadings $\geq .3$ in absolute value.\
+-   $\lambda$: User-specified penalty.
+
+## Aims of the Simulation Study
+
+I wanted to answer the following questions:
+
+1.  How do the model-error methods compare in terms of the fit indices they produce?
+
+2.  Does the proposed multiple-objective TKL method produce $\bSigma$ matrices with RMSEA and/or CFI values that are close to the target values?
+
+:::{.notes}
+Basically, how do the model error methods compare in terms of the fit indices they produce when used with the same target RMSEA values? Do the fit indices agree in terms of qualitative model fit?
+
+Although these were the primary questions, I was also interested in the other advantages/disadvantages of the model fit methods. For instance, how often did the methods lead to non-converged or improper solutions?
+:::
+
+# Method
+
+## Design Variables: Population Models
+
+-   Population models with 1, 3, 5 or 10 major common factors.
+-   Data sets with either 5 or 15 items per factor ($p \in [5, 15, 25, 45, 50, 75, 150]$).
+-   Common factor correlations either 0.0 (orthogonal), 0.3, or 0.6.
+-   Three factor loading structure types (simple structure): "Strong", "Moderate", and "Weak", corresponding to factor loadings of 0.8, 0.6, and 0.4 (Hair et al., 2018).
+
+## Design Variables: Model Error
+
+-   Model error methods
+    -   TKL (using target RMSEA, target CFI, and target RMSEA/CFI values).
+    -   CB.
+    -   WB.
+-   Model fit targets
+    -   $\RMSEA_\textrm{T} \in [0.025, 0.065, 0.090]$.
+    -   $\CFI_\textrm{T} \in [0.99, 0.95, 0.90]$.[^1]
+    -   $\RMSEA_\textrm{T}$ and $\textrm{CFI}_{\textrm{T}}$ pairs correspond to very good, fair, and poor model fit (MacCallum et al., 2001; Myers et al., 2015).
+
+[^1]: Note that target CFI only affects the multiple-objective TKL procedure.
+
+## Design Variables: Summary {.smaller}
+
+```{r count-conditions}
+conditions <- expand.grid(
+  factors = c(1,3,5,10),
+  items = c(5, 15),
+  factor_corr = c(0,.3,.6),
+  loadings = c(0.4, 0.6, 0.8),
+  model_fit = c("Very Good", "Fair", "Poor"),
+  model_error_method = c("TKL-RMSEA", "TKL-CFI", "TKL-RMSEA-CFI",
+                         "CB", "WB")
+)
+
+pop_mods <- expand.grid(
+  factors = c(1,3,5,10),
+  items = c(5, 15),
+  factor_corr = c(0,.3,.6),
+  loadings= c(0.4, 0.6, 0.8)
+)
+
+conditions <- dplyr::filter(conditions,
+                     !(factors == 1 & factor_corr > 0))
+pop_mods <- dplyr::filter(pop_mods,
+                   !(factors == 1 & factor_corr > 0))
+```
+
+```{r study1-tab, message=F, warning=F}
+study1_vars <- rbind(
+  c("Factors" = "1, 3, 5, 10",
+    "Items/Factor" = "5, 15",
+    "Factor Correlation ($\\phi$)" = "0.0, 0.3, 0.6",
+    "Loadings" = "0.4, 0.6, 0.8",
+    "Target Model Fit" = "Very Good ($\\RMSEA_\\textrm{T} = 0.025$, $\\textrm{CFI}_{\\textrm{T}} = 0.99$),",
+    " " = "Fair ($\\RMSEA_\\textrm{T} = 0.065$, $\\textrm{CFI}_{\\textrm{T}} = 0.95$),",
+    "  " = "Poor ($\\RMSEA_\\textrm{T} = 0.090$, $\\textrm{CFI}_{\\textrm{T}} = 0.90$)",
+    "Error Method" = "TKL (three variants), CB, WB")
+)
+
+study1_vars <- tibble::as_tibble(t(study1_vars),
+                                 rownames = "Variable")
+
+knitr::kable(
+  x = study1_vars,
+  booktabs = TRUE,
+  caption = "Design Variables and Levels.",
+  escape = FALSE,
+  col.names = c("Variable", "Levels"),
+  note = "$\\varepsilon_\\textrm{T}$ = Target RMSEA value.", 
+)
+```
+
+## Study Design Variables: Summary
+
+-   `r nrow(pop_mods)` (error-free) population models.
+-   `r conditions |> filter(!(model_error_method == "CB" & items == 15 & factors == 10)) |> nrow()` crossed conditions.
+-   500 reps for all model-error methods.
+-   $500 \times 873 = 436,500$ simulated $\boldsymbol{\Sigma}$ matrices.
+
+:::{.notes}
+27 of the original 900 fully-crossed conditions had to be dropped because the CB method took an impractically-long time when used with 150x150 input correlation matrices. More on that later!
+:::
+
+## Study Design: Data Generation
+
+-   For each (error-free) population model, generate the model-implied correlation matrix ($\boldsymbol{\Omega}$).
+-   For each model-implied correlation matrix:
+    -   Generate 500 error-perturbed covariance matrices ($\bSigma$) for each of the TKL, CB, and WB model-error methods at each $\RMSEA   _\textrm{T}$ and $\textrm{CFI}_{\textrm{T}}$ value pair.
+
+## Study Design: Evaluation
+
+For each error-perturbed correlation ($\bSigma$) matrix:
+
+-   Compute RMSEA, CFI, TLI, and CRMR for $\boldsymbol{\Sigma}$ and $\boldsymbol{\Omega}$ (and for $\boldsymbol{\Sigma}$ and $\hat{\boldsymbol{\Omega}}$).
+-   Compute:
+
+$$
+D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI}_{\textrm{obs}} - \textrm{CFI}_{\textrm{T}}|
+$$ {#eq-D}
+
+# Results
+
+## Distributions of $\rmseaOmega$ Values
+
+```{r echo = FALSE, out.width = '90%', fig.align = 'center'}
+knitr::include_graphics(here("img/rmsea_distributions.png"))
+```
+
++ The $\TKLrmsea$ and CB methods often led to $\rmseaOmega$ values closer to the target values compared to the other methods.
+
+:::{.notes}
+Distributions of the RMSEAΩ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target RMSEAΩ value for each condition. Note that some levels of model fit and factor loading strength were omitted to conserve space.
+:::
+
+## Distributionsof $\cfiOmega$ Values
+
+```{r echo = FALSE, out.width = '90%', fig.align = 'center'}
+knitr::include_graphics(here("img/cfi_distributions.png"))
+```
+
++ The $\TKLcfi$ and $\TKLrmseacfi$ methods often led to $\cfiOmega$ values that were closer to the target values compared to the other methods
+
+## Distributions of $D$ Values
+
+```{r echo = FALSE, out.width = '90%', fig.align = 'center'}
+knitr::include_graphics(here("img/d_plot.png"))
+```
++ The $\TKLcfi$ and $\TKLrmseacfi$ methods often led to the smallest $D$ values, particularly in conditions with many factors, weak factor loadings, and Poor model fit.
+
+## 
+
+## $\mathbf{W}$ Constraint Violations
+
+Despite the large penalty value ($\lambda = 1,000,000$), the $\TKLrmsea$ method often led to solutions with violated $\mathbf{W}$ constraints.
+
+```{r echo = FALSE, out.width = '60%', fig.align = 'center'}
+knitr::include_graphics(here("img/major_minor_factors.png"))
+```
+
++ Changing the value of $\lambda$ did not lead to much better results.
++ However, the $\TKLrmseacfi$ and $\TKLcfi$ methods seldom produced solutions with violated constraints.
+
+:::{.notes}
+I did a small follow-up simulation study to see whether the TKL (RMSEA/CFI) or TKL (CFI) methods were avoiding constraint violations because the penalty worked particularly well with those methods or whether it was the CFI target. I found that the inclusion of the CFI target value was almost completely responsible for the avoidance of W constraint violations.
+
+Conditions with low factor loadings, poor model fit, and many items and factors were most likely to be indefinite. The CFI target helped avoid violated W constraints in these conditions by pulling the RMSEA value down.
+:::
+
+## Indefinite $\bSigma$ Matrices
+
+xxx
+
+# Conclusions & Future Work
+
++ The $\TKLcfi$ and $\TKLrmseacfi$ methods 
+
+# Backup Slides
+
+## Population Model Fit Indices
+
+$$
+\textrm{RMSEA} = \varepsilon = \sqrt{\frac{F_h}{df_h}},
+$$ {#eq-rmsea}
+
+$$
+\textrm{CFI} = 1 - \frac{F_h}{F_b},
+$$ {#eq-cfi}
+
+$$
+\textrm{TLI} = 1 - \frac{F_h / df_h}{F_b / df_b}
+$$ {#eq-tli}
+
+-   $F_h$ and $df_h$ denote the discrepancy function value and degrees of freedom for the full model.
+-   $F_b$ and $df_b$ denote the discrepancy function value and degrees of freedom for the baseline (independence) model.
+
+## CB: Specifying the Amount of Model Error (RMSEA)
+
+The CB method allows a user to generate an error-perturbed covariance matrix with a specified RMSEA value.
+
+$$
+\delta = \varepsilon_\textrm{T} df,
+$$ {#eq-rmsea-to-delta} \noindent where $df$ denotes the model degrees of freedom.
+
+-   $\boldsymbol{\Sigma}$ can be indefinite if $\delta$ is too large.
+-   If $\delta$ is large, $\theta_0$ might correspond to a saddle point.
+
+## WB: Specifying the Amount of Model Error (RMSEA)
+
+The error-perturbed covariance matrix $\boldsymbol{\Sigma}$ is sampled from:
+
+$$
+(\boldsymbol{\Sigma} | \boldsymbol{\Omega}) \sim W^{-1}_p(m \boldsymbol{\Omega}, m),
+$$ {#eq-wb2}
+
+The precision parameter, $m = 1/v$, is related to RMSEA such that $v \approx \varepsilon^2$.
+
+The approximation gets worse as $\varepsilon^2$ increases; simply using $m = 1 / \tilde{v}$ is unlikely to lead to RMSEA values close to $\varepsilon_\textrm{T}$ when $\varepsilon_\textrm{T}$ is not very small.
+
+## WB: Fit a Regression Model for $v$
+
+Find an appropriate value of $v$ such that RMSEA($\boldsymbol{\Sigma}, \boldsymbol{\Omega}$) $\approx \varepsilon_\textrm{T}$:
+
+1.  Create a vector of $\tilde{v}$ values for $\varepsilon_\textrm{T}$ values in a reasonable range (e.g., 20 values between 0.01 and 0.095).\
+2.  For each value of $\tilde{v}$:
+    a.  Sample a number of covariance matrices (e.g., 50) from the corresponding inverse-Wishart distribution.\
+    b.  Calculate the median RMSEA value for the sampled covariance matrices.\
+3.  Regress $\tilde{v}$ on the median RMSEA and squared median RMSE values.\
+4.  Use the fitted model from Step 3 to find a value of $v$ that is likely to lead to error-perturbed covariance matrices with RMSEA values close to $\varepsilon_\textrm{T}$.
+
+## WB: Example
+
+```{r wb-mod-plot, fig.align = "center", dpi = 800}
+if (make_plots) {
+  set.seed(123)
+  
+  reps <- 50
+  NFac <- 5
+  mod <- fungible::simFA(Model = list(NFac = NFac, NItemPerFac = 5), Seed = 123)
+  target_rmsea <- seq(0.01, 0.095, length.out = 20)
+  vtilde <- target_rmsea^2
+  
+  rmsea_vec <- numeric(reps)
+  median_rmsea <- numeric(length(target_rmsea))
+  
+  for (i in seq_along(target_rmsea)) {
+    for (rep in 1:reps) {
+      Rwb <- noisemaker::wb(mod, target_rmsea = target_rmsea[i],
+                            adjust_target = FALSE)
+      rmsea_vec[rep] <- noisemaker::rmsea(Rwb, mod$Rpop, k = NFac)
+    }
+    median_rmsea[i] <- median(rmsea_vec)
+  }
+  
+  wb_data <- data.frame(v = vtilde, median_rmsea = median_rmsea)
+  
+  ggplot(wb_data, aes(y = sqrt(v), x = median_rmsea)) +
+    geom_point() +
+    geom_smooth(method = lm, 
+                formula = y ~ poly(x, 2), 
+                se = FALSE, color = "darkorange", lty = 2, size = .75) +
+    geom_abline(a = 0, b = 1, color = "gray") +
+    theme_minimal() + 
+    labs(x = latex2exp::TeX("median $\\epsilon$"),
+         y = latex2exp::TeX("$\\sqrt{\\tilde{v}} = \\epsilon_\textrm{T}$"),
+         title = latex2exp::TeX("Relationship between $\\sqrt{\\tilde{v}}$ and $\\epsilon$ for a 5-factor model"),
+         caption = "The solid gray line indicates where the target RMSEA and median RMSEA values would be equal. \nThe dashed orange line indicates the predicted value of v given an RMSEA value.")
+  
+  ggsave(filename = "wb-plot.png",
+         plot = last_plot(),
+         dpi = 320,
+         height = 4, 
+         width = 5,
+         scale = 1.1)
+}
+
+knitr::include_graphics(
+  "wb-plot.png",
+  dpi = 600
+)
+```
+
+## Population Model Fit Indices
+
+$$
+\textrm{SRMR} = \sqrt{ \frac{1}{p (p + 1) / 2} \sum_{i \leq j} \left(  \frac{\sigma_{ij} - \omega_{ij}}{\sqrt{\sigma_{ii} \sigma_{jj}}} \ \right) ^2 }
+$$ {#eq-srmr}
+
+$$
+\textrm{CRMR} = \sqrt{ \frac{1}{p (p - 1) / 2} \sum_{i < j} \left( \sigma_{ij} - \omega_{ij} \ \right) ^2 }
+$$ {#eq-crmr}
+
+-   $p$ is the number of observed variables.\
+-   $\sigma_{ij}$ and $\omega_{ij}$ are the $i,j$th elements of $\boldsymbol{\Sigma}$ and $\boldsymbol{\Omega}$, respectively.
+
+## Qualitative Fit Index Agreement
+
+```{r echo = FALSE, out.width = '95%', fig.align = 'center'}
+knitr::include_graphics(here("img/fit_index_agreement.png"))
+```
+
+## RMSEA and CFI Distributions
+
+```{r echo = FALSE, out.width = '90%', fig.align='center'}
+knitr::include_graphics(here("img/rmsea-cfi-distributions.png"))
+```
+
+## Local Optima
+
+```{r fig.align='center', fig.width = 6}
+knitr::include_graphics("local_optima.png", dpi = 800)
+```
+
+## CB Completion Time
+
+```{r echo = FALSE, out.width = '90%', fig.align='center'}
+knitr::include_graphics(here("img/cb_time_plot.png"))
+```
+
+## Indefinite Matrices
+
+```{r, echo = FALSE, out.width='85%', fig.align='center'}
+knitr::include_graphics(here("img/cb_percent_indefinite.png"))
+```
+
+## L-BFGS-B Non-convergence
+
+-   Non-convergence only occurred when the $\TKLrmseacfi$ method was used.\
+-   Only 14 of 90,000 (\<1%) of $\TKLrmseacfi$ cases failed to converge using L-BFGS-B.
+
+```{r echo = FALSE, out.width = '55%', fig.align='center'}
+knitr::include_graphics(here("img/nonconverged_rmsea_cfi.png"))
+```
+
+## $\mathbf{W}$ Constraint Violations
+
++ Despite a large penalty ($\lambda = 1,000,000$), violations of the $\mathbf{W}$ constraints were sometimes violated.
++ Adjusting the value of $\lambda$ was not helpful, but including a CFI target value helped considerably.
+
+```{r echo = FALSE, out.width = '60%', fig.align = 'center'}
+knitr::include_graphics(here("img/major_minor_factors.png"))
+```
+
+:::{.notes}
+The percent of cases where the constraints on W were violated when the TKLRMSEA model-error method was used, conditioned on number of factors, number of items per factor, factor loading, and model fit.
+
+<0.01% of solutions from the TKL (CFI) or TKL (RMSEA/CFI) methods led to solutions with violated W constraints. To ensure that the target CFI value was the cause of the reduction in violated W constraints, I 
+:::
+
+## $\mathbf{W}$ Constraint Violations
+
+```{r echo = FALSE, out.width = '75%', fig.align = 'center'}
+knitr::include_graphics(here("img/eps_and_nu_violation_example.png"))
+```
+
+:::{.notes}
+The distribution of eps and nu (and whether or not W constraints were violated) for conditions with Poor model fit, 10 factors, 15 items per factor, and factor loadings of 0.8. TKL = Tucker, Koopman, and Linn.
+:::
+
+## *noisemaker*
+
+```{r, echo = TRUE}
+mod <- fungible::simFA(Model = list(NFac = 1, NItemPerFac = 10))
+
+set.seed(123)
+mod_tkl <- noisemaker(mod, method = "TKL", 
+                      target_rmsea = 0.05, 
+                      target_cfi = 0.95)
+
+mod_cb <- noisemaker(mod, method = "CB", 
+                      target_rmsea = 0.05)
+
+mod_wb <- noisemaker(mod, method = "WB", 
+                     target_rmsea = 0.05)
+```

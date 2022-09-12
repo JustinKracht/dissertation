@@ -59,7 +59,7 @@
 | $\sigma_{ij}$ | The $i, j$th element of $\bSigma$. |
 | $\omega_{ij}$ | The $i, j$th element of $\bOmega$. |
 | $\varepsilon_{\textrm{T}}$ or $\textrm{RMSEA}_{\textrm{T}}$ | A target RMSEA value. |
-| $\textrm{CFI}_T$ | A target CFI value. |
+| $\textrm{CFI}_\textrm{T}$ | A target CFI value. |
 | $G(\nu_{\textrm{e}}, \epsilon)$ | The objective function for the multiple-target TKL method. |
 | $b_1$, $b_2$ | Weights used to determine how much influence the target RMSEA and CFI values were given in the multiple-target TKL method objective function. |
 | $1_{\mathbf{W}}$ | An indicator function that is equal to one when the constraints on the $\mathbf{W}$ matrix are violated and is equal to zero otherwise. |

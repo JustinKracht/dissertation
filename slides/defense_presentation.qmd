@@ -464,55 +464,84 @@ $$ {#eq-D}
 
 # Results
 
-## Distributions of $\rmseaOmega$ Values
+## Distributions of $\rmseaOmega$ Values {.smaller}
 
-```{r echo = FALSE, out.width = '90%', fig.align = 'center'}
+The $\TKLrmsea$ and CB methods often led to $\rmseaOmega$ values closer to the target values compared to the other methods.
+
+```{r echo = FALSE, out.width = '65%', fig.align = 'center'}
 knitr::include_graphics(here("img/rmsea_distributions.png"))
 ```
 
-+ The $\TKLrmsea$ and CB methods often led to $\rmseaOmega$ values closer to the target values compared to the other methods.
+::: {.notes}
+Note the similar performance of the TKL (RMSEA/CFI) and TKL (CFI) methods, and that both methods tended to produce RMSEA values that were smaller than the target values (with some exceptions when there was only one factor).
 
-:::{.notes}
 Distributions of the RMSEAΩ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target RMSEAΩ value for each condition. Note that some levels of model fit and factor loading strength were omitted to conserve space.
 :::
 
-## Distributionsof $\cfiOmega$ Values
+## Distributionsof $\cfiOmega$ Values {.smaller}
 
-```{r echo = FALSE, out.width = '90%', fig.align = 'center'}
+The $\TKLcfi$ and $\TKLrmseacfi$ methods often led to $\cfiOmega$ values that were closer to the target values compared to the other methods.
+
+```{r echo = FALSE, out.width = '65%', fig.align = 'center'}
 knitr::include_graphics(here("img/cfi_distributions.png"))
 ```
 
-+ The $\TKLcfi$ and $\TKLrmseacfi$ methods often led to $\cfiOmega$ values that were closer to the target values compared to the other methods
+## Distributions of $D$ Values {.smaller}
 
-## Distributions of $D$ Values
+The $\TKLcfi$ and $\TKLrmseacfi$ methods often led to the smallest $D$ values, particularly in conditions with many factors, weak factor loadings, and Poor model fit.
 
 ```{r echo = FALSE, out.width = '90%', fig.align = 'center'}
 knitr::include_graphics(here("img/d_plot.png"))
 ```
-+ The $\TKLcfi$ and $\TKLrmseacfi$ methods often led to the smallest $D$ values, particularly in conditions with many factors, weak factor loadings, and Poor model fit.
 
-## 
+## Trade-Off Between RMSEA and CFI {.smaller}
 
-## $\mathbf{W}$ Constraint Violations
+:::: {.columns}
+
+::: {.column width='45%'}
++ CFI values varied substantially over the range of acceptable RMSEA values, whereas RMSEA values tended not to vary much over the range of acceptable CFI values.
+
++ Thus, CFI values tended to be more influential in the $\TKLrmseacfi$ method, even when weighted equally.
+:::
+
+::: {.column width='55%'}
+```{r echo = FALSE, out.width = '100%', fig.align = 'right'}
+knitr::include_graphics(here("img/conditional_rmsea_and_cfi_plots.png"))
+```
+:::
+
+::::
+
+::: {.notes}
+Plot A: I used the TKL (RMSEA) method to generate 100 solutions for 16 target RMSEA values between 0.025 and 0.100. The black line indicates where RMSEA is equal to 1-CFI. 
+
+Plot B: I used the TKL (CFI) method to generate 100 solutions for 19 target CFI values between 0.90 and 0.99. The solid black line indicates where RMSEA and 1-CFI are equal.
+:::
+
+## $\mathbf{W}$ Constraint Violations {.smaller}
 
 Despite the large penalty value ($\lambda = 1,000,000$), the $\TKLrmsea$ method often led to solutions with violated $\mathbf{W}$ constraints.
 
-```{r echo = FALSE, out.width = '60%', fig.align = 'center'}
+:::: {.columns}
+
+::: {.column width='40%'}
++ Changing the value of $\lambda$ did not significantly reduce the frequency of violations.
++ The $\TKLrmseacfi$ and $\TKLcfi$ methods seldom produced solutions with violated constraints.
+:::
+
+::: {.column width='60%'}
+```{r echo = FALSE, out.width = '90%', fig.align = 'right'}
 knitr::include_graphics(here("img/major_minor_factors.png"))
 ```
+:::
 
-+ Changing the value of $\lambda$ did not lead to much better results.
-+ However, the $\TKLrmseacfi$ and $\TKLcfi$ methods seldom produced solutions with violated constraints.
+::::
 
-:::{.notes}
+::: {.notes}
 I did a small follow-up simulation study to see whether the TKL (RMSEA/CFI) or TKL (CFI) methods were avoiding constraint violations because the penalty worked particularly well with those methods or whether it was the CFI target. I found that the inclusion of the CFI target value was almost completely responsible for the avoidance of W constraint violations.
 
 Conditions with low factor loadings, poor model fit, and many items and factors were most likely to be indefinite. The CFI target helped avoid violated W constraints in these conditions by pulling the RMSEA value down.
 :::
-
-## Indefinite $\bSigma$ Matrices
-
-xxx
 
 # Conclusions & Future Work
 

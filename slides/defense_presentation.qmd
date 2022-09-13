@@ -139,7 +139,7 @@ Simulation work has shown that model error can affect:
 
 ## Existing Model Error Methods
 
-Three of the most prominent model error methods are:
+Three of existing model-error methods are:
 
 1.  Tucker, Koopman, and Linn (TKL; 1969)
 2.  Cudeck and Browne (CB; 1992)
@@ -494,7 +494,7 @@ The $\TKLcfi$ and $\TKLrmseacfi$ methods often led to the smallest $D$ values, p
 knitr::include_graphics(here("img/d_plot.png"))
 ```
 
-## Trade-Off Between RMSEA and CFI {.smaller}
+## Trade-Offs Between RMSEA and CFI {.smaller}
 
 :::: {.columns}
 
@@ -516,6 +516,8 @@ knitr::include_graphics(here("img/conditional_rmsea_and_cfi_plots.png"))
 Plot A: I used the TKL (RMSEA) method to generate 100 solutions for 16 target RMSEA values between 0.025 and 0.100. The black line indicates where RMSEA is equal to 1-CFI. 
 
 Plot B: I used the TKL (CFI) method to generate 100 solutions for 19 target CFI values between 0.90 and 0.99. The solid black line indicates where RMSEA and 1-CFI are equal.
+
+Relatively small changes moving RMSEA toward a large target were very "costly" in terms of moving CFI away from its target value. Conversely, small changes to CFI tended to have only small effects on RMSEA.
 :::
 
 ## $\mathbf{W}$ Constraint Violations {.smaller}
@@ -543,9 +545,48 @@ I did a small follow-up simulation study to see whether the TKL (RMSEA/CFI) or T
 Conditions with low factor loadings, poor model fit, and many items and factors were most likely to be indefinite. The CFI target helped avoid violated W constraints in these conditions by pulling the RMSEA value down.
 :::
 
-# Conclusions & Future Work
+## TKL Fit Index Recovery {.smaller}
 
-+ The $\TKLcfi$ and $\TKLrmseacfi$ methods 
+:::: {.columns}
+
+::: {.column width='40%'}
++ When RMSEA and CFI targets were known to be possible, the $\TKLrmseacfi$ method was able to generate solutions with very close $\rmseaOmega$ and $\cfiOmega$ values.
+
++ These results provide evidence that some RMSEA and CFI combinations are extremely difficult (if not impossible) to obtain for input matrices.
+:::
+
+::: {.column width='60%'}
+```{r echo = FALSE, out.width = '100%', fig.align = 'right'}
+knitr::include_graphics(here("img/tkl_recovery_small.png"))
+```
+:::
+
+::::
+
+::: {.notes}
+A useful follow-up question is: Can the TKL (RMSEA/CFI) method actually be shown to produce RMSEA and CFI values that are "right on" target RMSEA and CFI values, when those combinations are known to be possible?
+
+To find $\rmseaOmega$ and $\cfiOmega$ value combinations that were known to be possible, I used the standard TKL method implemented in the `simFA()` function to generate a correlation matrix with model error for every condition in the simulation design. Next, I computed the $\rmseaOmega$ and $\cfiOmega$ values for each simulated correlation matrix. I then used those values as target $\rmseaOmega$ and $\cfiOmega$ values for the $\TKLrmseacfi$ method and generated 50 correlation matrices with model error for each condition.
+:::
+
+## Conclusions {.smaller}
+
+### Recommendations
+
++ I recommend the $\TKLcfi$ or $\TKLrmseacfi$ methods for use in simulation studies
+  + Fast.
+  + Reliable.
+  + Produce RMSEA and CFI combinations that are more likely to indicate similar levels of model fit compared to alternative methods.
+  + Avoids issues with large (major) minor factors.
+  + However: limited to factor analysis models.
+
++ TKL, CB, and WB model-error methods are all available in the [*noisemaker* package](github.com/JustinKracht/noisemaker).
+
+### Directions for Future Work
+
++ Do the $\bSigma$ matrices from different model-error methods (with similar model fit index values) lead to different factor loading estimates?
+
++ Adapt the multiple-objective TKL method to restrict the range of possible $\nu_{\textrm{e}}$ and $\epsilon$ values.
 
 # Backup Slides
 

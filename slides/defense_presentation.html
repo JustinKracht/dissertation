@@ -7,7 +7,7 @@
 <link href="defense_presentation_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="defense_presentation_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="defense_presentation_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.0.38">
+  <meta name="generator" content="quarto-1.1.189">
 
   <meta name="author" content="Justin Kracht">
   <title>Make Some Noise: Generating Data From Imperfect Models</title>
@@ -19,10 +19,15 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
     pre > code.sourceCode { white-space: pre; position: relative; }
     pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -541,7 +546,7 @@
 </section>
 <section id="existing-model-error-methods" class="slide level2">
 <h2>Existing Model Error Methods</h2>
-<p>Three of the most prominent model error methods are:</p>
+<p>Three of existing model-error methods are:</p>
 <ol type="1">
 <li>Tucker, Koopman, and Linn (TKL; 1969)</li>
 <li>Cudeck and Browne (CB; 1992)</li>
@@ -866,7 +871,7 @@ G(\nu_\textrm{e}, \epsilon) = b_1 \frac{\left( \rmseaOmega - \textrm{RMSEA}_{\te
 <li><span class="math inline">\(\RMSEA_\textrm{T}\)</span> and <span class="math inline">\(\textrm{CFI}_{\textrm{T}}\)</span> pairs correspond to very good, fair, and poor model fit (MacCallum et al., 2001; Myers et al., 2015).</li>
 </ul></li>
 </ul>
-<aside><ol class="aside-footnotes"><li id="fn1" role="doc-endnote"><p>Note that target CFI only affects the multiple-objective TKL procedure.</p></li></ol></aside></section>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>Note that target CFI only affects the multiple-objective TKL procedure.</p></li></ol></aside></section>
 <section id="design-variables-summary" class="slide level2 smaller">
 <h2>Design Variables: Summary</h2>
 <div class="cell" data-hash="defense_presentation_cache/revealjs/count-conditions_2ca80246140ebe8e8f0f797b7bc31cce">
@@ -975,16 +980,8 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 <section id="distributions-of-rmseaomega-values" class="slide level2 smaller">
 <h2>Distributions of <span class="math inline">\(\rmseaOmega\)</span> Values</h2>
 <p>The <span class="math inline">\(\TKLrmsea\)</span> and CB methods often led to <span class="math inline">\(\rmseaOmega\)</span> values closer to the target values compared to the other methods.</p>
-<div class="cell" data-layout-align="center" data-hash="defense_presentation_cache/revealjs/unnamed-chunk-1_32416b0879a77b94fc58cf7a04353482">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="../img/rmsea_distributions.png" style="width:65.0%"></p>
-</figure>
-</div>
-</div>
-</div>
-<aside class="notes">
+
+<img data-src="/home/justin/Documents/dissertation/img/rmsea_distributions.png" style="width:65.0%" class="r-stretch quarto-figure-center"><aside class="notes">
 <p>Note the similar performance of the TKL (RMSEA/CFI) and TKL (CFI) methods, and that both methods tended to produce RMSEA values that were smaller than the target values (with some exceptions when there was only one factor).</p>
 <p>Distributions of the RMSEAΩ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target RMSEAΩ value for each condition. Note that some levels of model fit and factor loading strength were omitted to conserve space.</p>
 <style type="text/css">
@@ -1003,14 +1000,14 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 <h2>Distributionsof <span class="math inline">\(\cfiOmega\)</span> Values</h2>
 <p>The <span class="math inline">\(\TKLcfi\)</span> and <span class="math inline">\(\TKLrmseacfi\)</span> methods often led to <span class="math inline">\(\cfiOmega\)</span> values that were closer to the target values compared to the other methods.</p>
 
-<img data-src="../img/cfi_distributions.png" style="width:65.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="/home/justin/Documents/dissertation/img/cfi_distributions.png" style="width:65.0%" class="r-stretch quarto-figure-center"></section>
 <section id="distributions-of-d-values" class="slide level2 smaller">
 <h2>Distributions of <span class="math inline">\(D\)</span> Values</h2>
 <p>The <span class="math inline">\(\TKLcfi\)</span> and <span class="math inline">\(\TKLrmseacfi\)</span> methods often led to the smallest <span class="math inline">\(D\)</span> values, particularly in conditions with many factors, weak factor loadings, and Poor model fit.</p>
 
-<img data-src="../img/d_plot.png" style="width:90.0%" class="r-stretch quarto-figure-center"></section>
-<section id="trade-off-between-rmsea-and-cfi" class="slide level2 smaller">
-<h2>Trade-Off Between RMSEA and CFI</h2>
+<img data-src="/home/justin/Documents/dissertation/img/d_plot.png" style="width:90.0%" class="r-stretch quarto-figure-center"></section>
+<section id="trade-offs-between-rmsea-and-cfi" class="slide level2 smaller">
+<h2>Trade-Offs Between RMSEA and CFI</h2>
 <div class="columns">
 <div class="column" style="width:45%;">
 <ul>
@@ -1018,11 +1015,11 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 <li><p>Thus, CFI values tended to be more influential in the <span class="math inline">\(\TKLrmseacfi\)</span> method, even when weighted equally.</p></li>
 </ul>
 </div><div class="column" style="width:55%;">
-<div class="cell" data-layout-align="right" data-hash="defense_presentation_cache/revealjs/unnamed-chunk-4_e0747001faba8fe056cee2e0b85f24b6">
+<div class="cell" data-layout-align="right" data-hash="defense_presentation_cache/revealjs/unnamed-chunk-8_fafb63d0e218104acbe31303fc3367f4">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-right">
 <figure>
-<p><img data-src="../img/conditional_rmsea_and_cfi_plots.png" style="width:100.0%"></p>
+<p><img data-src="/home/justin/Documents/dissertation/img/conditional_rmsea_and_cfi_plots.png" style="width:100.0%"></p>
 </figure>
 </div>
 </div>
@@ -1032,6 +1029,7 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 <aside class="notes">
 <p>Plot A: I used the TKL (RMSEA) method to generate 100 solutions for 16 target RMSEA values between 0.025 and 0.100. The black line indicates where RMSEA is equal to 1-CFI.</p>
 <p>Plot B: I used the TKL (CFI) method to generate 100 solutions for 19 target CFI values between 0.90 and 0.99. The solid black line indicates where RMSEA and 1-CFI are equal.</p>
+<p>Relatively small changes moving RMSEA toward a large target were very “costly” in terms of moving CFI away from its target value. Conversely, small changes to CFI tended to have only small effects on RMSEA.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -1054,11 +1052,11 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 <li>The <span class="math inline">\(\TKLrmseacfi\)</span> and <span class="math inline">\(\TKLcfi\)</span> methods seldom produced solutions with violated constraints.</li>
 </ul>
 </div><div class="column" style="width:60%;">
-<div class="cell" data-layout-align="right" data-hash="defense_presentation_cache/revealjs/unnamed-chunk-5_97a596dc90fa24e3d9301505b5517a4b">
+<div class="cell" data-layout-align="right" data-hash="defense_presentation_cache/revealjs/unnamed-chunk-10_9c0b64dccca93b7f85d1b7c5ff0c515a">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-right">
 <figure>
-<p><img data-src="../img/major_minor_factors.png" style="width:90.0%"></p>
+<p><img data-src="/home/justin/Documents/dissertation/img/major_minor_factors.png" style="width:90.0%"></p>
 </figure>
 </div>
 </div>
@@ -1079,14 +1077,62 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</section></section>
-<section id="conclusions-future-work" class="title-slide slide level1 center">
-<h1>Conclusions &amp; Future Work</h1>
-<ul>
-<li>The <span class="math inline">\(\TKLcfi\)</span> and <span class="math inline">\(\TKLrmseacfi\)</span> methods</li>
-</ul>
 </section>
-
+<section id="tkl-fit-index-recovery" class="slide level2 smaller">
+<h2>TKL Fit Index Recovery</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<ul>
+<li><p>When RMSEA and CFI targets were known to be possible, the <span class="math inline">\(\TKLrmseacfi\)</span> method was able to generate solutions with very close <span class="math inline">\(\rmseaOmega\)</span> and <span class="math inline">\(\cfiOmega\)</span> values.</p></li>
+<li><p>These results provide evidence that some RMSEA and CFI combinations are extremely difficult (if not impossible) to obtain for input matrices.</p></li>
+</ul>
+</div><div class="column" style="width:60%;">
+<div class="cell" data-layout-align="right" data-hash="defense_presentation_cache/revealjs/unnamed-chunk-12_4b84a02e5c5671dce58f0c3392870e23">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-right">
+<figure>
+<p><img data-src="/home/justin/Documents/dissertation/img/tkl_recovery_small.png" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>A useful follow-up question is: Can the TKL (RMSEA/CFI) method actually be shown to produce RMSEA and CFI values that are “right on” target RMSEA and CFI values, when those combinations are known to be possible?</p>
+<p>To find <span class="math inline">\(\rmseaOmega\)</span> and <span class="math inline">\(\cfiOmega\)</span> value combinations that were known to be possible, I used the standard TKL method implemented in the <code>simFA()</code> function to generate a correlation matrix with model error for every condition in the simulation design. Next, I computed the <span class="math inline">\(\rmseaOmega\)</span> and <span class="math inline">\(\cfiOmega\)</span> values for each simulated correlation matrix. I then used those values as target <span class="math inline">\(\rmseaOmega\)</span> and <span class="math inline">\(\cfiOmega\)</span> values for the <span class="math inline">\(\TKLrmseacfi\)</span> method and generated 50 correlation matrices with model error for each condition.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="conclusions" class="slide level2 smaller">
+<h2>Conclusions</h2>
+<h3 id="recommendations">Recommendations</h3>
+<ul>
+<li>I recommend the <span class="math inline">\(\TKLcfi\)</span> or <span class="math inline">\(\TKLrmseacfi\)</span> methods for use in simulation studies
+<ul>
+<li>Fast.</li>
+<li>Reliable.</li>
+<li>Produce RMSEA and CFI combinations that are more likely to indicate similar levels of model fit compared to alternative methods.</li>
+<li>Avoids issues with large (major) minor factors.</li>
+<li>However: limited to factor analysis models.</li>
+</ul></li>
+<li>TKL, CB, and WB model-error methods are all available in the <a href="github.com/JustinKracht/noisemaker"><em>noisemaker</em> package</a>.</li>
+</ul>
+<h3 id="directions-for-future-work">Directions for Future Work</h3>
+<ul>
+<li><p>Do the <span class="math inline">\(\bSigma\)</span> matrices from different model-error methods (with similar model fit index values) lead to different factor loading estimates?</p></li>
+<li><p>Adapt the multiple-objective TKL method to restrict the range of possible <span class="math inline">\(\nu_{\textrm{e}}\)</span> and <span class="math inline">\(\epsilon\)</span> values.</p></li>
+</ul>
+</section></section>
 <section>
 <section id="backup-slides" class="title-slide slide level1 center">
 <h1>Backup Slides</h1>
@@ -1149,7 +1195,7 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 <section id="wb-example" class="slide level2">
 <h2>WB: Example</h2>
 
-<img data-src="wb-plot.png" class="r-stretch quarto-figure-center"></section>
+<img data-src="wb-plot.png" width="282" class="r-stretch quarto-figure-center"></section>
 <section id="population-model-fit-indices-1" class="slide level2">
 <h2>Population Model Fit Indices</h2>
 <p><span id="eq-srmr"><span class="math display">\[
@@ -1167,23 +1213,23 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 <section id="qualitative-fit-index-agreement" class="slide level2">
 <h2>Qualitative Fit Index Agreement</h2>
 
-<img data-src="../img/fit_index_agreement.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="/home/justin/Documents/dissertation/img/fit_index_agreement.png" style="width:95.0%" class="r-stretch quarto-figure-center"></section>
 <section id="rmsea-and-cfi-distributions" class="slide level2">
 <h2>RMSEA and CFI Distributions</h2>
 
-<img data-src="../img/rmsea-cfi-distributions.png" style="width:90.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="/home/justin/Documents/dissertation/img/rmsea-cfi-distributions.png" style="width:90.0%" class="r-stretch quarto-figure-center"></section>
 <section id="local-optima" class="slide level2">
 <h2>Local Optima</h2>
 
-<img data-src="local_optima.png" class="r-stretch quarto-figure-center"></section>
+<img data-src="local_optima.png" width="396" class="r-stretch quarto-figure-center"></section>
 <section id="cb-completion-time" class="slide level2">
 <h2>CB Completion Time</h2>
 
-<img data-src="../img/cb_time_plot.png" style="width:90.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="/home/justin/Documents/dissertation/img/cb_time_plot.png" style="width:90.0%" class="r-stretch quarto-figure-center"></section>
 <section id="indefinite-matrices" class="slide level2">
 <h2>Indefinite Matrices</h2>
 
-<img data-src="../img/cb_percent_indefinite.png" style="width:85.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="/home/justin/Documents/dissertation/img/cb_percent_indefinite.png" style="width:85.0%" class="r-stretch quarto-figure-center"></section>
 <section id="l-bfgs-b-non-convergence" class="slide level2">
 <h2>L-BFGS-B Non-convergence</h2>
 <ul>
@@ -1192,23 +1238,15 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 <li>Only 14 of 90,000 (&lt;1%) of <span class="math inline">\(\TKLrmseacfi\)</span> cases failed to converge using L-BFGS-B.</li>
 </ul>
 
-<img data-src="../img/nonconverged_rmsea_cfi.png" style="width:55.0%" class="r-stretch quarto-figure-center"></section>
+<img data-src="/home/justin/Documents/dissertation/img/nonconverged_rmsea_cfi.png" style="width:55.0%" class="r-stretch quarto-figure-center"></section>
 <section id="mathbfw-constraint-violations-1" class="slide level2">
 <h2><span class="math inline">\(\mathbf{W}\)</span> Constraint Violations</h2>
 <ul>
 <li>Despite a large penalty (<span class="math inline">\(\lambda = 1,000,000\)</span>), violations of the <span class="math inline">\(\mathbf{W}\)</span> constraints were sometimes violated.</li>
 <li>Adjusting the value of <span class="math inline">\(\lambda\)</span> was not helpful, but including a CFI target value helped considerably.</li>
 </ul>
-<div class="cell" data-layout-align="center" data-hash="defense_presentation_cache/revealjs/unnamed-chunk-12_1091811054c8798e690b2a2f1a86db0d">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="../img/major_minor_factors.png" style="width:60.0%"></p>
-</figure>
-</div>
-</div>
-</div>
-<aside class="notes">
+
+<img data-src="/home/justin/Documents/dissertation/img/major_minor_factors.png" style="width:60.0%" class="r-stretch quarto-figure-center"><aside class="notes">
 <p>The percent of cases where the constraints on W were violated when the TKLRMSEA model-error method was used, conditioned on number of factors, number of items per factor, factor loading, and model fit.</p>
 <p>&lt;0.01% of solutions from the TKL (CFI) or TKL (RMSEA/CFI) methods led to solutions with violated W constraints. To ensure that the target CFI value was the cause of the reduction in violated W constraints, I</p>
 <style type="text/css">
@@ -1225,16 +1263,8 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 </section>
 <section id="mathbfw-constraint-violations-2" class="slide level2">
 <h2><span class="math inline">\(\mathbf{W}\)</span> Constraint Violations</h2>
-<div class="cell" data-layout-align="center" data-hash="defense_presentation_cache/revealjs/unnamed-chunk-13_a9b438dbca0c66e7dde565699e824e97">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="../img/eps_and_nu_violation_example.png" style="width:75.0%"></p>
-</figure>
-</div>
-</div>
-</div>
-<aside class="notes">
+
+<img data-src="/home/justin/Documents/dissertation/img/eps_and_nu_violation_example.png" style="width:75.0%" class="r-stretch quarto-figure-center"><aside class="notes">
 <p>The distribution of eps and nu (and whether or not W constraints were violated) for conditions with Poor model fit, 10 factors, 15 items per factor, and factor loadings of 0.8. TKL = Tucker, Koopman, and Linn.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -1250,7 +1280,7 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
 </section>
 <section id="noisemaker" class="slide level2">
 <h2><em>noisemaker</em></h2>
-<div class="cell" data-hash="defense_presentation_cache/revealjs/unnamed-chunk-14_af72513dabbb7a4754701ef58eece0ed">
+<div class="cell" data-hash="defense_presentation_cache/revealjs/unnamed-chunk-30_3e90d4d99725c51c09fffc65ed66dcb2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>mod <span class="ot">&lt;-</span> fungible<span class="sc">::</span><span class="fu">simFA</span>(<span class="at">Model =</span> <span class="fu">list</span>(<span class="at">NFac =</span> <span class="dv">1</span>, <span class="at">NItemPerFac =</span> <span class="dv">10</span>))</span>
 <span id="cb1-2"><a href="#cb1-2"></a></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
@@ -1591,7 +1621,8 @@ D = |\textrm{RMSEA}_{\textrm{obs}} - \textrm{RMSEA}_{\textrm{T}}| + |\textrm{CFI
       for (var i=0; i<noterefs.length; i++) {
         const ref = noterefs[i];
         tippyHover(ref, function() {
-          let href = ref.getAttribute('href');
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);

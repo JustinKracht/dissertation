@@ -49,16 +49,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - $\bm{\Omega}_{p \times p}$: Population covariance matrix for $p$ items
 - $\bm{\Sigma}_{p \times p}$: The population covariance matrix with model error.
-- $\hat{\bm{\Omega}}_{p \times p}$: The model-implied population covariance (correlation) matrix obtained from analyzing $\mathbf{\Sigma}$ (the population correlation matrix with model error).
-- $\bm{\Omega}(\bm{\gamma})$: Matrix-valued function of a vector of free parameters, $\bm{\gamma}$
-- $\mathbf{E}_{p \times p}$: Error (perturbation) matrix
-- $\bm{\Lambda}_{p \times k}$: Matrix of factor loadings for $p$ items on $k$ factors
-- $\bm{\Phi}_{k \times k}$: Correlation matrix for the $k$ factors
-- $\bm{\Psi}_{p \times p}$: Diagonal matrix of item unique variances
-- $\RMSEA$: Root mean square error of approximation (RMSEA)
-- $\RMSEA_\textrm{T}$: Target RMSEA
-- $\textrm{CFI}$: Comparative Fit Index (CFI)
-- $\textrm{CFI}_\textrm{T}$: Target CFI
-- $m = 1/v$: Precision parameter for the inverse-Wishart distribution
+- $\hat{\bm{\Omega}}_{p \times p}$: The model-implied population covariance (correlation) matrix obtained from analyzing $\mathbf{\Sigma}$.
+- $\bm{\Omega}(\bm{\gamma})$: Matrix-valued function of a vector of free parameters, $\bm{\gamma}$.
+- $\mathbf{E}_{p \times p}$: Error (perturbation) matrix.
+- $\bm{\Lambda}_{p \times k}$: Matrix of factor loadings for $p$ items on $k$ factors.
+- $\bm{\Phi}_{k \times k}$: Correlation matrix for the $k$ factors.
+- $\bm{\Psi}_{p \times p}$: Diagonal matrix of item unique variances.
+- $\RMSEA$: Root mean square error of approximation (RMSEA).
+- $\RMSEA_\textrm{T}$: Target RMSEA.
+- $\textrm{CFI}$: Comparative Fit Index (CFI).
+- $\textrm{CFI}_\textrm{T}$: Target CFI.
+- $m = 1/v$: Precision parameter for the inverse-Wishart distribution.
 
 ## References

@@ -478,7 +478,7 @@ Note the similar performance of the TKL (RMSEA/CFI) and TKL (CFI) methods, and t
 Distributions of the RMSEAΩ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target RMSEAΩ value for each condition. Note that some levels of model fit and factor loading strength were omitted to conserve space.
 :::
 
-## Distributionsof $\cfiOmega$ Values {.smaller}
+## Distributions of $\cfiOmega$ Values {.smaller}
 
 The $\TKLcfi$ and $\TKLrmseacfi$ methods often led to $\cfiOmega$ values that were closer to the target values compared to the other methods.
 
@@ -574,13 +574,17 @@ To find $\rmseaOmega$ and $\cfiOmega$ value combinations that were known to be p
 ### Recommendations
 
 + I recommend the $\TKLcfi$ or $\TKLrmseacfi$ methods for use in simulation studies
-  + Fast.
-  + Reliable.
-  + Produce RMSEA and CFI combinations that are more likely to indicate similar levels of model fit compared to alternative methods.
-  + Avoids issues with large (major) minor factors.
+  + Relatively fast.
+  + Seldom has issues with non-convergence.
+  + Produces RMSEA and CFI combinations that are more likely to indicate similar levels of model fit compared to alternative methods.
+  + Tends not to produce solutions with strong minor factors.
   + However: limited to factor analysis models.
 
 + TKL, CB, and WB model-error methods are all available in the [*noisemaker* package](github.com/JustinKracht/noisemaker).
+
+::: {.notes}
++ Using $150 \times 150$ input correlation matrix, the TKL (RMSEA/CFI) method takes ~1s to complete.
+:::
 
 ### Directions for Future Work
 
@@ -588,24 +592,20 @@ To find $\rmseaOmega$ and $\cfiOmega$ value combinations that were known to be p
 
 + Adapt the multiple-objective TKL method to restrict the range of possible $\nu_{\textrm{e}}$ and $\epsilon$ values.
 
+## Acknowledgements {.smaller}
+
+There are many people to whom I owe a debt of gratitude.
+
+Thank you to:
+
++ My advisor, Niels Waller, and my other committee members, Dr. Weiss, Nate Helwig, and Katerina Markoulides, for your valuable guidance and support.
++ My friends and colleagues in the QPM program, for your friendship and camaraderie; with particular thanks to Allie Cooperman, Kelly Duffy, Gretchen Saunders, and Alec Nyce for your advice, encouragement, and feedback.
++ My friends and colleagues at General Mills, for cheering me on; with particular thanks to Stef Bell Egge, Stacy Davies, and Jack Kostal for your support and flexibility.  
++ Matt Hilgers, Jaime Jarmin, Deniz Çömez, Abbey Leier-Murphy, and Ethan Murphy, whose friendship has kept me going. 
++ My parents, Harold and Janalee Kracht, and the rest of my family, who have been with me every step of the way;
++ And to my partner, Claudia Ursulescu Kracht: «*Du er det fineste komplimentet jeg noen gang har fått*».
+
 # Backup Slides
-
-## Population Model Fit Indices
-
-$$
-\textrm{RMSEA} = \varepsilon = \sqrt{\frac{F_h}{df_h}},
-$$ {#eq-rmsea}
-
-$$
-\textrm{CFI} = 1 - \frac{F_h}{F_b},
-$$ {#eq-cfi}
-
-$$
-\textrm{TLI} = 1 - \frac{F_h / df_h}{F_b / df_b}
-$$ {#eq-tli}
-
--   $F_h$ and $df_h$ denote the discrepancy function value and degrees of freedom for the full model.
--   $F_b$ and $df_b$ denote the discrepancy function value and degrees of freedom for the baseline (independence) model.
 
 ## CB: Specifying the Amount of Model Error (RMSEA)
 
@@ -692,6 +692,23 @@ knitr::include_graphics(
   dpi = 600
 )
 ```
+
+## Population Model Fit Indices
+
+$$
+\textrm{RMSEA} = \varepsilon = \sqrt{\frac{F_h}{df_h}},
+$$ {#eq-rmsea}
+
+$$
+\textrm{CFI} = 1 - \frac{F_h}{F_b},
+$$ {#eq-cfi}
+
+$$
+\textrm{TLI} = 1 - \frac{F_h / df_h}{F_b / df_b}
+$$ {#eq-tli}
+
+-   $F_h$ and $df_h$ denote the discrepancy function value and degrees of freedom for the full model.
+-   $F_b$ and $df_b$ denote the discrepancy function value and degrees of freedom for the baseline (independence) model.
 
 ## Population Model Fit Indices
 

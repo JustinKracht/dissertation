@@ -85,6 +85,14 @@ $$ {#eq-csm}
 > "All models are wrong, but some are useful"\
 > --- Box (1987, p. 424)
 
+::: {.notes}
+
+Covariance structure models attempt to represent the structural connections between a set of unobserved latent variables and a set of observed variables that are indicators of the latent variables.
+
+When assessing model fit or estimating the dispersion of estimated parameters, it is commonly assumed that the model holds perfectly in the population. However, we know that this is not true: to paraphrase George Box, we know our models are wrong, but we hope that they are at least useful.
+
+:::
+
 ## What is Model Error?
 
 Psychological phenomena are complex; no population covariance matrix will be perfectly represented by $\boldsymbol{\Omega}(\boldsymbol{\gamma})$ in practice.
@@ -96,6 +104,8 @@ Model error can be grouped into two basic categories (Meehl, 1990):
 -   [**Falsity**]{style="color:#7a0019"}
 
 ::: notes
+We can call the discrepancy between our (wrong) models and the true, complex models underlying psychological phenomena *model error*. According to Paul Meehl, model error can be grouped into two basic categories:
+
 -   [**Incompleteness**]{style="color:#7a0019"}: The model is too simple to adequately reflect reality (e.g., there are more common factors than are modeled).
 -   [**Falsity**]{style="color:#7a0019"}: There are contradictions between the model and the world (e.g., non-linear relationships are modeled as linear).
 :::
@@ -110,9 +120,13 @@ $$ {#eq-model-error}
 
 where $\mathbf{E}$ is a symmetric error matrix representing the effects of model error.
 
+::: {.notes}
+To make this explicit, we can define the population covariance matrix incorporating the effects of model error, $\Sigma$, as the sum of $\Omega$ and a symmetric error matrix $\mathbf{E}$. Note that we need $\Omega$ to be positive semi-definite (i.e., having strictly positive eigenvalues) in order to be a proper correlation matrix, which places an additional constraint on $\mathbf{E}$.
+:::
+
 ## Why Should We Care About Model Error?
 
-Monte Carlo simulation studies that sample from $\boldsymbol{\Omega}$ (rather than $\boldsymbol{\Sigma}$) are likely to produce overly-optimistic results.
+Monte Carlo simulation studies that use $\boldsymbol{\Omega}$ (rather than $\boldsymbol{\Sigma}$) to simulate data are likely to produce overly-optimistic results.
 
 . . .
 
@@ -125,6 +139,8 @@ Simulation work has shown that model error can affect:
 -   ...And other statistical procedures (Pek, 2012; Beauducel, 2016; de Winter, 2016, Gnambs, 2016; Hsu, 2015; Trichtinger, 2020).
 
 ::: notes
+In quantitative psychology, we often use Monte Carlo simulation studies to get insight into the behavior of particular statistical procedures in a variety of (hopefully representative) scenarios. However, simulated data are often sampled directly from $\Omega$, which is not realistic and only tells us how the procedures we're trying to study would work when applied to models that fit perfectly in the population. Previous work has shown that model error can affect:
+
 -   Parameter estimation for exploratory factor analysis (Briggs, 2003).
 -   Dimensionality identification with parallel analysis (Kracht, 2020).
 -   Behavior of confidence regions and fungible parameter estimates for structural equation models (Pek, 2012).
@@ -139,7 +155,7 @@ Simulation work has shown that model error can affect:
 
 ## Existing Model Error Methods
 
-Three of existing model-error methods are:
+Three existing model-error methods are:
 
 1.  Tucker, Koopman, and Linn (TKL; 1969)
 2.  Cudeck and Browne (CB; 1992)
@@ -178,21 +194,17 @@ $$
 \boldsymbol{\Sigma} = \boldsymbol{\Lambda} \boldsymbol{\Phi} \boldsymbol{\Lambda}^\prime + \boldsymbol{\Psi} + \mathbf{WW}^\prime
 $$ {#eq-tkl}
 
-. . .
-
 Minor common factors are ["...far too many and far too minor to be retained in a factor analysis of empirical data"]{style="color:#7a0019; font-weight: bold"} (MacCallum, 2003, p. 135).
 
 ## Tucker, Koopman, and Linn Method Parameters
 
 Two user-specified parameters affect the characteristics of $\mathbf{W}$:
 
--   $\nu_{\textrm{e}} \in [0, 1]$: The proportion of unique variance allocated to the minor common factors.
-
--   $\epsilon \in [0, 1]$: Controls how variance is distributed among the minor common factors.
+-   $\nu_{\textrm{e}} \in [0, 1]$: The proportion of unique variance allocated to the minor common factors.  
+-   $\epsilon \in [0, 1]$: Controls how variance is distributed among the minor common factors.  
 
 ::: notes
--   Values of $\epsilon$ close to zero result in relatively equipotent minor factors
-
+-   Values of $\epsilon$ close to zero result in relatively equipotent minor factors.
 -   Values of $\epsilon$ close to one result in error variance primarily being distributed to the first minor factor.
 
 ### Advantages
@@ -293,6 +305,11 @@ Model fit indices are often used to indicate the level of misfit between $\bolds
 -   Tucker-Lewis Index (TLI; Tucker & Lewis, 1973)
 
 ::: notes
+Having described the three model-methods that I included in my study, I'll next introduce the population model fit indices that are often used as measures of model error.
+
++ Absolute fit indices indicate the discrepancy between $\Sigma$ and $\Omega$ (or $\Sigma$ and $\hat{\Omega}$)
++ Incremental fit indices reflect the improvement in model fit for a particular model compared to a reduced or baseline model (I use the independence model as the baseline model, although other choices are possible).
+
 Where $\hat{\boldsymbol{\Omega}}$ is the implied covariance matrix from an analysis of $\boldsymbol{\Sigma}$. I'll focus mainly on fit indices representing the lack-of-fit between Sigma and Omega, which I denote by sub-scripting each of the fit indices with an "Omega". When a fit index represents the lack-of-fit between Sigma and Omega-hat, I subscript the fit index with an "Omega-hat".
 :::
 
@@ -302,16 +319,15 @@ Different model fit indices can lead to different qualitative interpretations of
 
 [**Example**]{style="color:#7a0019; font-weight: bold"}:
 
--   $\rmseaOmega = 0.04$
-
--   $\cfiOmega = 0.78$
-
-. . .
+-   $\rmseaOmega = 0.04$  
+-   $\cfiOmega = 0.78$  
 
 > "\[T\]here is no such thing as a magical, single-number summary that says everything worth knowing about model fit."\
 > ---Kline (2011, p. 193)
 
 ::: notes
+Population model fit should be assessed using multiple fit indices; however, fit indices might disagree, making it difficult to neatly classify $\Sigma$ matrices in terms of their qualitative degree of model fit.
+
 -   RMSEA values less than 0.05 generally represent good model fit.
 -   CFI values less than 0.90 generally represent unacceptably poor model fit.
 :::
@@ -319,8 +335,6 @@ Different model fit indices can lead to different qualitative interpretations of
 ## Controlling the Amount of Model Error
 
 Given that fit indices can lead to different qualitative interpretations of model fit, researchers should use and report multiple model fit indices in Monte Carlo simulation studies.
-
-. . .
 
 [Problem]{style="color:#7a0019; font-weight: bold"}: Current model-error methods take only target $\rmseaOmega$ values (CB, WB) or no explicit target fit index (TKL).
 
@@ -361,7 +375,7 @@ Basically, how do the model error methods compare in terms of the fit indices th
 Although these were the primary questions, I was also interested in the other advantages/disadvantages of the model fit methods. For instance, how often did the methods lead to non-converged or improper solutions?
 :::
 
-# Method
+# Simulation Design & Method
 
 ## Design Variables: Population Models
 
@@ -443,6 +457,8 @@ knitr::kable(
 
 :::{.notes}
 27 of the original 900 fully-crossed conditions had to be dropped because the CB method took an impractically-long time when used with 150x150 input correlation matrices. More on that later!
+
+For the TKL method; restart the optimization procedure up to 100 times with random starting values if convergence doesn't occur. If the method hasn't converged after 100 random starts, optimize using genetic optimization instead of L-BFGS-B.
 :::
 
 ## Study Design: Data Generation
@@ -513,6 +529,8 @@ knitr::include_graphics(here("img/conditional_rmsea_and_cfi_plots.png"))
 ::::
 
 ::: {.notes}
+A question that rose out of the previous results was why the TKL (RMSEA/CFI) method produce results that were so similar to the TKL (CFI) method? Why didn't the RMSEA target have more of an effect, given that the results were weighted equally in the objective function? To answer this question, I did a follow-up simulation study.
+
 Plot A: I used the TKL (RMSEA) method to generate 100 solutions for 16 target RMSEA values between 0.025 and 0.100. The black line indicates where RMSEA is equal to 1-CFI. 
 
 Plot B: I used the TKL (CFI) method to generate 100 solutions for 19 target CFI values between 0.90 and 0.99. The solid black line indicates where RMSEA and 1-CFI are equal.
@@ -598,12 +616,14 @@ There are many people to whom I owe a debt of gratitude.
 
 Thank you to:
 
-+ My advisor, Niels Waller, and my other committee members, Dr. Weiss, Nate Helwig, and Katerina Markoulides, for your valuable guidance and support.
-+ My friends and colleagues in the QPM program, for your friendship and camaraderie; with particular thanks to Allie Cooperman, Kelly Duffy, Gretchen Saunders, and Alec Nyce for your advice, encouragement, and feedback.
-+ My friends and colleagues at General Mills, for cheering me on; with particular thanks to Stef Bell Egge, Stacy Davies, and Jack Kostal for your support and flexibility.  
++ My advisor, Dr. Niels Waller, and my other committee members, Dr. David Weiss, Dr. Nate Helwig, and Dr. Katerina Marcoulides, for your valuable guidance and support.
++ My friends and colleagues in the QPM program, for your friendship and camaraderie; with particular thanks to Dr. Allie Cooperman, Kelly Duffy, Dr. Gretchen Saunders, and Alec Nyce for your advice, encouragement, and feedback.
++ My friends and colleagues at General Mills, for cheering me on; with particular thanks to Stef Bell Egge, Dr. Stacy Davies, and Dr. Jack Kostal for your support and flexibility.  
 + Matt Hilgers, Jaime Jarmin, Deniz Çömez, Abbey Leier-Murphy, and Ethan Murphy, whose friendship has kept me going. 
 + My parents, Harold and Janalee Kracht, and the rest of my family, who have been with me every step of the way;
-+ And to my partner, Claudia Ursulescu Kracht: «*Du er det fineste komplimentet jeg noen gang har fått*».
++ And to my partner, Claudia Ursulescu Kracht: «*Du er det fineste komplimentet jeg noen gang har fått*».[^2]
+
+[^2]: *Smykke*, Trygve Skaug
 
 # Backup Slides
 

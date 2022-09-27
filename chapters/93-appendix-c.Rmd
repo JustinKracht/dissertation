@@ -49,9 +49,7 @@ fix_apa_coef_names <- function(names) {
 
 ### Percent of Cases with Violated $\mathbf{W}$ Constraints
 
-(ref:major-minor-factors) The percent of cases that violated the minor common factor loading constraints when the $\TKLrmsea$ method was used.
-
-```{r tab-major-minor-factors}
+```{r tab-major-minor-factors-sup, results='asis'}
 percent_w_major_factors_table <- results_matrix %>%
   filter(error_method == "TKL (RMSEA)") %>%
   group_by(factors, items_per_factor, loading_numeric, model_fit) %>%
@@ -62,18 +60,17 @@ percent_w_major_factors_table <- results_matrix %>%
   pivot_wider(values_from = mean_w_major_factors,
               names_from = "model_fit")
 
-percent_w_major_factors_table %>%
-  apa_table(col.names = c("Factors", "Items per Factor", "Loading",
-                          "Very Good", 
-                          "Fair", 
-                          "Poor"),
-            col_spanner = list("Model Fit" = c(4, 6)),
-            digits = c(0, 0, 1, 1, 1, 1),
-            align = "rrlrrr",
-            placement = "h",
-            caption = "(ref:major-minor-factors)",
-            label = "major-minor-factors",
-            font_size = "small")
+apa_table(
+  x = percent_w_major_factors_table,
+  col.names = c("Factors", "Items per Factor", "Loading",
+                "Very Good", "Fair", "Poor"),
+  col_spanner = list("Model Fit" = c(4, 6)),
+  digits = c(0, 0, 1, 1, 1, 1),
+  escape = FALSE,
+  align = "rrrrrr",
+  caption = "The percent of cases that violated the minor common factor loading constraints when the $\\TKLrmsea$ method was used.",
+  font_size = "small"
+)
 ```
 
 \pagebreak

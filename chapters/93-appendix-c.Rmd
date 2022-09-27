@@ -47,6 +47,37 @@ fix_apa_coef_names <- function(names) {
 }
 ```
 
+### Percent of Cases with Violated $\mathbf{W}$ Constraints
+
+(ref:major-minor-factors) The percent of cases that violated the minor common factor loading constraints when the $\TKLrmsea$ method was used.
+
+```{r tab-major-minor-factors}
+percent_w_major_factors_table <- results_matrix %>%
+  filter(error_method == "TKL (RMSEA)") %>%
+  group_by(factors, items_per_factor, loading_numeric, model_fit) %>%
+  mutate(w_has_major_factors = fn_value >= 1e06) %>%
+  summarise(mean_w_major_factors =
+              mean(w_has_major_factors, na.rm = TRUE) * 100) %>%
+  ungroup() %>%
+  pivot_wider(values_from = mean_w_major_factors,
+              names_from = "model_fit")
+
+percent_w_major_factors_table %>%
+  apa_table(col.names = c("Factors", "Items per Factor", "Loading",
+                          "Very Good", 
+                          "Fair", 
+                          "Poor"),
+            col_spanner = list("Model Fit" = c(4, 6)),
+            digits = c(0, 0, 1, 1, 1, 1),
+            align = "rrlrrr",
+            placement = "h",
+            caption = "(ref:major-minor-factors)",
+            label = "major-minor-factors",
+            font_size = "small")
+```
+
+\pagebreak
+
 ### Logistic Regression on $\mathbf{W}$ Constraint Violations {#w-constraints-regression-table}
 
 \@ref(tab:mmf-mod-summary) gives a summary of the logistic regression of each of the independent simulation study variables and their interactions on a variable indicating whether a solution violated the constraints imposed on $\mathbf{W}$ (i.e., whether the solution had major minor factors). Note that some standard errors were quite large because some combinations of conditions produced few (or no) solutions with violated $\mathbf{W}$ constraints. All numeric predictors were scaled to have a mean of zero and a standard deviation of one to make the coefficient estimates more easily comparable. The "Model Fit (Very Good)" and "Error Method ($\TKLrmsea$)" terms were used as baseline levels and were subsumed within the "Constant" term.

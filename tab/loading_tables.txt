@@ -1,5 +1,6 @@
 \begin{table}
 \centering
+
 \caption{\label{tab:factor-loadings} Matrices of factor loadings corresponding to the (a) Weak, (b) Moderate, and (c) Strong factor loading conditions.}
 
 \begin{tabular}{llllllllllllll}

@@ -14,6 +14,10 @@
 \usepackage{bm}
 \usepackage{floatrow}
 \usepackage{dcolumn}
+\usepackage{chngcntr}         % Use sequential equation numbering
+
+\counterwithout{equation}{chapter}
+\counterwithout*{footnote}{chapter}
 
 \DeclareMathOperator{\diag}{diag}
 \DeclareMathOperator{\tr}{tr}
@@ -66,7 +70,6 @@
 \usepackage{makecell}          % Allow breaks in table cells; header alignment
 \renewcommand{\theadalign}{bc} % Set table header alignment: bottom, center
 
-
 %% ------------------------------------------------------------------- %%
 %% Define TOC counters
 %% ------------------------------------------------------------------- %%
@@ -74,14 +77,14 @@
 \setcounter{secnumdepth}{3}
 \setcounter{tocdepth}{3}
 
-
 %% ------------------------------------------------------------------- %%
 %% Define captioning for tables and figures (default = APA)
 %% ------------------------------------------------------------------- %%
 
-\captionsetup[table]{textfont={it}, labelfont={}, justification=raggedright, skip=0pt, singlelinecheck=false, labelsep=newline}
+\captionsetup[table]{textfont={it}, labelfont={}, justification=raggedright, skip=0pt, singlelinecheck=false, labelsep=newline, position=above}
 \captionsetup[figure]{textfont={}, labelfont={it}, justification=raggedright, singlelinecheck=false, labelsep=period}
 
+\floatsetup[table]{capposition=top}
 
 %% ------------------------------------------------------------------- %%
 %% Figure/table floating
@@ -91,13 +94,11 @@
 \usepackage{float} 
 \floatplacement{figure}{H}
 
-
 %% ------------------------------------------------------------------- %%
 %% Support for hyperreferences/links 
 %% ------------------------------------------------------------------- %%
 
 \usepackage{xurl}   % Allow URL breaks
-
 
 %% --------------- Define link colors --------------- %%
 
@@ -111,7 +112,6 @@ $if(citecolor-hex)$
 \definecolor{mycitecolor}{HTML}{$citecolor-hex$}
 $endif$
 
-
 %% --------------- Bordered links --------------- %%
 
 $if(colored-not-bordered-links)$
@@ -123,7 +123,6 @@ $if(colored-not-bordered-links)$
   urlcolor=$if(urlcolor-hex)$myurlcolor$else$.$endif$,
   citecolor=$if(citecolor-hex)$mycitecolor$else$.$endif$
 }
-
 
 %% --------------- No colored links --------------- %%
 
@@ -137,19 +136,16 @@ $else$
 }
 $endif$
 
-
 %% ------------------------------------------------------------------- %%
 %% Subfigures 
 %% ------------------------------------------------------------------- %%
 
 \makeatletter
 
-
 \@ifundefined{showcaptionsetup}{}{%
   \PassOptionsToPackage{caption=false}{subfig}}
 %\usepackage{subfig}
 \makeatother
-
 
 % %% ------------------------------------------------------------------- %%
 % %% These additions are from {rticles} to make the references play nice with pandoc
@@ -187,7 +183,6 @@ $if(csl-refs)$
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 $endif$
 
-
 %% ------------------------------------------------------------------- %%
 %% Include additional LaTeX packages/commands 
 %% ------------------------------------------------------------------- %%
@@ -201,11 +196,9 @@ $endif$
 % \usepackage{array}
 % \newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 
-
 %% --------------- textsquare from amsthm --------------- %%
  
 % \DeclareRobustCommand{\textsquare}{\begingroup\usefont{U}{msa}{m}{n}\thr@@\endgroup}
-
 
 %% --------------- Example environment --------------- %%
 
@@ -217,12 +210,10 @@ $endif$
 % \newtheorem{example}{Example}[chapter]
 % \labelformat{example}{Example~#1}
 
-
 %% --------------- Proof environment --------------- %%
 
 % \newtheorem{proof}{Proof}[chapter]
 % \labelformat{proof}{Proof~#1}
-
 
 %% --------------- Useful math operators --------------- %%
 
@@ -234,8 +225,6 @@ $endif$
 % from Prof. Weisberg:
 % \DeclareMathOperator{\indep}{\;\,\rule[0em]{.03em}{.6em}\hspace{-.25em}%
 % 	\rule[0em]{.65em}{.03em}\hspace{-.25em}\rule[0em]{.03em}{.6em}\;\,} 
-
-
 
 %% ------------------------------------------------------------------- %%
 %% Define things from the YAML in the index.RMD file
@@ -251,8 +240,6 @@ $if(coadvisor)$
   \coadvisor{$coadvisor$}
 $endif$
 
-
-
 %% ------------------------------------------------------------------- %%
 %% Document body
 %% ------------------------------------------------------------------- %%
@@ -260,7 +247,6 @@ $endif$
 \begin{document}
 
 \frenchspacing % one space after sentences
-
 
 %% --------------- Signature, title, and copyright pages --------------- %%
 
@@ -276,12 +262,10 @@ $else$
 \makecopyrightpage % recommended, required if registering copyright
 $endif$
 
-
 %% --------------- Frontmatter --------------- %%
 
 \frontmatter
 \pagestyle{empty} % this removes page numbers from the frontmatter
-
 
 %% --------------- Acknowledgements --------------- %%
 
@@ -291,7 +275,6 @@ $if(acknowledgements)$
   \end{acknowledgements}
 $endif$
 
-
 %% --------------- Dedication --------------- %%
 
 $if(dedication)$
@@ -300,7 +283,6 @@ $if(dedication)$
   \end{dedication}
 $endif$
 
-
 %% --------------- Abstract --------------- %%
 
 $if(abstract)$
@@ -308,7 +290,6 @@ $if(abstract)$
     $abstract$
   \end{abstract}
 $endif$
-
 
 %% --------------- Table of contents --------------- %%
 
@@ -331,7 +312,6 @@ $endif$
 
 \tableofcontents{}
 
-
 %% --------------- List of tables --------------- %%
 
 $if(lot)$
@@ -339,7 +319,6 @@ $if(lot)$
   \addcontentsline{toc}{chapter}{List of Tables}
   \listoftables
 $endif$
-
 
 %% --------------- List of figures --------------- %%
 
@@ -349,7 +328,6 @@ $if(lof)$
   \listoffigures
 $endif$
 
-
 %% --------------- Mainmatter --------------- %%
 
 % Here the regular arabic numbering starts
@@ -358,6 +336,5 @@ $endif$
 \pagestyle{fancyplain} % turns page numbering back on
 
 $body$
-
 
 \end{document}

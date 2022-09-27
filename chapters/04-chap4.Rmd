@@ -29,7 +29,7 @@ One drawback of the CB model-error method is that the resulting correlation matr
 
 \@ref(fig:fig-percent-indefinite-matrices) shows at least three notable trends. First, the percent of indefinite solutions increased as model fit degraded. Second, the percent of indefinite solutions increased as the total number of items increased (i.e., as the number of factors and items per factor increased). Finally, the percent of indefinite solutions increased as factor loadings increased. In the best-case scenarios, conditions corresponding to models with 25 or fewer items led to indefinite solutions very infrequently (in less than 1% of cases). On the other hand, conditions with Poor model fit and 45 or more items led to indefinite correlation matrices in more than 90% of cases. These results show that the CB method would be an inefficient way to simulate positive semi-definite population correlation or covariance matrices with model error when input matrices are large and the target $\rmseaOmega$ value is relatively large. 
 
-A potential strategy for dealing with indefinite solutions when using the CB method would be to simply generate solutions using the CB method until a sufficient number of positive semi-definite solutions have been obtained. However, the amount of time taken by the CB method increases quickly as the number of items increases, making the oversampling strategy impractical for problems with many items. Using the CB method to generate even a small number of solution matrices becomes impractical for large input matrices. This is shown in \@ref(fig:cb-completion-time), which plots the completion time for the CB method when applied to a one-factor model with salient loadings fixed at 0.6 and the number of items varying between 5 and 120. Using a computer with an Intel Core i5-4570 3.20GHz CPU and 16GB of RAM, the CB method took just over 30 seconds to complete (on average) for an input correlation matrix with 65 items. For an input matrix with 115 items, the CB method took approximately four and a half minutes to complete. Such long completion times are often impractical for large simulation studies, particularly if indefinite solutions are discarded. In fact, I had to skip using the CB method in simulation conditions with 10 factors and 15 items per factor (150 items) because those conditions would have taken an impractical amount of time to complete. Timing a single example, the CB method took 15 minutes and 48 seconds to complete with a 150-item input correlation matrix. At that rate, it would have taken almost 11 days to complete one (out of 36) conditions of the simulation design with 150 items. 
+A potential strategy for dealing with indefinite solutions when using the CB method would be to simply generate solutions using the CB method until a sufficient number of positive semi-definite solutions have been obtained. However, the amount of time taken by the CB method increases quickly as the number of items increases, making the oversampling strategy impractical for problems with many items (e.g., more than 50 items). Using the CB method to generate even a small number of solution matrices becomes impractical for large input matrices. This is shown in \@ref(fig:cb-completion-time), which plots the completion time for the CB method when applied to a one-factor model with salient loadings fixed at 0.6 and the number of items varying between 5 and 120. Using a computer with an Intel Core i5-4570 3.20GHz CPU and 16GB of RAM, the CB method took just over 30 seconds to complete (on average) for an input correlation matrix with 65 items. For an input matrix with 115 items, the CB method took approximately four and a half minutes to complete. Such long completion times are often impractical for large simulation studies, particularly if indefinite solutions are discarded. In fact, I had to skip using the CB method in simulation conditions with 10 factors and 15 items per factor (150 items) because those conditions would have taken an impractical amount of time to complete. Timing a single example, the CB method took 15 minutes and 48 seconds to complete with a 150-item input correlation matrix. At that rate, it would have taken almost 11 days to complete one (out of 36) conditions of the simulation design with 150 items. 
 
 (ref:cb-indefinite-table-caption) The percent of Cudeck and Browne (CB) model-error method solutions that were indefinite.
 
@@ -107,7 +107,7 @@ if (make_plots) {
 knitr::include_graphics(here("img/cb_percent_indefinite.png"))
 ```
 
-```{r cb-completion-time, fig.cap = 'The amount of time (in minutes) taken to generate a single correlation matrix with model error using the CB method. Completion times were recorded 10 times for single-factor models with salient factor loadings fixed at 0.6 and number of items (\\emph{p}) varying between 5 and 115. The dashed black line is the LOESS regression line.', align = "center"}
+```{r cb-completion-time, fig.cap = 'The amount of time (in minutes) taken to generate a single correlation matrix with model error using the CB method. Completion times were recorded 10 times for single-factor models with salient factor loadings fixed at 0.6, a target RMSEA value of 0.05, and number of items (\\emph{p}) varying between 5 and 115. The dashed black line is the locally estimated scatterplot smoothing (LOESS) regression line.', align = "center"}
 if (make_plots) {
   set.seed(123)
   max_p <- 115
@@ -149,9 +149,7 @@ if (make_plots) {
                 method = "loess", level = 0, span = 0.35) +
     scale_x_continuous(breaks = seq(5, 150, by = 10)) +
     labs(x = "p",
-         y = "Completion Time (minutes)",
-         title = "CB method completion time",
-         subtitle = "One-factor models with salient loadings of .6 and $\\rmseaOmega$ = 0.05") +
+         y = "Completion Time (minutes)") +
     theme_bw()
   
   saveRDS(times, here("misc/cb_completion_times.RDS"))
@@ -168,7 +166,7 @@ knitr::include_graphics(path = here("img", "cb_time_plot.png"))
 
 ## L-BFGS-B Non-convergence (Genetic Algorithm)
 
-The default optimization method for the multiple-target TKL method was L-BFGS-B. In most cases, this method worked well and converged to a solution relatively quickly. However, there were a small number of cases where the L-BGFS-B method failed to converge. Specifically, the L-BFGS-B method failed to converge 14 times ($<1$% of cases) and only failed to converge when the $\TKLrmseacfi$ method was used and when model fit was Poor. Non-convergence was also somewhat more likely for conditions with few factors compared to conditions with many factors. This can be seen in \@ref(tab:tab-l-bfgs-b-convergence), which shows the L-BFGS-B non-convergence rates by the number of factors, number of items per factor, and model fit for the $\TKLrmseacfi$ method.
+The default optimization method for the multiple-target TKL method was L-BFGS-B. In most cases, this method worked well and converged to a solution relatively quickly. However, there were a small number of cases where the L-BGFS-B method failed to converge. Specifically, the L-BFGS-B method failed to converge 14 out of 270,000 times ($<1$% of cases) and only failed to converge when the $\TKLrmseacfi$ method was used and when model fit was Poor. Non-convergence was also somewhat more likely for conditions with few factors compared to conditions with many factors. This can be seen in \@ref(tab:tab-l-bfgs-b-convergence), which shows the L-BFGS-B non-convergence rates by the number of factors, number of items per factor, and model fit for the $\TKLrmseacfi$ method.
 
 Although non-convergence of the L-BFGS-B algorithm was rare, a natural question was whether the genetic algorithm that was used as a fallback option led to similar results compared to cases where the L-BFGS-B algorithm converged. This question was difficult to answer statistically because non-convergence occurred so infrequently. To get a general sense of whether results were similar for cases where the L-BFGS-B algorithm converged or did not converge, I plotted the $\cfiOmega$ and $\rmseaOmega$ values for all converged and non-converged cases in conditions where the $\TKLrmseacfi$ model-error method was used and model fit was Poor. \@ref(fig:comparison-of-converged-vs-non-converged) shows that cases where the L-BFGS-B algorithm did not converge (shown in black) led to similar $\rmseaOmega$ and $\cfiOmega$ values compared to cases where the algorithm converged (shown in gray). Thus, using a genetic algorithm seemed to provide reasonable results in the few cases where the L-BFGS-B algorithm failed to converge. However, the GA algorithm was much slower than the L-BFGS-B algorithm. In benchmarking done for conditions with one factor, fifteen items per factor, strong salient factor loadings of 0.8, and Poor model fit, the median completion time across 25 trials when using a genetic algorithm was 8.3 seconds, substantially longer than the median completion time of 23 milliseconds when using the L-BFGS-B algorithm.
 
@@ -234,7 +232,7 @@ bfgs_nonconvergence_table %>%
 
 (ref:bfgs-convergence-table-caption) The percent of cases in each combination of conditions where the L-BFGS-B algorithm did not converge after 100 random starts and genetic optimization was used instead.
 
-```{r comparison-of-converged-vs-non-converged, fig.cap = "$\\rmseaOmega$ and $\\cfiOmega$ values for cases where the model-error method was $\\textrm{TKL}_{\\textrm{RMSEA/CFI}}$ and model fit was Poor. Grey dots indicate cases where the L-BFGS-G algorithm converged; black dots indicate cases that did not converge and where a genetic algorithm was used instead. The dashed black lines indicate the target $\\rmseaOmega$ and $\\cfiOmega$ values."}
+```{r comparison-of-converged-vs-non-converged, fig.cap = "$\\rmseaOmega$ and $\\cfiOmega$ values for cases where the model-error method was $\\textrm{TKL}_{\\textrm{RMSEA/CFI}}$ and model fit was Poor. Grey dots indicate cases where the L-BFGS-G algorithm converged; black dots indicate cases that did not converge and where a genetic algorithm was used instead. The dashed black lines indicate the target $\\rmseaOmega$ and $\\cfiOmega$ values.", out.width="65%"}
 if (make_plots) {
   nonconverged_data <- results_matrix %>%
     filter(error_method == "TKL (RMSEA/CFI)") %>%
@@ -267,37 +265,11 @@ if (make_plots) {
 knitr::include_graphics(here("img/nonconverged_rmsea_cfi.png"))
 ```
 
-## Major Minor Factors ($\mathbf{W}$ Matrix Constraint Violations)
+## $\mathbf{W}$ Constraint Violations
 
 Recall that the multiple-objective TKL method included an optional penalty that penalized cases that had strong minor factors. Specifically, the penalty was applied if any minor factor had two or more absolute factor loadings greater than or equal to a specified value. The purpose of the penalty was to avoid introducing minor factors that might be more accurately characterized as major factors. To determine whether the penalty was effective at helping avoid major minor factors, I checked each of the minor factor loading ($\mathbf{W}$) matrices to determine whether any minor factor had two or more loadings greater than 0.3 in absolute value. 
 
-The percent of cases where the constraints on $\mathbf{W}$ were violated for each level of number of factors, number of items per factor, factor loading strength, and model fit are shown in \@ref(fig:w-major-factors-plot) and reported in \@ref(tab:tab-major-minor-factors). Only results for the $\TKLrmsea$ method were included because the $\TKLrmseacfi$ and $\TKLcfi$ model-error methods seldom led to solutions that violated the constraints on $\mathbf{W}$. In fact, only 24 out of 180,000 cases (<0.01%) had violated $\mathbf{W}$ constraints for the $\TKLrmseacfi$ and $\TKLcfi$ methods combined. \@ref(fig:w-major-factors-plot) shows that the $\mathbf{W}$ constraints were violated most often when model fit was Fair or Poor, factor loadings were relatively low, and there were many total items (i.e., many factors and items per factor). These variables were included in the figure because they were most important in terms of whether a solution was likely to violate the constraints on $\mathbf{W}$, as indicated by the size of the logistic regression coefficients reported in \@ref(w-constraints-regression-table).
-
-(ref:major-minor-factors) The percent of cases that violated the minor common factor loading constraints when the $\TKLrmsea$ method was used.
-
-```{r tab-major-minor-factors, results='asis'}
-percent_w_major_factors_table <- results_matrix %>%
-  filter(error_method == "TKL (RMSEA)") %>%
-  group_by(factors, items_per_factor, loading_numeric, model_fit) %>%
-  mutate(w_has_major_factors = fn_value >= 1e06) %>%
-  summarise(mean_w_major_factors =
-              mean(w_has_major_factors, na.rm = TRUE) * 100) %>%
-  ungroup() %>%
-  pivot_wider(values_from = mean_w_major_factors,
-              names_from = "model_fit")
-
-percent_w_major_factors_table %>%
-  apa_table(col.names = c("Factors", "Items per Factor", "Loading",
-                          "Very Good", 
-                          "Fair", 
-                          "Poor"),
-            col_spanner = list("Model Fit" = c(4, 6)),
-            digits = c(0, 0, 1, 1, 1, 1),
-            align = "rrlrrr",
-            caption = "(ref:major-minor-factors)",
-            label = "major-minor-factors",
-            font_size = "small")
-```
+The percent of cases where the constraints on $\mathbf{W}$ were violated for each level of number of factors, number of items per factor, factor loading strength, and model fit are shown in \@ref(fig:w-major-factors-plot). Only results for the $\TKLrmsea$ method were included because the $\TKLrmseacfi$ and $\TKLcfi$ model-error methods seldom led to solutions that violated the constraints on $\mathbf{W}$. In fact, only 24 out of 180,000 cases (<0.01%) had violated $\mathbf{W}$ constraints for the $\TKLrmseacfi$ and $\TKLcfi$ methods combined. \@ref(fig:w-major-factors-plot) shows that the $\mathbf{W}$ constraints were violated most often when model fit was Fair or Poor, factor loadings were relatively low, and there were many total items (i.e., many factors and items per factor). These variables were included in the figure because they were most important in terms of whether a solution was likely to violate the constraints on $\mathbf{W}$, as indicated by the size of the logistic regression coefficients reported in \@ref(w-constraints-regression-table).
 
 ```{r w-major-factors-plot}
 #| fig.cap = "The percent of cases where the constraints on $\\mathbf{W}$ were violated when the $\\textrm{TKL}_{\\textrm{RMSEA}}$ model-error method was used, conditioned on number of factors, number of items per factor, factor loading, and model fit."

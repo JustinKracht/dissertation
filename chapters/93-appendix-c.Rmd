@@ -103,7 +103,7 @@ if (fit_mods) {
     dcolumn = TRUE,
     longtable = TRUE,
     use.packages = FALSE,
-    caption.above = FALSE,
+    caption.above = TRUE,
     fontsize = "small",
     caption = 'Coefficient estimates and standard errors (in parentheses) for the logistic regression model predicting the probability of producing a solution with violated $\\mathbf{W}$ constraints (i.e., at least one minor factor with more than two absolute factor loadings greater than 0.3).',
     label = "tab:mmf-mod-summary"
@@ -224,7 +224,7 @@ if (fit_mods) {
     dcolumn = TRUE,
     longtable = TRUE,
     use.packages = FALSE,
-    caption.above = FALSE,
+    caption.above = TRUE,
     fontsize = "small",
     caption = 'Coefficient estimates and standard errors (in parentheses) for the logistic regression model predicting the probability of producing a solution with qualitative fit index agreement.',
     label = "tab:qualitative-fit-mod-summary"
@@ -383,7 +383,7 @@ knitr::include_graphics(here("img/major_minor_factors_full.png"))
 ### Values of $\epsilon$ and $\nu_{\textrm{e}}$ {#eps-and-nu-full}
 
 ```{r eps-and-v-values-by-W-violations-full}
-#| fig.cap = "Values of the TKL parameters ($\\epsilon$ and $\\nu_{\\textrm{e}}$) by model-error method, number of factors, number of items per factor, and factor loading strength when model fit was Poor. TKL = Tucker, Koopman, and Linn."
+#| fig.cap = "Values of the TKL parameters ($\\epsilon$ and $\\nu_{\\textrm{e}}$) by model-error method, number of factors, number of items per factor, and factor loading strength when model fit was Poor."
 
 if (make_plots) {
   eps_and_nu_plot_full <- results_matrix %>%
@@ -417,7 +417,7 @@ knitr::include_graphics(here("img/eps_and_nu_w_violations_full.png"))
 
 ### Observed $\rmseaOmega$ Values
 
-```{r rmsea-distributions-full, fig.cap = "Distributions of the $\\rmseaOmega$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target $\\rmseaOmega$ value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width='70%'}
+```{r rmsea-distributions-full, fig.cap = "Distributions of the $\\rmseaOmega$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target $\\rmseaOmega$ value for each condition.", out.width='70%'}
 if (make_plots) {
   rmsea_distributions <- 
     results_matrix %>%
@@ -450,7 +450,7 @@ knitr::include_graphics(here("img/rmsea_distributions_full.png"))
 
 ### Observed $\cfiOmega$ Values
 
-```{r cfi-distributions-full, fig.cap = "Distributions of the $\\cfiOmega$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target $\\cfiOmega$ value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width='70%'}
+```{r cfi-distributions-full, fig.cap = "Distributions of the $\\cfiOmega$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target $\\cfiOmega$ value for each condition.", out.width='70%'}
 if (make_plots) {
   cfi_distributions <- 
     results_matrix %>%
@@ -484,7 +484,7 @@ knitr::include_graphics(here("img/cfi_distributions_full.png"))
 ### Observed $\tliOmega$ Values
 
 ```{r tli-distributions-full, out.width="70%"}
-#| fig.cap="Distributions of the $\tliOmega$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the threshold values of TLI that correspond to the targeted levels of model fit, according to Hu and Bentler (1999). TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap="Distributions of the $\tliOmega$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the threshold values of TLI that correspond to the targeted levels of model fit, according to Hu and Bentler (1999)."
 
 if (make_plots) {
   tli_distributions <- 
@@ -520,7 +520,7 @@ knitr::include_graphics(here("img/tli_distributions_full.png"))
 
 ### Observed $\crmrOmega$ Values
 
-```{r crmr-distributions-full, fig.cap="Distributions of the $\\crmrOmega$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values; the dashed lines indicate these two threshold values. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne.", out.width="65%"}
+```{r crmr-distributions-full, fig.cap="Distributions of the $\\crmrOmega$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values; the dashed lines indicate these two threshold values.", out.width="65%"}
 if (make_plots) {
   crmr_distributions <- 
     results_matrix %>%
@@ -558,7 +558,7 @@ knitr::include_graphics(here("img/crmr_distributions_full.png"))
 #### $\textrm{RMSEA}_{\hat{\bm{\Omega}}}$
 
 ```{r rmsea-thetahat-distributions, out.width="85%"}
-#| fig.cap = "Distributions of the $\\textrm{RMSEA}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target $\\rmseaOmega$ value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Distributions of the $\\textrm{RMSEA}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target $\\rmseaOmega$ value for each condition."
 if (make_plots) {
   rmsea_thetahat_distributions <- 
     results_matrix %>%
@@ -592,7 +592,7 @@ knitr::include_graphics(here("img/rmsea_thetahat_distributions.png"))
 #### $\textrm{CFI}_{\hat{\bm{\Omega}}}$
 
 ```{r cfi-thetahat-distributions, out.width="90%"}
-#| fig.cap = "Distributions of the $\\textrm{CFI}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target $\\cfiOmega$ value for each condition. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Distributions of the $\\textrm{CFI}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the target $\\cfiOmega$ value for each condition."
 if (make_plots) {
   cfi_thetahat_distributions <- 
     results_matrix %>%
@@ -626,7 +626,7 @@ knitr::include_graphics(here("img/cfi_thetahat_distributions.png"))
 #### $\textrm{TLI}_{\hat{\bm{\Omega}}}$
 
 ```{r tli-thetahat-distributions, out.width="90%"}
-#| fig.cap = "Distributions of the $\\textrm{TLI}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the threshold values of TLI that correspond to the targeted levels of model fit, according to Hu and Bentler (1999). TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Distributions of the $\\textrm{TLI}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the threshold values of TLI that correspond to the targeted levels of model fit, according to Hu and Bentler (1999)."
 if (make_plots) {
   tli_thetahat_distributions <- 
     results_matrix %>%
@@ -660,7 +660,7 @@ knitr::include_graphics(here("img/tli_thetahat_distributions.png"))
 #### $\textrm{CRMR}_{\hat{\bm{\Omega}}}$
 
 ```{r crmr-thetahat-distributions, out.width="90%"}
-#| fig.cap = "Distributions of the $\\textrm{TLI}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values; the dashed lines indicate these two threshold values. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Distributions of the $\\textrm{TLI}_{\\hat{\\bm{\\Omega}}}$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. Threshold values of 0.05 and 0.08 were proposed by Hu and Bentler (1999) as more and less conservative upper-bounds for acceptable SRMR/CRMR values; the dashed lines indicate these two threshold values."
 if (make_plots) {
   crmr_thetahat_distributions <- 
     results_matrix %>%
@@ -696,7 +696,7 @@ knitr::include_graphics(here("img/crmr_thetahat_distributions.png"))
 ### Fit Index Agreement ($D$) {#full-d3-plot}
 
 ```{r full-d3-plot, out.width="90%"}
-#| fig.cap = "The sum of the absolute differences between the observed and target $\\rmseaOmega$ and $\\cfiOmega$ values ($D$), conditioned on number of factors, model fit, and factor loading strength. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "The sum of the absolute differences between the observed and target $\\rmseaOmega$ and $\\cfiOmega$ values ($D$), conditioned on number of factors, model fit, and factor loading strength."
 if (make_plots) {
   d_plot <- 
     results_matrix %>%
@@ -916,7 +916,7 @@ knitr::include_graphics(here("img/cfi_conditional_rmsea_with_factor_cor.png"))
 #### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$ for the Condition with Ten Orthogonal Factors, Five Items per Factor, Weak Factor Loadings, and Poor Model Fit
 
 ```{r c129-with-annotation, out.width = '55%'}
-#| fig.cap = "Correlation matrices with model error ($\\mathbf{\\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\\mathbf{\\Sigma}$ ($\\hat{\\mathbf{\\Omega}}$) for each model-error method. Results are shown for the condition with ten orthogonal factors, five items per factor, weak factor loadings of 0.3, and Poor model fit. TKL = Tucker, Koopman, and Linn; CB = Cudeck and Browne; WB = Wu and Browne."
+#| fig.cap = "Correlation matrices with model error ($\\mathbf{\\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\\mathbf{\\Sigma}$ ($\\hat{\\mathbf{\\Omega}}$) for each model-error method. Results are shown for the condition with ten orthogonal factors, five items per factor, weak factor loadings of 0.3, and Poor model fit."
 
 knitr::include_graphics(here("img/c129_R_plots_with_annotation.png"))
 ```
@@ -924,7 +924,7 @@ knitr::include_graphics(here("img/c129_R_plots_with_annotation.png"))
 #### Heatmap Representations of $\bm{\Sigma}$ and $\hat{\bm{\Omega}}$ for the Condition with Ten Orthogonal Factors, Ten Items per Factor, Weak Factor Loadings, and Poor Model Fit
 
 ```{r c156-with-annotation, out.width='67%'}
-#| fig.cap = "Correlation matrices with model error ($\\mathbf{\\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\\mathbf{\\Sigma}$ ($\\hat{\\mathbf{\\Omega}}$) for each model-error method. Results are shown for the condition with ten orthogonal factors, ten items per factor, weak factor loadings of 0.4, and Poor model fit. Note that the Cudeck and Browne method is omitted because it was not used for conditions with ten factors and 15 items per factor. TKL = Tucker, Koopman, and Linn; WB = Wu and Browne."
+#| fig.cap = "Correlation matrices with model error ($\\mathbf{\\Sigma}$) and the implied correlation matrix obtained by fitting the population major-factor model to $\\mathbf{\\Sigma}$ ($\\hat{\\mathbf{\\Omega}}$) for each model-error method. Results are shown for the condition with ten orthogonal factors, ten items per factor, weak factor loadings of 0.4, and Poor model fit. Note that the Cudeck and Browne method is omitted because it was not used for conditions with ten factors and 15 items per factor."
 
 knitr::include_graphics(here("img/c156_R_plots_with_annotation.png"))
 ```

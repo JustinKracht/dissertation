@@ -2,6 +2,8 @@
 \begin{center}
 \begin{small}
 \begin{longtable}{l D{)}{)}{11)3}}
+\caption{Coefficient estimates and standard errors (in parentheses) for the logistic regression model predicting the probability of producing a solution with qualitative fit index agreement.}
+\label{tab:qualitative-fit-mod-summary}\\
 \hline
  & \multicolumn{1}{c}{ } \\
 \hline
@@ -14,9 +16,7 @@
 \endfoot
 \hline
 \multicolumn{2}{l}{\tiny{$^{***}p<0.001$; $^{**}p<0.01$; $^{*}p<0.05$}}\\
-\caption{Coefficient estimates and standard errors for the logistic regression model predicting the probability of producing a solution with qualitative fit index agreement.}
-\label{tab:qualitative-fit-mod-summary}
-\endlastfoot \\
+\endlastfoot
 Constant                                                  & 1.30 \;  (0.03)^{***}   \\
 Factors                                                   & -3.76 \;  (0.04)^{***}  \\
 Items/Factor                                              & -3.02 \;  (0.04)^{***}  \\

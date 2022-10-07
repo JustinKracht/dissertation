@@ -484,7 +484,7 @@ knitr::include_graphics(here("img/cfi_distributions_full.png"))
 ### Observed $\tliOmega$ Values
 
 ```{r tli-distributions-full, out.width="70%"}
-#| fig.cap="Distributions of the $\tliOmega$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the threshold values of TLI that correspond to the targeted levels of model fit, according to Hu and Bentler (1999)."
+#| fig.cap="Distributions of the $\\tliOmega$ values for solutions produced by each of the model-error methods, conditioned on number of factors, model fit, and factor loading strength. The dashed lines indicate the threshold values of TLI that correspond to the targeted levels of model fit, according to Hu and Bentler (1999)."
 
 if (make_plots) {
   tli_distributions <- 

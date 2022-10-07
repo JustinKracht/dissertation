@@ -238,8 +238,14 @@ examining committee have been made.\par}
 %% For building the acknowledgements, dedication, and abstract pages
 %% ------------------------------------------------------------------- %%
 
+% \newenvironment{frontpage}[2][0in]
+% {\clearasneeded\thispagestyle{plain}\vspace*{#1}%
+% {\centering\large\textsc{#2}\par}%
+% \vspace{3em}\noindent\ignorespaces}
+% {\clearasneeded}
+
 \newenvironment{frontpage}[2][0in]
-{\clearasneeded\thispagestyle{plain}\vspace*{#1}%
+{\clearasneeded\pagestyle{plain}\vspace*{#1}%
 {\centering\large\textsc{#2}\par}%
 \vspace{3em}\noindent\ignorespaces}
 {\clearasneeded}

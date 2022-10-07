@@ -2,7 +2,7 @@
 # Required Information ------------------------------------
 title: "Make Some Noise: Methods for Generating Data From Imperfect Factor Models"
 author: "Justin D. Kracht"  
-month: "September"
+month: "October"
 year: "2022"
 advisor: "Niels G. Waller"
 phd: true
